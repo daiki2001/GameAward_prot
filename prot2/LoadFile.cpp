@@ -40,11 +40,6 @@ int LoadFile::LoadCSV(int* mapArray, const size_t& mapSize, const char* filePath
 
 		for (int i = 0; string[i] != '\0'; i++)
 		{
-			if (index >= (int)mapSize)
-			{
-				end = true;
-			}
-
 			if (string[i] == '/')
 			{
 				// コメントアウト
@@ -131,11 +126,6 @@ int LoadFile::LoadCSV(int* mapArray, const size_t& mapSize, FILE* fileHandle, co
 
 		for (int i = 0; string[i] != '\0'; i++)
 		{
-			if (index >= (int)mapSize)
-			{
-				end = true;
-			}
-
 			if (string[i] == '/')
 			{
 				// コメントアウト
@@ -225,11 +215,6 @@ int LoadFile::LoadCSV(char* mapArray, const size_t& mapSize, FILE* fileHandle, c
 
 		for (int i = 0; string[i] != '\0'; i++)
 		{
-			if (index >= (int)mapSize)
-			{
-				end = true;
-			}
-
 			if (string[i] == '/')
 			{
 				// コメントアウト
@@ -280,8 +265,6 @@ int LoadFile::LoadCSV(char* mapArray, const size_t& mapSize, FILE* fileHandle, c
 					break;
 				}
 			}
-
-			index++;
 		}
 		if (end)
 		{

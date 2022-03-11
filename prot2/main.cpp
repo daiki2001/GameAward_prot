@@ -60,8 +60,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// XVˆ—
 		player->Updata();
 		if (Input::isKey(KEY_INPUT_SPACE) &&
-			(Input::isKey(KEY_INPUT_W) || Input::isKey(KEY_INPUT_A) ||
-			Input::isKey(KEY_INPUT_S) || Input::isKey(KEY_INPUT_D)))
+			(Input::isKeyTrigger(KEY_INPUT_W) || Input::isKeyTrigger(KEY_INPUT_A) ||
+				Input::isKeyTrigger(KEY_INPUT_S) || Input::isKeyTrigger(KEY_INPUT_D)))
 		{
 			stage->Fold(player->GetPos());
 		}

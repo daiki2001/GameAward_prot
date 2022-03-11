@@ -8,7 +8,7 @@ enum MapchipData
 {
 	EMPTY_STAGE = 0,
 	NONE = 1,
-	FOLD = 2,
+	//FOLD = 2,
 	BLOCK = 3,
 	GOAL = 4,
 	START = 5
@@ -49,6 +49,7 @@ public: //定数
 
 public: //静的メンバ変数
 	static int foldGraph;
+private:
 	static Vector3 startPlayerPos;
 
 public: //メンバ関数
@@ -74,7 +75,7 @@ public: //メンバ関数
 	void DataClear();
 
 	// ステージの枚数を取得
-	Vector3 GetStartPlayerPos();
+	static Vector3 GetStartPlayerPos();
 	// 各ステージのデータを取得
 	inline StageTileData* GetStageData(const short& stageTileNumber);
 	// 全ステージのデータを取得
@@ -84,4 +85,5 @@ private: //メンバ変数
 	StageData stageTile;
 	std::vector<StageTileData> stageData;
 	std::vector<StageTileData> initStageData;
+	std::vector<char> offsetX, offsetY;
 };

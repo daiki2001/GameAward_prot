@@ -22,8 +22,7 @@ Player::~Player()
 
 void Player::Init()
 {
-	pos.x = 1 + 0;
-	pos.y = 9 + 0;
+	pos = Stage::GetStartPlayerPos();
 }
 
 void Player::Updata()

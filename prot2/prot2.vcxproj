@@ -136,14 +136,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="General.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="LoadFile.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Vector3.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="Resources\fold.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
