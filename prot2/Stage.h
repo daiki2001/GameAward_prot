@@ -8,10 +8,9 @@ enum MapchipData
 {
 	EMPTY_STAGE = 0,
 	NONE = 1,
-	//FOLD = 2,
-	BLOCK = 3,
-	GOAL = 4,
-	START = 5
+	BLOCK = 2,
+	GOAL = 3,
+	START = 4
 };
 
 class Stage final

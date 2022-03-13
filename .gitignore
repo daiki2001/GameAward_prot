@@ -1,6 +1,7 @@
 prot2/仕様書メモ.txt
+Log.txt
 GameAward_prot/
-Debug/GameAward_prot.exe
-Debug/GameAward_prot.pdb
-Release/GameAward_prot.exe
-Release/GameAward_prot.pdb
+/Debug
+/prot2/Debug
+/prot2/Release
+/Release

@@ -1,7 +1,7 @@
 #include <DxLib.h>
-#include "Input.h"
 #include "Stage.h"
 #include "Player.h"
+#include "InputManger.h"
 #include "Colors.h"
 
 // ウィンドウのタイトルに表示する文字列
@@ -59,9 +59,19 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 更新処理
 		player->Updata();
-		if (Input::isKey(KEY_INPUT_SPACE) &&
-			(Input::isKeyTrigger(KEY_INPUT_W) || Input::isKeyTrigger(KEY_INPUT_A) ||
-				Input::isKeyTrigger(KEY_INPUT_S) || Input::isKeyTrigger(KEY_INPUT_D)))
+		if (Input::isKey(KEY_INPUT_1))
+		{
+			stage->LoadStage("./Resources/stage1.csv");
+		}
+		if (Input::isKey(KEY_INPUT_2))
+		{
+			stage->LoadStage("./Resources/stage2.csv");
+		}
+		if (InputManger::Reset())
+		{
+			stage->Reset();
+		}
+		if (InputManger::Act1() && (InputManger::UpTrigger() || InputManger::DownTrigger() || InputManger::LeftTrigger() || InputManger::RightTrigger()))
 		{
 			stage->Fold(player->GetPos());
 		}
@@ -84,7 +94,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		// ESCキーが押されたらループから抜ける
-		if (CheckHitKey(KEY_INPUT_ESCAPE) == TRUE)
+		if (InputManger::Escape())
 		{
 			break;
 		}

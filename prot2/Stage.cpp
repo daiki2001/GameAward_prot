@@ -1,8 +1,7 @@
 #include "Stage.h"
 #include <DxLib.h>
-#include "Input.h"
 #include "LoadFile.h"
-
+#include "InputManger.h"
 #include "General.h"
 #include "Colors.h"
 
@@ -152,6 +151,8 @@ void Stage::Draw()
 
 int Stage::LoadStage(const char* filePath)
 {
+	DataClear();
+
 	static FILE* fileHandle;
 	static errno_t err;
 	static char string[256];
@@ -229,7 +230,7 @@ int Stage::LoadStage(const char* filePath)
 		return EF;
 	}
 
-	for (size_t i = 0; i < size_t(stageTile.width * stageTile.height); i++)
+	for (size_t i = 0; i < static_cast<size_t>(stageTile.width * stageTile.height); i++)
 	{
 		if (stageTile.stageTile[i] == MapchipData::EMPTY_STAGE)
 		{
@@ -238,9 +239,9 @@ int Stage::LoadStage(const char* filePath)
 
 		static char tilePos[2] = { 0 };
 
-		stageTile.stageTile[i] = stageData.size() + 1;
+		stageTile.stageTile[i] = static_cast<char>(stageData.size() + 1);
 		stageData.push_back({});
-		stageData[stageData.size() - 1].stageNumber = i;
+		stageData[stageData.size() - 1].stageNumber = static_cast<char>(i);
 		for (size_t j = 0; j < sizeof(tilePos) / sizeof(tilePos[0]); j++) tilePos[j] = 0;
 		for (size_t j = 0; j < sizeof(size) / sizeof(size[0]); j++) size[j] = 0;
 		for (size_t j = 0; j < sizeof(string) / sizeof(string[0]); j++) string[j] = '\0';
@@ -374,7 +375,7 @@ int Stage::LoadStage(const char* filePath)
 		}
 		else
 		{
-			if (offsetX < tileOffsetX.size())
+			if (static_cast<size_t>(offsetX) < tileOffsetX.size())
 			{
 				stageData[i].offsetX = tileOffsetX[offsetX - 1];
 				stageData[i].offsetX += stageData[i].width;
@@ -402,7 +403,7 @@ int Stage::LoadStage(const char* filePath)
 		}
 		else
 		{
-			if (offsetY < tileOffsetY.size())
+			if (static_cast<size_t>(offsetY) < tileOffsetY.size())
 			{
 				stageData[i].offsetY = tileOffsetY[offsetY - 1];
 				stageData[i].offsetY += stageData[i].height;
@@ -481,19 +482,19 @@ int Stage::Fold(const Vector3& playerPos)
 		}
 	}
 
-	if (Input::isKey(KEY_INPUT_W))
+	if (InputManger::Up())
 	{
 		direction = 0;
 	}
-	else if (Input::isKey(KEY_INPUT_A))
+	else if (InputManger::Down())
 	{
 		direction = 1;
 	}
-	else if (Input::isKey(KEY_INPUT_S))
+	else if (InputManger::Left())
 	{
 		direction = 2;
 	}
-	else if (Input::isKey(KEY_INPUT_D))
+	else if (InputManger::Right())
 	{
 		direction = 3;
 	}
@@ -519,7 +520,7 @@ int Stage::Fold(const Vector3& playerPos)
 			break;
 		}
 
-		for (size_t y = 0; y < stageData[moveStageData].height / 2; y++)
+		for (size_t y = 0; y < static_cast<size_t>(stageData[moveStageData].height / 2); y++)
 		{
 			if (y == stageData[moveStageData].height - y - 1)
 			{
@@ -535,12 +536,49 @@ int Stage::Fold(const Vector3& playerPos)
 		}
 
 		stageData[moveStageData].offsetY += stageData[moveStageData].height;
-		stageData[moveStageData].stageNumber = onPlayerStageTile;
+		stageData[moveStageData].stageNumber = static_cast<char>(onPlayerStageTile);
 		stageData[moveStageData].turnFlagY = !stageData[moveStageData].turnFlagY;
 
 		break;
 	}
-	case 1: //ç∂ì¸óÕ
+	case 1: //â∫ì¸óÕ
+	{
+		if (onPlayerStageTile / stageTile.height >= static_cast<size_t>(stageTile.height - 1))
+		{
+			break;
+		}
+
+		moveStageTile = onPlayerStageTile + stageTile.height;
+		moveStageData = stageTile.stageTile[moveStageTile] - 1;
+
+		if (moveStageTile >= static_cast<size_t>(stageTile.width * stageTile.height) ||
+			stageTile.stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
+		{
+			break;
+		}
+
+		for (size_t y = 0; y < static_cast<size_t>(stageData[moveStageData].height / 2); y++)
+		{
+			if (y == stageData[moveStageData].height - y - 1)
+			{
+				break;
+			}
+			for (size_t x = 0; x < stageData[moveStageData].width; x++)
+			{
+				mapchipPos = y * stageData[moveStageData].height + x;
+				reverseMapchipPos = (stageData[moveStageData].height - y - 1) * stageData[moveStageData].height + x;
+
+				Swap(&stageData[moveStageData].mapchip[mapchipPos], &stageData[moveStageData].mapchip[reverseMapchipPos]);
+			}
+		}
+
+		stageData[moveStageData].offsetY -= stageData[moveStageData].height;
+		stageData[moveStageData].stageNumber = static_cast<char>(onPlayerStageTile);
+		stageData[moveStageData].turnFlagY = !stageData[moveStageData].turnFlagY;
+
+		break;
+	}
+	case 2: //ç∂ì¸óÕ
 	{
 		if (onPlayerStageTile % stageTile.width <= 0)
 		{
@@ -558,7 +596,7 @@ int Stage::Fold(const Vector3& playerPos)
 
 		for (size_t y = 0; y < stageData[moveStageData].height; y++)
 		{
-			for (size_t x = 0; x < stageData[moveStageData].width / 2; x++)
+			for (size_t x = 0; x < static_cast<size_t>(stageData[moveStageData].width / 2); x++)
 			{
 				if (x == stageData[moveStageData].width - x - 1)
 				{
@@ -573,51 +611,14 @@ int Stage::Fold(const Vector3& playerPos)
 		}
 
 		stageData[moveStageData].offsetX += stageData[moveStageData].width;
-		stageData[moveStageData].stageNumber = onPlayerStageTile;
+		stageData[moveStageData].stageNumber = static_cast<char>(onPlayerStageTile);
 		stageData[moveStageData].turnFlagX = !stageData[moveStageData].turnFlagX;
-
-		break;
-	}
-	case 2: //â∫ì¸óÕ
-	{
-		if (onPlayerStageTile / stageTile.height >= stageTile.height - 1)
-		{
-			break;
-		}
-
-		moveStageTile = onPlayerStageTile + stageTile.height;
-		moveStageData = stageTile.stageTile[moveStageTile] - 1;
-
-		if (moveStageTile >= stageTile.width * stageTile.height ||
-			stageTile.stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
-		{
-			break;
-		}
-
-		for (size_t y = 0; y < stageData[moveStageData].height / 2; y++)
-		{
-			if (y == stageData[moveStageData].height - y - 1)
-			{
-				break;
-			}
-			for (size_t x = 0; x < stageData[moveStageData].width; x++)
-			{
-				mapchipPos = y * stageData[moveStageData].height + x;
-				reverseMapchipPos = (stageData[moveStageData].height - y - 1) * stageData[moveStageData].height + x;
-
-				Swap(&stageData[moveStageData].mapchip[mapchipPos], &stageData[moveStageData].mapchip[reverseMapchipPos]);
-			}
-		}
-
-		stageData[moveStageData].offsetY -= stageData[moveStageData].height;
-		stageData[moveStageData].stageNumber = onPlayerStageTile;
-		stageData[moveStageData].turnFlagY = !stageData[moveStageData].turnFlagY;
 
 		break;
 	}
 	case 3: //âEì¸óÕ
 	{
-		if (onPlayerStageTile % stageTile.width >= stageTile.width - 1)
+		if (onPlayerStageTile % stageTile.width >= static_cast<size_t>(stageTile.width - 1))
 		{
 			break;
 		}
@@ -625,7 +626,7 @@ int Stage::Fold(const Vector3& playerPos)
 		moveStageTile = onPlayerStageTile + 1;
 		moveStageData = stageTile.stageTile[moveStageTile] - 1;
 
-		if (moveStageTile >= stageTile.width * stageTile.height ||
+		if (moveStageTile >= static_cast<size_t>(stageTile.width * stageTile.height) ||
 			stageTile.stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
 		{
 			break;
@@ -633,7 +634,7 @@ int Stage::Fold(const Vector3& playerPos)
 
 		for (size_t y = 0; y < stageData[moveStageData].height; y++)
 		{
-			for (size_t x = 0; x < stageData[moveStageData].width / 2; x++)
+			for (size_t x = 0; x < static_cast<size_t>(stageData[moveStageData].width / 2); x++)
 			{
 				if (x == stageData[moveStageData].width - x - 1)
 				{
@@ -648,7 +649,7 @@ int Stage::Fold(const Vector3& playerPos)
 		}
 
 		stageData[moveStageData].offsetX -= stageData[moveStageData].width;
-		stageData[moveStageData].stageNumber = onPlayerStageTile;
+		stageData[moveStageData].stageNumber = static_cast<char>(onPlayerStageTile);
 		stageData[moveStageData].turnFlagX = !stageData[moveStageData].turnFlagX;
 
 		break;

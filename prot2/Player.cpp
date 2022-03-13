@@ -1,7 +1,7 @@
 #include "Player.h"
 #include <DxLib.h>
-#include "Input.h"
 #include "Stage.h"
+#include "InputManger.h"
 #include "Colors.h"
 
 Player* Player::Get()
@@ -27,14 +27,14 @@ void Player::Init()
 
 void Player::Updata()
 {
-	//if (Input::isKeyTrigger(KEY_INPUT_A) && Input::isKeyTrigger(KEY_INPUT_LEFT))
-	//{
-	//	pos.x -= 1.0f;
-	//}
-	//if (Input::isKeyTrigger(KEY_INPUT_D) && Input::isKeyTrigger(KEY_INPUT_RIGHT))
-	//{
-	//	pos.x += 1.0f;
-	//}
+	if (InputManger::LeftTrigger())
+	{
+		pos.x -= 1.0f;
+	}
+	if (InputManger::RightTrigger())
+	{
+		pos.x += 1.0f;
+	}
 }
 
 void Player::Draw()
