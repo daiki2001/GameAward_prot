@@ -19,9 +19,7 @@ public: //メンバ関数
 	// 描画
 	void Draw();
 
-	// プレイヤーの座標を取得
-	inline Vector3 GetPos() { return pos; }
-
-private: //メンバ変数
+public: //メンバ変数
 	Vector3 pos;
+	unsigned char tile[4];
 };

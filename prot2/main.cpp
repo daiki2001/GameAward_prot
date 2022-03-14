@@ -1,6 +1,6 @@
 #include <DxLib.h>
-#include "Stage.h"
 #include "Player.h"
+#include "Stage.h"
 #include "InputManger.h"
 #include "Colors.h"
 
@@ -43,10 +43,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// 画像などのリソースデータの変数宣言と読み込み
 
 	// ゲームループで使う変数の宣言
-	Stage* stage = Stage::Get();
-	stage->LoadStage("./Resources/stage1.csv");
-
 	Player* player = Player::Get();
+
+	Stage* stage = Stage::Get();
+	stage->LoadStage("./Resources/stage1.csv", player->tile);
+	player->pos.x = static_cast<float>(Stage::GetStartPlayerPosX());
+	player->pos.y = static_cast<float>(Stage::GetStartPlayerPosY());
 
 	// ゲームループ
 	while (1)
@@ -61,11 +63,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		player->Updata();
 		if (Input::isKey(KEY_INPUT_1))
 		{
-			stage->LoadStage("./Resources/stage1.csv");
+			stage->LoadStage("./Resources/stage1.csv", player->tile);
+			player->pos.x = static_cast<float>(Stage::GetStartPlayerPosX());
+			player->pos.y = static_cast<float>(Stage::GetStartPlayerPosY());
 		}
 		if (Input::isKey(KEY_INPUT_2))
 		{
-			stage->LoadStage("./Resources/stage2.csv");
+			stage->LoadStage("./Resources/stage2.csv", player->tile);
+			player->pos.x = static_cast<float>(Stage::GetStartPlayerPosX());
+			player->pos.y = static_cast<float>(Stage::GetStartPlayerPosY());
 		}
 		if (InputManger::Reset())
 		{
@@ -73,7 +79,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 		if (InputManger::Act1() && (InputManger::UpTrigger() || InputManger::DownTrigger() || InputManger::LeftTrigger() || InputManger::RightTrigger()))
 		{
-			stage->Fold(player->GetPos());
+			stage->Fold(player->pos, player->tile);
 		}
 
 		// 描画処理

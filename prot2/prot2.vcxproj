@@ -145,6 +145,10 @@
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stage1.csv" />
+    <None Include="Resources\stage2.csv" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

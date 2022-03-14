@@ -63,4 +63,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stage1.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+    <None Include="Resources\stage2.csv">
+      <Filter>リソース ファイル</Filter>
+    </None>
+  </ItemGroup>
 </Project>
