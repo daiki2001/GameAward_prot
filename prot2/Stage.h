@@ -30,9 +30,11 @@ public: //サブクラス
 		char stageNumber = 0;
 		char offsetX = 0;
 		char offsetY = 0;
+		size_t size = 1;
 		unsigned char width = 1;
 		unsigned char height = 1;
 		unsigned char direction = 0;
+		bool isTop = true;
 	};
 	struct StageData
 	{
@@ -47,7 +49,6 @@ public: //サブクラス
 	};
 
 public: //定数
-	static const int stageSize = 5;
 	static const int blockSize;
 
 public: //静的メンバ変数
@@ -55,6 +56,7 @@ public: //静的メンバ変数
 private:
 	static int startPlayerPosX;
 	static int startPlayerPosY;
+	static unsigned char initFoldCount[4];
 
 public: //メンバ関数
 	// 初期化
@@ -67,28 +69,35 @@ public: //メンバ関数
 	/// <summary>
 	/// ステージファイルの読み込み
 	/// </summary>
-	/// <param name="playerTileArray"> プレイヤーが折れる回数(0番から上、下、左、右) </param>
+	/// <param name="foldCount"> プレイヤーが折れる回数(0番から上、下、左、右) </param>
 	/// <param name="fileHandle"> ステージファイルのパス </param>
 	/// <returns> 0で成功、0以外で失敗 </returns>
 	int LoadStage(const char* fileHandle, unsigned char playerTileArray[4]);
 
-	// ステージを折る
-	int Fold(const Vector3& playerPos, unsigned char playerTile[4]);
+	// ステージを折る・開く
+	int FoldAndOpen(const Vector3& playerPos, unsigned char foldCount[4]);
 	// リセット
-	inline void Reset() { stageData = initStageData; }
+	void Reset();
 	// 内部データ全削除
 	void DataClear();
 
 	// プレイヤーのx軸上の開始位置を取得
-	static int GetStartPlayerPosX() { return startPlayerPosX; }
+	inline static int GetStartPlayerPosX() { return startPlayerPosX; }
 	// プレイヤーのx軸上の開始位置を取得
-	static int GetStartPlayerPosY() { return startPlayerPosY; }
+	inline static int GetStartPlayerPosY() { return startPlayerPosY; }
+	// プレイヤーの折れる回数の初期状態を取得
+	static void GetInitFoldCount(unsigned char foldCount[4]);
 	// ステージタイルのデータを取得
 	inline StageTileData* GetStageTileData(const short& stageNumber, const short& stageTileNumber);
 	// ステージのデータを取得
 	inline StageData* GetStageData(const short& stageNumber);
 	// 全ステージのデータを取得
 	inline StageData* GetAllStageData();
+private:
+	// ステージを折る
+	int Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData);
+	// ステージを開く
+	int Open(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& moveStageTile, const size_t& moveStageData);
 
 private: //メンバ変数
 	std::vector<StageData> stageData;

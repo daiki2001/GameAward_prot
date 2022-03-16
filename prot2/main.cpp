@@ -76,10 +76,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		if (InputManger::Reset())
 		{
 			stage->Reset();
+			stage->GetInitFoldCount(player->tile);
 		}
 		if (InputManger::Act1() && (InputManger::UpTrigger() || InputManger::DownTrigger() || InputManger::LeftTrigger() || InputManger::RightTrigger()))
 		{
-			stage->Fold(player->pos, player->tile);
+			stage->FoldAndOpen(player->pos, player->tile);
 		}
 
 		// •`‰æˆ—
