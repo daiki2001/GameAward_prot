@@ -69,7 +69,7 @@ void Stage::Draw()
 				{
 					posX = static_cast<int>(x + stageData[i].stageData[j].offsetX);
 					posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
-					mapchipPos = y * stageData[i].stageData[j].height + x;
+					mapchipPos = y * stageData[i].stageData[j].width + x;
 
 					switch (stageData[i].stageData[j].mapchip[mapchipPos])
 					{
@@ -107,52 +107,72 @@ void Stage::Draw()
 
 		for (j = 0; j < stageData[i].stageData.size(); j++)
 		{
-			if ((stageData[i].stageData[j].stageNumber % stageData[i].width) - 1 >= 0 &&
-				stageData[i].stageTile[stageData[i].stageData[j].stageNumber - 1] != MapchipData::EMPTY_STAGE)
-			{
-				for (y = 0; y < stageData[i].stageData[j].height; y++)
-				{
-					posX = static_cast<int>(0 + stageData[i].stageData[j].offsetX);
-					posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
+			static char sideStageTile = 0;
+			static char sideStageData = 0;
 
-					DxLib::DrawBox(posX * blockSize, posY * blockSize + blockSize * 1 / 4,
-						posX * blockSize + blockSize * 1 / 4, posY * blockSize + blockSize * 3 / 4, BLACK, true);
+			if ((stageData[i].stageData[j].stageNumber % stageData[i].width) - 1 >= 0)
+			{
+				sideStageTile = stageData[i].stageData[j].stageNumber - 1;
+
+				if (stageData[i].stageTile[sideStageTile] != MapchipData::EMPTY_STAGE)
+				{
+					for (y = 0; y < stageData[i].stageData[j].height; y++)
+					{
+						posX = static_cast<int>(0 + stageData[i].stageData[j].offsetX);
+						posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
+
+						DxLib::DrawBox(posX * blockSize, posY * blockSize + blockSize * 1 / 4,
+							posX * blockSize + blockSize * 1 / 4, posY * blockSize + blockSize * 3 / 4, BLACK, true);
+					}
 				}
 			}
-			if ((stageData[i].stageData[j].stageNumber % stageData[i].width) + 1 < stageData[i].width &&
-				stageData[i].stageTile[stageData[i].stageData[j].stageNumber + 1] != MapchipData::EMPTY_STAGE)
+			if ((stageData[i].stageData[j].stageNumber % stageData[i].width) + 1 < stageData[i].width)
 			{
-				for (y = 0; y < stageData[i].stageData[j].height; y++)
-				{
-					posX = static_cast<int>((stageData[i].stageData[j].width - 1) + stageData[i].stageData[j].offsetX);
-					posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
+				sideStageTile = stageData[i].stageData[j].stageNumber + 1;
 
-					DxLib::DrawBox(posX * blockSize + blockSize * 3 / 4, posY * blockSize + blockSize * 1 / 4,
-						(posX + 1) * blockSize, posY * blockSize + blockSize * 3 / 4, BLACK, true);
+				if (stageData[i].stageTile[sideStageTile] != MapchipData::EMPTY_STAGE)
+				{
+					for (y = 0; y < stageData[i].stageData[j].height; y++)
+					{
+						posX = static_cast<int>((stageData[i].stageData[j].width - 1) + stageData[i].stageData[j].offsetX);
+						posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
+
+						DxLib::DrawBox(posX * blockSize + blockSize * 3 / 4, posY * blockSize + blockSize * 1 / 4,
+							(posX + 1) * blockSize, posY * blockSize + blockSize * 3 / 4, BLACK, true);
+					}
 				}
 			}
-			if ((stageData[i].stageData[j].stageNumber / stageData[i].width) - 1 >= 0 &&
-				stageData[i].stageTile[stageData[i].stageData[j].stageNumber - stageData[i].height] != MapchipData::EMPTY_STAGE)
+			if ((stageData[i].stageData[j].stageNumber / stageData[i].width) - 1 >= 0)
 			{
-				for (x = 0; x < stageData[i].stageData[j].width; x++)
-				{
-					posX = static_cast<int>(x + stageData[i].stageData[j].offsetX);
-					posY = static_cast<int>(0 + stageData[i].stageData[j].offsetY);
+				sideStageTile = stageData[i].stageData[j].stageNumber - stageData[i].width;
+				sideStageData = stageData[i].stageTile[sideStageTile];
 
-					DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4, posY * blockSize,
-						posX * blockSize + blockSize * 3 / 4, posY * blockSize + blockSize * 1 / 4, BLACK, true);
+				if (sideStageData != MapchipData::EMPTY_STAGE)
+				{
+					for (x = 0; x < stageData[i].stageData[sideStageData].width; x++)
+					{
+						posX = static_cast<int>(x + stageData[i].stageData[sideStageData].offsetX);
+						posY = static_cast<int>(0 + stageData[i].stageData[sideStageData].offsetY);
+
+						DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4, posY * blockSize,
+							posX * blockSize + blockSize * 3 / 4, posY * blockSize + blockSize * 1 / 4, BLACK, true);
+					}
 				}
 			}
-			if ((stageData[i].stageData[j].stageNumber / stageData[i].width) + 1 < stageData[i].height &&
-				stageData[i].stageTile[stageData[i].stageData[j].stageNumber + stageData[i].height] != MapchipData::EMPTY_STAGE)
+			if ((stageData[i].stageData[j].stageNumber / stageData[i].width) + 1 < stageData[i].height)
 			{
-				for (x = 0; x < stageData[i].stageData[j].width; x++)
-				{
-					posX = static_cast<int>(x + stageData[i].stageData[j].offsetX);
-					posY = static_cast<int>((stageData[i].stageData[j].height - 1) + stageData[i].stageData[j].offsetY);
+				sideStageTile = stageData[i].stageData[j].stageNumber + stageData[i].width;
 
-					DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4, posY * blockSize + blockSize * 3 / 4,
-						posX * blockSize + blockSize * 3 / 4, (posY + 1) * blockSize, BLACK, true);
+				if (stageData[i].stageTile[sideStageTile] != MapchipData::EMPTY_STAGE)
+				{
+					for (x = 0; x < stageData[i].stageData[j].width; x++)
+					{
+						posX = static_cast<int>(x + stageData[i].stageData[j].offsetX);
+						posY = static_cast<int>((stageData[i].stageData[j].height - 1) + stageData[i].stageData[j].offsetY);
+
+						DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4, posY * blockSize + blockSize * 3 / 4,
+							posX * blockSize + blockSize * 3 / 4, (posY + 1) * blockSize, BLACK, true);
+					}
 				}
 			}
 		}
@@ -184,7 +204,9 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 
 	for (i = 0; i < sizeof(initFoldCount) / sizeof(initFoldCount[0]); i++)
 	{
-		foldCount[i] = initFoldCount[i];
+		//foldCount[i] = initFoldCount[i];
+		foldCount[i] = 1;
+		initFoldCount[i] = 1;
 	}
 
 	static char stageCount = 0;
@@ -297,73 +319,15 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 		for (j = 0; j < stageData[i].stageData.size(); j++)
 		{
 			static unsigned char tileNumber = 0;
-			static char offsetX = 0;
-			static char offsetY = 0;
-
 			tileNumber = stageData[i].stageData[j].stageNumber;
-			offsetX = tileNumber % stageData[i].width;
-			offsetY = tileNumber / stageData[i].width;
 
 			if (stageData[i].stageTile[tileNumber] == MapchipData::EMPTY_STAGE)
 			{
 				continue;
 			}
 
-			if (offsetX <= 0)
-			{
-				stageData[i].stageData[j].offsetX = 0 + stageData[i].offsetX;
-				if (stageData[i].stageOffsetX.size() <= 0)
-				{
-					stageData[i].stageOffsetX.push_back(0 + stageData[i].offsetX);
-				}
-			}
-			else
-			{
-				if (static_cast<size_t>(offsetX) < stageData[i].stageOffsetX.size())
-				{
-					stageData[i].stageData[j].offsetX = stageData[i].stageOffsetX[offsetX - 1];
-					stageData[i].stageData[j].offsetX += stageData[i].stageData[j].width;
-					stageData[i].stageOffsetX[offsetX] = stageData[i].stageData[j].offsetX;
-				}
-				else
-				{
-					for (size_t k = stageData[i].stageOffsetX.size(); k <= size_t(offsetX); k++)
-					{
-						stageData[i].stageOffsetX.push_back(stageData[i].stageOffsetX[k - 1]);
-					}
-					stageData[i].stageData[j].offsetX = stageData[i].stageOffsetX[offsetX - 1];
-					stageData[i].stageData[j].offsetX += stageData[i].stageData[j].width;
-					stageData[i].stageOffsetX[offsetX] = stageData[i].stageData[j].offsetX;
-				}
-			}
-
-			if (offsetY <= 0)
-			{
-				stageData[i].stageData[j].offsetY = 0 + stageData[i].offsetY;
-				if (stageData[i].stageOffsetY.size() <= 0)
-				{
-					stageData[i].stageOffsetY.push_back(0 + stageData[i].offsetY);
-				}
-			}
-			else
-			{
-				if (static_cast<size_t>(offsetY) < stageData[i].stageOffsetY.size())
-				{
-					stageData[i].stageData[j].offsetY = stageData[i].stageOffsetY[offsetY - 1];
-					stageData[i].stageData[j].offsetY += stageData[i].stageData[j].height;
-					stageData[i].stageOffsetY[offsetY] = stageData[i].stageData[j].offsetY;
-				}
-				else
-				{
-					for (size_t k = stageData[i].stageOffsetY.size(); k <= size_t(offsetY); k++)
-					{
-						stageData[i].stageOffsetY.push_back(stageData[i].stageOffsetY[k - 1]);
-					}
-					stageData[i].stageData[j].offsetY = stageData[i].stageOffsetY[offsetY - 1];
-					stageData[i].stageData[j].offsetY += stageData[i].stageData[j].height;
-					stageData[i].stageOffsetY[offsetY] = stageData[i].stageData[j].offsetY;
-				}
-			}
+			stageData[i].stageData[j].offsetX += stageData[i].offsetX;
+			stageData[i].stageData[j].offsetY += stageData[i].offsetY;
 		}
 	}
 
@@ -429,26 +393,9 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 {
 	static unsigned char direction = 0;
-	static size_t onPlayerStage = 0;
 	static size_t onPlayerStageTile = 0;
 	static size_t moveStageTile = 0;
 	static size_t moveStageData = 0;
-
-	for (i = 0; i < stageData.size(); i++)
-	{
-		for (j = 0; j < stageData[i].stageData.size(); j++)
-		{
-			if (playerPos.x >= stageData[i].stageData[j].offsetX &&
-				playerPos.x < stageData[i].stageData[j].offsetX + stageData[i].stageData[j].width &&
-				playerPos.y >= stageData[i].stageData[j].offsetY &&
-				playerPos.y < stageData[i].stageData[j].offsetY + stageData[i].stageData[j].height)
-			{
-				onPlayerStage = i;
-				onPlayerStageTile = stageData[i].stageData[j].stageNumber;
-				break;
-			}
-		}
-	}
 
 	if (InputManger::Up())
 	{
@@ -468,122 +415,173 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 	}
 
 	static size_t reverseMapchipPos = 0;
+	static bool isAct = false;
 
-	switch (direction)
+	isAct = false;
+
+	for (i = 0; i < stageData.size(); i++)
 	{
-	case 0: //è„ì¸óÕ
-	{
-		if (onPlayerStageTile / stageData[onPlayerStage].width <= 0)
+		for (j = 0; j < stageData[i].stageData.size(); j++)
+		{
+			if ((playerPos.x >= stageData[i].stageData[j].offsetX &&
+				playerPos.x < stageData[i].stageData[j].offsetX + stageData[i].stageData[j].width) &&
+				(playerPos.y >= stageData[i].stageData[j].offsetY &&
+				playerPos.y < stageData[i].stageData[j].offsetY + stageData[i].stageData[j].height))
+			{
+				onPlayerStageTile = stageData[i].stageData[j].stageNumber;
+			}
+			else
+			{
+				continue;
+			}
+
+			switch (direction)
+			{
+			case 0: //è„ì¸óÕ
+			{
+				if (onPlayerStageTile / stageData[i].width <= 0)
+				{
+					break;
+				}
+
+				moveStageTile = onPlayerStageTile - stageData[i].width;
+				moveStageData = stageData[i].stageTile[moveStageTile] - 1;
+
+				if (moveStageTile < 0 ||
+					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
+				{
+					break;
+				}
+
+				if (playerPos.x < stageData[i].stageData[moveStageData].offsetX ||
+					playerPos.x >= stageData[i].stageData[moveStageData].offsetX + stageData[i].stageData[moveStageData].width)
+				{
+					break;
+				}
+
+				if (stageData[i].stageData[moveStageData].direction == 0)
+				{
+					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
+				}
+				else
+				{
+					Open(playerTile, direction, i, moveStageTile, moveStageData);
+				}
+
+				isAct = true;
+
+				break;
+			}
+			case 1: //â∫ì¸óÕ
+			{
+				if (onPlayerStageTile / stageData[i].width >= static_cast<size_t>(stageData[i].height - 1))
+				{
+					break;
+				}
+
+				moveStageTile = onPlayerStageTile + stageData[i].width;
+				moveStageData = stageData[i].stageTile[moveStageTile] - 1;
+
+				if (moveStageTile >= static_cast<size_t>(stageData[i].width * stageData[i].height) ||
+					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
+				{
+					break;
+				}
+
+				if (playerPos.x < stageData[i].stageData[moveStageData].offsetX ||
+					playerPos.x >= stageData[i].stageData[moveStageData].offsetX + stageData[i].stageData[moveStageData].width)
+				{
+					break;
+				}
+
+				if (stageData[i].stageData[moveStageData].direction == 0)
+				{
+					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
+				}
+				else
+				{
+					Open(playerTile, direction, i, moveStageTile, moveStageData);
+				}
+
+				isAct = true;
+
+				break;
+			}
+			case 2: //ç∂ì¸óÕ
+			{
+				if (onPlayerStageTile % stageData[i].width <= 0)
+				{
+					break;
+				}
+
+				moveStageTile = onPlayerStageTile - 1;
+				moveStageData = stageData[i].stageTile[moveStageTile] - 1;
+
+				if (moveStageTile < 0 ||
+					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
+				{
+					break;
+				}
+
+				if (stageData[i].stageData[moveStageData].direction == 0)
+				{
+					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
+				}
+				else
+				{
+					Open(playerTile, direction, i, moveStageTile, moveStageData);
+				}
+
+				isAct = true;
+
+				break;
+			}
+			case 3: //âEì¸óÕ
+			{
+				if (onPlayerStageTile % stageData[i].width >= static_cast<size_t>(stageData[i].width - 1))
+				{
+					break;
+				}
+
+				moveStageTile = onPlayerStageTile + 1;
+				moveStageData = stageData[i].stageTile[moveStageTile] - 1;
+
+				if (moveStageTile >= static_cast<size_t>(stageData[i].width * stageData[i].height) ||
+					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
+				{
+					break;
+				}
+
+				if (stageData[i].stageData[moveStageData].direction == 0)
+				{
+					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
+				}
+				else
+				{
+					Open(playerTile, direction, i, moveStageTile, moveStageData);
+				}
+
+				isAct = true;
+
+				break;
+			}
+			default:
+			{
+				return EF;
+				break;
+			}
+			}
+
+			if (isAct)
+			{
+				break;
+			}
+		}
+
+		if (isAct)
 		{
 			break;
 		}
-
-		moveStageTile = onPlayerStageTile - stageData[onPlayerStage].width;
-		moveStageData = stageData[onPlayerStage].stageTile[moveStageTile] - 1;
-
-		if (moveStageTile < 0 ||
-			stageData[onPlayerStage].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
-		{
-			break;
-		}
-
-		if (stageData[onPlayerStage].stageData[moveStageData].direction == 0)
-		{
-			Fold(playerTile, direction, onPlayerStage, onPlayerStageTile, moveStageData);
-		}
-		else
-		{
-			Open(playerTile, direction, onPlayerStage, moveStageTile, moveStageData);
-		}
-
-		break;
-	}
-	case 1: //â∫ì¸óÕ
-	{
-		if (onPlayerStageTile / stageData[onPlayerStage].width >= static_cast<size_t>(stageData[onPlayerStage].height - 1))
-		{
-			break;
-		}
-
-		moveStageTile = onPlayerStageTile + stageData[onPlayerStage].width;
-		moveStageData = stageData[onPlayerStage].stageTile[moveStageTile] - 1;
-
-		if (moveStageTile >= static_cast<size_t>(stageData[onPlayerStage].width * stageData[onPlayerStage].height) ||
-			stageData[onPlayerStage].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
-		{
-			break;
-		}
-
-		if (stageData[onPlayerStage].stageData[moveStageData].direction == 0)
-		{
-			Fold(playerTile, direction, onPlayerStage, onPlayerStageTile, moveStageData);
-		}
-		else
-		{
-			Open(playerTile, direction, onPlayerStage, moveStageTile, moveStageData);
-		}
-
-		break;
-	}
-	case 2: //ç∂ì¸óÕ
-	{
-		if (onPlayerStageTile % stageData[onPlayerStage].width <= 0)
-		{
-			break;
-		}
-
-		moveStageTile = onPlayerStageTile - 1;
-		moveStageData = stageData[onPlayerStage].stageTile[moveStageTile] - 1;
-
-		if (moveStageTile < 0 ||
-			stageData[onPlayerStage].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
-		{
-			break;
-		}
-
-		if (stageData[onPlayerStage].stageData[moveStageData].direction == 0)
-		{
-			Fold(playerTile, direction, onPlayerStage, onPlayerStageTile, moveStageData);
-		}
-		else
-		{
-			Open(playerTile, direction, onPlayerStage, moveStageTile, moveStageData);
-		}
-
-		break;
-	}
-	case 3: //âEì¸óÕ
-	{
-		if (onPlayerStageTile % stageData[onPlayerStage].width >= static_cast<size_t>(stageData[onPlayerStage].width - 1))
-		{
-			break;
-		}
-
-		moveStageTile = onPlayerStageTile + 1;
-		moveStageData = stageData[onPlayerStage].stageTile[moveStageTile] - 1;
-
-		if (moveStageTile >= static_cast<size_t>(stageData[onPlayerStage].width * stageData[onPlayerStage].height) ||
-			stageData[onPlayerStage].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
-		{
-			break;
-		}
-
-		if (stageData[onPlayerStage].stageData[moveStageData].direction == 0)
-		{
-			Fold(playerTile, direction, onPlayerStage, onPlayerStageTile, moveStageData);
-		}
-		else
-		{
-			Open(playerTile, direction, onPlayerStage, moveStageTile, moveStageData);
-		}
-
-		break;
-	}
-	default:
-	{
-		return EF;
-		break;
-	}
 	}
 
 	return 0;
@@ -709,8 +707,8 @@ int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, con
 			}
 			for (x = 0; x < stageData[onPlayerStage].stageData[moveStageData].width; x++)
 			{
-				mapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].height + x;
-				reverseMapchipPos = (stageData[onPlayerStage].stageData[moveStageData].height - y - 1) * stageData[onPlayerStage].stageData[moveStageData].height + x;
+				mapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].width + x;
+				reverseMapchipPos = (stageData[onPlayerStage].stageData[moveStageData].height - y - 1) * stageData[onPlayerStage].stageData[moveStageData].width + x;
 
 				Swap(&stageData[onPlayerStage].stageData[moveStageData].mapchip[mapchipPos], &stageData[onPlayerStage].stageData[moveStageData].mapchip[reverseMapchipPos]);
 			}
@@ -736,8 +734,8 @@ int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, con
 					break;
 				}
 
-				mapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].height + x;
-				reverseMapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].height + (stageData[onPlayerStage].stageData[moveStageData].width - x - 1);
+				mapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].width + x;
+				reverseMapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].width + (stageData[onPlayerStage].stageData[moveStageData].width - x - 1);
 
 				Swap(&stageData[onPlayerStage].stageData[moveStageData].mapchip[mapchipPos], &stageData[onPlayerStage].stageData[moveStageData].mapchip[reverseMapchipPos]);
 			}
@@ -779,8 +777,8 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 			}
 			for (x = 0; x < stageData[onPlayerStage].stageData[moveStageData].width; x++)
 			{
-				mapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].height + x;
-				reverseMapchipPos = (stageData[onPlayerStage].stageData[moveStageData].height - y - 1) * stageData[onPlayerStage].stageData[moveStageData].height + x;
+				mapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].width + x;
+				reverseMapchipPos = (stageData[onPlayerStage].stageData[moveStageData].height - y - 1) * stageData[onPlayerStage].stageData[moveStageData].width + x;
 
 				Swap(&stageData[onPlayerStage].stageData[moveStageData].mapchip[mapchipPos], &stageData[onPlayerStage].stageData[moveStageData].mapchip[reverseMapchipPos]);
 			}
@@ -806,8 +804,8 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 					break;
 				}
 
-				mapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].height + x;
-				reverseMapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].height + (stageData[onPlayerStage].stageData[moveStageData].width - x - 1);
+				mapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].width + x;
+				reverseMapchipPos = y * stageData[onPlayerStage].stageData[moveStageData].width + (stageData[onPlayerStage].stageData[moveStageData].width - x - 1);
 
 				Swap(&stageData[onPlayerStage].stageData[moveStageData].mapchip[mapchipPos], &stageData[onPlayerStage].stageData[moveStageData].mapchip[reverseMapchipPos]);
 			}
@@ -826,6 +824,27 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 	stageData[onPlayerStage].stageData[moveStageData].stageNumber = static_cast<char>(moveStageTile);
 	stageData[onPlayerStage].stageData[moveStageData].direction = 0;
 	playerTile[direction]++;
+
+	return 0;
+}
+
+int Stage::SearchTopStageTile()
+{
+	std::vector<Vector3> topStageTile; //xÇÃílÇ…stageDataÇÃóvëfî‘çÜÅAyÇÃílÇ…stageData[i].stageDataÇÃóvëfî‘çÜÇäiî[Ç∑ÇÈ
+	static bool isTop = false;
+
+	for (i = 0; i < stageData.size(); i++)
+	{
+		for (j = 0; j < stageData[i].stageData.size(); j++)
+		{
+			isTop = false;
+
+			for (size_t k = 0; k < topStageTile.size(); k++)
+			{
+
+			}
+		}
+	}
 
 	return 0;
 }

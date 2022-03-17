@@ -132,6 +132,7 @@
     <ClCompile Include="LoadFile.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerBody.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
@@ -142,12 +143,14 @@
     <ClInclude Include="InputManger.h" />
     <ClInclude Include="LoadFile.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerBody.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\stage1.csv" />
     <None Include="Resources\stage2.csv" />
+    <None Include="Resources\stage3.csv" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

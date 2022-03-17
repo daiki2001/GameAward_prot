@@ -38,6 +38,14 @@ void Player::Updata()
 {
 	if (!InputManger::Act1())
 	{
+		if (InputManger::UpTrigger())
+		{
+			pos.y -= 1.0f;
+		}
+		if (InputManger::DownTrigger())
+		{
+			pos.y += 1.0f;
+		}
 		if (InputManger::LeftTrigger())
 		{
 			pos.x -= 1.0f;

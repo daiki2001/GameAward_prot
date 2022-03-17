@@ -98,6 +98,8 @@ private:
 	int Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData);
 	// ステージを開く
 	int Open(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& moveStageTile, const size_t& moveStageData);
+	// 一番上のステージタイルを探す
+	int SearchTopStageTile();
 
 private: //メンバ変数
 	std::vector<StageData> stageData;

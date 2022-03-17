@@ -73,6 +73,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->pos.x = static_cast<float>(Stage::GetStartPlayerPosX());
 			player->pos.y = static_cast<float>(Stage::GetStartPlayerPosY());
 		}
+		if (Input::isKey(KEY_INPUT_3))
+		{
+			stage->LoadStage("./Resources/stage3.csv", player->tile);
+			player->pos.x = static_cast<float>(Stage::GetStartPlayerPosX());
+			player->pos.y = static_cast<float>(Stage::GetStartPlayerPosY());
+		}
 		if (InputManger::Reset())
 		{
 			stage->Reset();
