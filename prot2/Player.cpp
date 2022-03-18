@@ -382,6 +382,8 @@ void Player::Draw()
 		DrawBox(center_position.x - 30, center_position.y - 30, center_position.x + 30, center_position.y + 30, GetColor(255, 0, 0), true);
 	}
 
+	DrawLine(0, floorHeight, 1280, floorHeight, WHITE, true);
+
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "AD:左右移動");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "SPACE:ジャンプ");
 	DrawFormatString(0, 40, GetColor(255, 255, 255), "←↑→:折る・開く");
