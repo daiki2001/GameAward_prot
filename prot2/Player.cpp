@@ -30,8 +30,8 @@ Player::~Player()
 
 void Player::Init()
 {
-	center_position.x = static_cast<float>(Stage::GetStartPlayerPosX());
-	center_position.y = static_cast<float>(Stage::GetStartPlayerPosY());
+	center_position.x = static_cast<float>(Stage::GetStartPlayerPosX() * Stage::blockSize);
+	center_position.y = static_cast<float>(Stage::GetStartPlayerPosY() * Stage::blockSize);
 
 	//for (i = 0; i < sizeof(tile) / sizeof(tile[0]); i++) tile[i] = 0;
 

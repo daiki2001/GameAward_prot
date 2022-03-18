@@ -21,7 +21,7 @@ static size_t y = 0;
 static size_t mapchipPos = 0;
 }
 
-const int Stage::blockSize = 20;
+const int Stage::blockSize = 40;
 int Stage::foldGraph = -1;
 int Stage::startPlayerPosX = 0;
 int Stage::startPlayerPosY = 0;
@@ -207,9 +207,9 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 
 	for (i = 0; i < sizeof(initFoldCount) / sizeof(initFoldCount[0]); i++)
 	{
-		foldCount[i] = initFoldCount[i];
-		//foldCount[i] = 1;
-		//initFoldCount[i] = 1;
+		//foldCount[i] = initFoldCount[i];
+		foldCount[i] = 1;
+		initFoldCount[i] = 1;
 	}
 
 	static char stageCount = 0;
