@@ -2,6 +2,21 @@
 #include "Vector3.h"
 #include "Colors.h"
 
+struct easing
+{
+	float maxtime = 2.0f;
+	float timerate = 0.0f;
+	float addtime = 0.1f;
+
+	bool ismove = false;
+
+	float easeout(const float start, const float end, const float time)
+	{
+		float position = time * (2 - time);
+		return start * (1.0f - position) + end * position;
+	}
+};
+
 enum bodytype
 {
 	left,
@@ -20,12 +35,26 @@ public: //メンバ関数
 	void Init(Vector3 position, bodytype number);
 	// 更新
 	void Update(Vector3 center);
-	//1 or -1(1:right&down -1:left&up)
-	void setslide(int slidepat, Vector3 startpos);
+	/// <summary>
 	// 描画
 	void Draw();
 
+	/// <summary>
+	/// 体を有効化した時の設定
+	/// </summary>
+	/// <param name="center">有効化した時の座標参照先</param>
+	void setactivate(Vector3 center);
+	/// 体のスライドのセットアップ
+	/// </summary>
+	/// <param name="slidepat">スライドする向き(左上:-1 右下:1)</param>
+	/// <param name="move_dis">スライドする距離(隣:1 顔をまたぐ:2)</param>
+	void setslide(int slidepat, int move_dis);
+
 public: //メンバ変数
+	//有効化フラグ
+	bool Isactivate;
+
+	//顔から見た体の位置
 	int body_type;
 
 	//体の座標
@@ -48,6 +77,9 @@ public: //メンバ変数
 	//折る・開く・スライドをしている途中かどうか
 	bool Isaction;
 
+	//スライドする距離
+	int slide_dis;
+
 	//上に重なっている噛みの数
 	int overlap;
 
@@ -55,7 +87,7 @@ public: //メンバ変数
 	int bodydistance;
 
 	//イージング
-	//easing ease;
+	easing ease;
 
 	//体の色
 	int bodycolor = WHITE;

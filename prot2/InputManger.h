@@ -41,6 +41,30 @@ public: //静的メンバ関数
 	static bool RightTrigger();
 	// 右(離した瞬間の判定)
 	static bool RightReturn();
+	// 上
+	static bool SubUp();
+	// 上(押した瞬間の判定)
+	static bool SubUpTrigger();
+	// 上(離した瞬間の判定)
+	static bool SubUpReturn();
+	// 下
+	static bool SubDown();
+	// 下(押した瞬間の判定)
+	static bool SubDownTrigger();
+	// 下(離した瞬間の判定)
+	static bool SubDownReturn();
+	// 左
+	static bool SubLeft();
+	// 左(押した瞬間の判定)
+	static bool SubLeftTrigger();
+	// 左(離した瞬間の判定)
+	static bool SubLeftReturn();
+	// 右
+	static bool SubRight();
+	// 右(押した瞬間の判定)
+	static bool SubRightTrigger();
+	// 右(離した瞬間の判定)
+	static bool SubRightReturn();
 	// リセット
 	static bool Reset();
 	// リセット(押した瞬間の判定)

@@ -8,10 +8,10 @@
 const char TITLE[] = "ワガミオリ";
 
 // ウィンドウ横幅
-const int WIN_WIDTH = 600;
+const int WIN_WIDTH = 1280;
 
 // ウィンドウ縦幅
-const int WIN_HEIGHT = 400;
+const int WIN_HEIGHT = 720;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -44,11 +44,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 	// ゲームループで使う変数の宣言
 	Player* player = Player::Get();
+	unsigned char playerTile[4] = { 0 };
 
 	Stage* stage = Stage::Get();
-	stage->LoadStage("./Resources/stage1.csv", player->tile);
-	player->pos.x = static_cast<float>(Stage::GetStartPlayerPosX());
-	player->pos.y = static_cast<float>(Stage::GetStartPlayerPosY());
+	stage->LoadStage("./Resources/stage1.csv", playerTile);
+	player->Init();
+	player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
 
 	// ゲームループ
 	while (1)
@@ -63,42 +64,39 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		player->Updata();
 		if (Input::isKey(KEY_INPUT_1))
 		{
-			stage->LoadStage("./Resources/stage1.csv", player->tile);
-			player->pos.x = static_cast<float>(Stage::GetStartPlayerPosX());
-			player->pos.y = static_cast<float>(Stage::GetStartPlayerPosY());
+			stage->LoadStage("./Resources/stage1.csv", playerTile);
+			player->Init();
 		}
 		if (Input::isKey(KEY_INPUT_2))
 		{
-			stage->LoadStage("./Resources/stage2.csv", player->tile);
-			player->pos.x = static_cast<float>(Stage::GetStartPlayerPosX());
-			player->pos.y = static_cast<float>(Stage::GetStartPlayerPosY());
+			stage->LoadStage("./Resources/stage2.csv", playerTile);
+			player->Init();
 		}
 		if (Input::isKey(KEY_INPUT_3))
 		{
-			stage->LoadStage("./Resources/stage3.csv", player->tile);
-			player->pos.x = static_cast<float>(Stage::GetStartPlayerPosX());
-			player->pos.y = static_cast<float>(Stage::GetStartPlayerPosY());
+			stage->LoadStage("./Resources/stage3.csv", playerTile);
+			player->Init();
 		}
 		if (InputManger::Reset())
 		{
 			stage->Reset();
-			stage->GetInitFoldCount(player->tile);
+			stage->GetInitFoldCount(playerTile);
 		}
-		if (InputManger::Act1() && (InputManger::UpTrigger() || InputManger::DownTrigger() || InputManger::LeftTrigger() || InputManger::RightTrigger()))
+		if (InputManger::SubUpTrigger() || InputManger::SubDownTrigger() || InputManger::SubLeftTrigger() || InputManger::SubRightTrigger())
 		{
-			stage->FoldAndOpen(player->pos, player->tile);
+			stage->FoldAndOpen(player->center_position, playerTile);
 		}
 
 		// 描画処理
-		stage->Draw();
+		stage->Draw(300, 200);
 		player->Draw();
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
-		ScreenFlip();	
+		DxLib::ScreenFlip();
 
 		// 20ミリ秒待機(疑似60FPS)
-		WaitTimer(20);
+		DxLib::WaitTimer(20);
 
 		// Windowsシステムからくる情報を処理する
 		if (ProcessMessage() == -1)
@@ -113,7 +111,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 	}
 	// Dxライブラリ終了処理
-	DxLib_End();
+	DxLib::DxLib_End();
 
 	// 正常終了
 	return 0;

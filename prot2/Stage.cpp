@@ -21,7 +21,7 @@ static size_t y = 0;
 static size_t mapchipPos = 0;
 }
 
-const int Stage::blockSize = 40;
+const int Stage::blockSize = 20;
 int Stage::foldGraph = -1;
 int Stage::startPlayerPosX = 0;
 int Stage::startPlayerPosY = 0;
@@ -54,7 +54,7 @@ void Stage::Updata()
 {
 }
 
-void Stage::Draw()
+void Stage::Draw(int offsetX, int offsetY)
 {
 	static int posX = 0;
 	static int posY = 0;
@@ -81,13 +81,15 @@ void Stage::Draw()
 					case MapchipData::BLOCK:
 					{
 						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
-						DxLib::DrawBox(posX * blockSize, posY * blockSize, (posX + 1) * blockSize, (posY + 1) * blockSize, GRAY, true);
+						DxLib::DrawBox(posX * blockSize + offsetX, posY * blockSize + offsetY,
+							(posX + 1) * blockSize + offsetX, (posY + 1) * blockSize + offsetY, GRAY, true);
 						break;
 					}
 					case MapchipData::GOAL:
 					{
 						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
-						DxLib::DrawBox(posX * blockSize, posY * blockSize, (posX + 1) * blockSize, (posY + 1) * blockSize, YELLOW, true);
+						DxLib::DrawBox(posX * blockSize + offsetX, posY * blockSize + offsetY,
+							(posX + 1) * blockSize + offsetX, (posY + 1) * blockSize + offsetY, YELLOW, true);
 						break;
 					}
 					case MapchipData::NONE:
@@ -95,7 +97,8 @@ void Stage::Draw()
 					default:
 					{
 						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0x80);
-						DxLib::DrawBox(posX * blockSize, posY * blockSize, (posX + 1) * blockSize, (posY + 1) * blockSize, WHITE, true);
+						DxLib::DrawBox(posX * blockSize + offsetX, posY * blockSize + offsetY,
+							(posX + 1) * blockSize + offsetX, (posY + 1) * blockSize + offsetY, WHITE, true);
 						break;
 					}
 					}
@@ -121,8 +124,8 @@ void Stage::Draw()
 						posX = static_cast<int>(0 + stageData[i].stageData[j].offsetX);
 						posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
 
-						DxLib::DrawBox(posX * blockSize, posY * blockSize + blockSize * 1 / 4,
-							posX * blockSize + blockSize * 1 / 4, posY * blockSize + blockSize * 3 / 4, BLACK, true);
+						DxLib::DrawBox(posX * blockSize + offsetX, posY * blockSize + blockSize * 1 / 4 + offsetY,
+							posX * blockSize + blockSize * 1 / 4 + offsetX, posY * blockSize + blockSize * 3 / 4 + offsetY, BLACK, true);
 					}
 				}
 			}
@@ -137,8 +140,8 @@ void Stage::Draw()
 						posX = static_cast<int>((stageData[i].stageData[j].width - 1) + stageData[i].stageData[j].offsetX);
 						posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
 
-						DxLib::DrawBox(posX * blockSize + blockSize * 3 / 4, posY * blockSize + blockSize * 1 / 4,
-							(posX + 1) * blockSize, posY * blockSize + blockSize * 3 / 4, BLACK, true);
+						DxLib::DrawBox(posX * blockSize + blockSize * 3 / 4 + offsetX, posY * blockSize + blockSize * 1 / 4 + offsetY,
+							(posX + 1) * blockSize + offsetX, posY * blockSize + blockSize * 3 / 4 + offsetY, BLACK, true);
 					}
 				}
 			}
@@ -154,8 +157,8 @@ void Stage::Draw()
 						posX = static_cast<int>(x + stageData[i].stageData[sideStageData].offsetX);
 						posY = static_cast<int>(0 + stageData[i].stageData[sideStageData].offsetY);
 
-						DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4, posY * blockSize,
-							posX * blockSize + blockSize * 3 / 4, posY * blockSize + blockSize * 1 / 4, BLACK, true);
+						DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4 + offsetX, posY * blockSize + offsetY,
+							posX * blockSize + blockSize * 3 / 4 + offsetX, posY * blockSize + blockSize * 1 / 4 + offsetY, BLACK, true);
 					}
 				}
 			}
@@ -170,8 +173,8 @@ void Stage::Draw()
 						posX = static_cast<int>(x + stageData[i].stageData[j].offsetX);
 						posY = static_cast<int>((stageData[i].stageData[j].height - 1) + stageData[i].stageData[j].offsetY);
 
-						DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4, posY * blockSize + blockSize * 3 / 4,
-							posX * blockSize + blockSize * 3 / 4, (posY + 1) * blockSize, BLACK, true);
+						DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4 + offsetX, posY* blockSize + blockSize * 3 / 4 + offsetY,
+							posX* blockSize + blockSize * 3 / 4 + offsetX, (posY + 1)* blockSize + offsetY, BLACK, true);
 					}
 				}
 			}
@@ -204,9 +207,9 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 
 	for (i = 0; i < sizeof(initFoldCount) / sizeof(initFoldCount[0]); i++)
 	{
-		//foldCount[i] = initFoldCount[i];
-		foldCount[i] = 1;
-		initFoldCount[i] = 1;
+		foldCount[i] = initFoldCount[i];
+		//foldCount[i] = 1;
+		//initFoldCount[i] = 1;
 	}
 
 	static char stageCount = 0;
@@ -397,19 +400,19 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 	static size_t moveStageTile = 0;
 	static size_t moveStageData = 0;
 
-	if (InputManger::Up())
+	if (InputManger::SubUp())
 	{
 		direction = 0;
 	}
-	else if (InputManger::Down())
+	else if (InputManger::SubDown())
 	{
 		direction = 1;
 	}
-	else if (InputManger::Left())
+	else if (InputManger::SubLeft())
 	{
 		direction = 2;
 	}
-	else if (InputManger::Right())
+	else if (InputManger::SubRight())
 	{
 		direction = 3;
 	}

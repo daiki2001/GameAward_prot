@@ -64,7 +64,7 @@ public: //メンバ関数
 	// 更新
 	void Updata();
 	// 描画
-	void Draw();
+	void Draw(int offsetX, int offsetY);
 
 	/// <summary>
 	/// ステージファイルの読み込み
