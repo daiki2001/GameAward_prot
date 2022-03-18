@@ -1,21 +1,7 @@
 #pragma once
 #include "Vector3.h"
+#include "Easing.h"
 #include "Colors.h"
-
-struct easing
-{
-	float maxtime = 2.0f;
-	float timerate = 0.0f;
-	float addtime = 0.1f;
-
-	bool ismove = false;
-
-	float easeout(const float start, const float end, const float time)
-	{
-		float position = time * (2 - time);
-		return start * (1.0f - position) + end * position;
-	}
-};
 
 enum bodytype
 {
@@ -37,7 +23,7 @@ public: //メンバ関数
 	void Update(Vector3 center);
 	/// <summary>
 	// 描画
-	void Draw();
+	void Draw(int offsetX, int offsetY);
 
 	/// <summary>
 	/// 体を有効化した時の設定
@@ -87,7 +73,7 @@ public: //メンバ変数
 	int bodydistance;
 
 	//イージング
-	easing ease;
+	Easing ease;
 
 	//体の色
 	int bodycolor = WHITE;

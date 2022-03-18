@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Vector3.h"
+#include "Easing.h"
 
 /*ƒƒ‚ƒŠ‚ª‘å‚«‚­‚È‚è‚·‚¬‚éŒœ”O‚ª‚ ‚é‰ÓŠ‚ÍcharŒ^‚É‚µ‚Ä‚¢‚Ü‚·*/
 
@@ -104,4 +105,6 @@ private:
 private: //ƒƒ“ƒo•Ï”
 	std::vector<StageData> stageData;
 	std::vector<StageData> initStageData;
+
+	Easing stageEase;
 };

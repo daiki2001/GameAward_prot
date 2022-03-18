@@ -88,8 +88,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		// 描画処理
-		stage->Draw(320, 20);
-		player->Draw();
+		stage->Draw(320, 0);
+		player->Draw(320, 0);
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

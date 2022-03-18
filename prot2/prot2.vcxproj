@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Easing.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="InputManger.cpp" />
     <ClCompile Include="LoadFile.cpp" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Colors.h" />
+    <ClInclude Include="Easing.h" />
     <ClInclude Include="General.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputManger.h" />

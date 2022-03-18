@@ -21,7 +21,7 @@ static size_t y = 0;
 static size_t mapchipPos = 0;
 }
 
-const int Stage::blockSize = 40;
+const int Stage::blockSize = 60;
 int Stage::foldGraph = -1;
 int Stage::startPlayerPosX = 0;
 int Stage::startPlayerPosY = 0;
@@ -35,7 +35,8 @@ Stage* Stage::Get()
 
 Stage::Stage() :
 	stageData{},
-	initStageData{}
+	initStageData{},
+	stageEase{}
 {
 	Init();
 }
@@ -47,7 +48,6 @@ Stage::~Stage()
 
 void Stage::Init()
 {
-	//foldGraph = LoadGraph("./Resources/fold.png");
 }
 
 void Stage::Updata()

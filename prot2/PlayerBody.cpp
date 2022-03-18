@@ -266,12 +266,12 @@ void PlayerBody::Update(Vector3 center)
 	}
 }
 
-void PlayerBody::Draw()
+void PlayerBody::Draw(int offsetX, int offsetY)
 {
 	if (Isactivate == true)
 	{
-		DrawBox(static_cast<int>(bodystartpos.x), static_cast<int>(bodystartpos.y),
-			static_cast<int>(bodyendpos.x), static_cast<int>(bodyendpos.y), bodycolor, true);
+		DrawBox(static_cast<int>(bodystartpos.x) + offsetX, static_cast<int>(bodystartpos.y) + offsetY,
+			static_cast<int>(bodyendpos.x) + offsetX, static_cast<int>(bodyendpos.y) + offsetY, bodycolor, true);
 	}
 }
 

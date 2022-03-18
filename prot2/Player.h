@@ -18,7 +18,7 @@ public: //メンバ関数
 	// 更新
 	void Updata();
 	// 描画
-	void Draw();
+	void Draw(int offsetX, int offsetY);
 
 	/// <summary>
 	/// どの体を有効化するか

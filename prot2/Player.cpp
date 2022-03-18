@@ -30,8 +30,8 @@ Player::~Player()
 
 void Player::Init()
 {
-	center_position.x = static_cast<float>(Stage::GetStartPlayerPosX() * Stage::blockSize);
-	center_position.y = static_cast<float>(Stage::GetStartPlayerPosY() * Stage::blockSize);
+	center_position.x = static_cast<float>(Stage::GetStartPlayerPosX() * Stage::blockSize + Stage::blockSize / 2);
+	center_position.y = static_cast<float>(Stage::GetStartPlayerPosY() * Stage::blockSize + Stage::blockSize / 2);
 
 	//for (i = 0; i < sizeof(tile) / sizeof(tile[0]); i++) tile[i] = 0;
 
@@ -320,51 +320,51 @@ void Player::Updata()
 	}
 }
 
-void Player::Draw()
+void Player::Draw(int offsetX, int offsetY)
 {
 	if (body_one.Isslide == false && body_two.Isslide == false && body_three.Isslide == false)
 	{
-		DrawBox(center_position.x - 30, center_position.y - 30, center_position.x + 30, center_position.y + 30, GetColor(255, 0, 0), true);
+		DrawBox(center_position.x - 30 + offsetX, center_position.y - 30 + offsetY, center_position.x + 30 + offsetX, center_position.y + 30 + offsetY, GetColor(255, 0, 0), true);
 	}
 
 #pragma region 重なっている枚数ごとに順番に描画
 	if (body_one.overlap == 2)
 	{
-		body_one.Draw();
+		body_one.Draw(offsetX, offsetY);
 	}
 	if (body_two.overlap == 2)
 	{
-		body_two.Draw();
+		body_two.Draw(offsetX, offsetY);
 	}
 	if (body_three.overlap == 2)
 	{
-		body_three.Draw();
+		body_three.Draw(offsetX, offsetY);
 	}
 
 	if (body_one.overlap == 1)
 	{
-		body_one.Draw();
+		body_one.Draw(offsetX, offsetY);
 	}
 	if (body_two.overlap == 1)
 	{
-		body_two.Draw();
+		body_two.Draw(offsetX, offsetY);
 	}
 	if (body_three.overlap == 1)
 	{
-		body_three.Draw();
+		body_three.Draw(offsetX, offsetY);
 	}
 
 	if (body_one.overlap == 0)
 	{
-		body_one.Draw();
+		body_one.Draw(offsetX, offsetY);
 	}
 	if (body_two.overlap == 0)
 	{
-		body_two.Draw();
+		body_two.Draw(offsetX, offsetY);
 	}
 	if (body_three.overlap == 0)
 	{
-		body_three.Draw();
+		body_three.Draw(offsetX, offsetY);
 	}
 #pragma endregion 重なっている枚数ごとに順番に描画
 
@@ -372,24 +372,24 @@ void Player::Draw()
 	{
 		if (body_three.slide_dis == 2)
 		{
-			DrawBox(center_position.x - 30, center_position.y - 30, body_one.bodyendpos.x, body_one.bodyendpos.y, body_three.bodycolor, true);
+			DrawBox(center_position.x - 30 + offsetX, center_position.y - 30 + offsetY, body_one.bodyendpos.x + offsetX, body_one.bodyendpos.y + offsetY, body_three.bodycolor, true);
 		}
 		if (body_one.slide_dis == 2)
 		{
-			DrawBox(center_position.x + 30, center_position.y - 30, body_three.bodystartpos.x, body_three.bodyendpos.y, body_one.bodycolor, true);
+			DrawBox(center_position.x + 30 + offsetX, center_position.y - 30 + offsetY, body_three.bodystartpos.x + offsetX, body_three.bodyendpos.y + offsetY, body_one.bodycolor, true);
 		}
 
-		DrawBox(center_position.x - 30, center_position.y - 30, center_position.x + 30, center_position.y + 30, GetColor(255, 0, 0), true);
+		DrawBox(center_position.x - 30 + offsetX, center_position.y - 30 + offsetY, center_position.x + 30 + offsetX, center_position.y + 30 + offsetY, GetColor(255, 0, 0), true);
 	}
 
-	DrawLine(0, floorHeight, 1280, floorHeight, WHITE, true);
+	DrawLine(0, floorHeight + offsetY, 1280, floorHeight + offsetY, WHITE, true);
 
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "AD:左右移動");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "SPACE:ジャンプ");
 	DrawFormatString(0, 40, GetColor(255, 255, 255), "←↑→:折る・開く");
-	DrawFormatString(0, 60, GetColor(255, 255, 255), "重なっている枚数\n左：%d\n上：%d\n右：%d", body_one.overlap, body_two.overlap, body_three.overlap);
-	DrawFormatString(0, 140, GetColor(255, 255, 255), "左右スライド：Z or X\n上下スライド：C or V");
-	DrawFormatString(0, 180, GetColor(255, 255, 255), "%f   %f   %f", body_one.bodystartpos.x, body_one.bodyendpos.x, center_position.x);
+	//DrawFormatString(0, 60, GetColor(255, 255, 255), "重なっている枚数\n左：%d\n上：%d\n右：%d", body_one.overlap, body_two.overlap, body_three.overlap);
+	//DrawFormatString(0, 140, GetColor(255, 255, 255), "左右スライド：Z or X\n上下スライド：C or V");
+	//DrawFormatString(0, 180, GetColor(255, 255, 255), "%f   %f   %f", body_one.bodystartpos.x, body_one.bodyendpos.x, center_position.x);
 }
 
 void Player::bodysetup(bool one, int one_type, bool two, int two_type, bool three, int three_type)
