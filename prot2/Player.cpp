@@ -36,13 +36,13 @@ void Player::Init()
 	//for (i = 0; i < sizeof(tile) / sizeof(tile[0]); i++) tile[i] = 0;
 
 	body_one.Init(center_position, left);
-	body_one.bodycolor = GetColor(255, 255, 0);
+	body_one.bodycolor = YELLOW;
 
 	body_two.Init(center_position, up);
-	body_two.bodycolor = GetColor(0, 255, 0);
+	body_two.bodycolor = GREEN;
 
 	body_three.Init(center_position, right);
-	body_three.bodycolor = GetColor(255, 0, 255);
+	body_three.bodycolor = MAGENTA;
 }
 
 void Player::Updata()
@@ -61,13 +61,13 @@ void Player::Updata()
 	if (InputManger::Up() && !InputManger::Act1() && IsJump == false)
 	{
 		IsJump = true;
-		fallspeed = 4.2f;
+		fallspeed = 8.0f;
 	}
 
 	if (IsJump == true)
 	{
 		center_position.y -= fallspeed;
-		fallspeed -= 0.1f;
+		fallspeed -= 0.5f;
 
 		if (center_position.y >= floorHeight - 30)
 		{
@@ -210,7 +210,7 @@ void Player::Updata()
 			{
 				body_two.overlap--;
 			}
-			if (body_three.Isfold == true)
+			if (body_three.Isfold == true || (body_three.Isopen == true && body_three.body_type == left))
 			{
 				body_three.overlap--;
 			}
@@ -252,7 +252,7 @@ void Player::Updata()
 			{
 				body_one.overlap--;
 			}
-			if (body_two.Isfold == true)
+			if (body_two.Isfold == true || (body_one.Isopen == true && body_one.body_type == right))
 			{
 				body_two.overlap--;
 			}
@@ -261,7 +261,7 @@ void Player::Updata()
 
 
 	//体のスライド
-	//左にずらす
+	//左にスライド
 	if (Input::isKeyTrigger(KEY_INPUT_Z) && body_one.bodydistance < 2 && body_one.Isaction == false)
 	{
 		if (body_one.body_type == right)
@@ -270,14 +270,24 @@ void Player::Updata()
 			body_three.bodydistance = 1;
 			body_three.setslide(-1, 1);
 		}
-		else if (body_one.bodydistance == 1)
+		if (body_one.body_type == left && body_one.bodydistance == 1 && body_three.Isfold == false)
 		{
-			body_one.bodydistance = 2;
-			body_one.setslide(-1, 1);
-			body_three.setslide(-1, 2);
+			if (body_one.Isfold == true)
+			{
+				body_three.overlap = 1;
+				body_one.bodydistance = 2;
+				body_one.setslide(-1, 1);
+				body_three.setslide(-1, 2);
+			}
+			else
+			{
+				body_one.bodydistance = 2;
+				body_one.setslide(-1, 1);
+				body_three.setslide(-1, 2);
+			}
 		}
 	}
-	//右にずらす
+	//右にスライド
 	if (Input::isKeyTrigger(KEY_INPUT_X) && body_three.bodydistance < 2 && body_three.Isaction == false)
 	{
 		if (body_three.body_type == left)
@@ -286,14 +296,24 @@ void Player::Updata()
 			body_one.bodydistance = 1;
 			body_one.setslide(1, 1);
 		}
-		else if (body_three.bodydistance == 1)
+		if (body_three.body_type == right && body_three.bodydistance == 1 && body_one.Isfold == false)
 		{
-			body_three.bodydistance = 2;
-			body_three.setslide(1, 1);
-			body_one.setslide(1, 2);
+			if (body_three.Isfold == true)
+			{
+				body_one.overlap = 1;
+				body_three.bodydistance = 2;
+				body_three.setslide(1, 1);
+				body_one.setslide(1, 2);
+			}
+			else
+			{
+				body_three.bodydistance = 2;
+				body_three.setslide(1, 1);
+				body_one.setslide(1, 2);
+			}
 		}
 	}
-	//上下
+	//上下のスライド
 	if (Input::isKeyTrigger(KEY_INPUT_C) && body_two.Isaction == false)
 	{
 		if (body_two.body_type == up)
@@ -372,7 +392,7 @@ void Player::Draw(int offsetX, int offsetY)
 	{
 		if (body_three.slide_dis == 2)
 		{
-			DrawBox(center_position.x - 30 + offsetX, center_position.y - 30 + offsetY, body_one.bodyendpos.x + offsetX, body_one.bodyendpos.y + offsetY, body_three.bodycolor, true);
+			//DrawBox(center_position.x - 30 + offsetX, center_position.y - 30 + offsetY, body_one.bodyendpos.x + offsetX, body_one.bodyendpos.y + offsetY, body_three.bodycolor, true);
 		}
 		if (body_one.slide_dis == 2)
 		{
@@ -384,12 +404,15 @@ void Player::Draw(int offsetX, int offsetY)
 
 	DrawLine(0, floorHeight + offsetY, 1280, floorHeight + offsetY, WHITE, true);
 
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "AD:左右移動");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "SPACE:ジャンプ");
-	DrawFormatString(0, 40, GetColor(255, 255, 255), "←↑→:折る・開く");
-	//DrawFormatString(0, 60, GetColor(255, 255, 255), "重なっている枚数\n左：%d\n上：%d\n右：%d", body_one.overlap, body_two.overlap, body_three.overlap);
-	//DrawFormatString(0, 140, GetColor(255, 255, 255), "左右スライド：Z or X\n上下スライド：C or V");
-	//DrawFormatString(0, 180, GetColor(255, 255, 255), "%f   %f   %f", body_one.bodystartpos.x, body_one.bodyendpos.x, center_position.x);
+#pragma region UI
+	DrawFormatString(0, 0, WHITE, "AD:左右移動");
+	DrawFormatString(0, 20, WHITE, "W:ジャンプ");
+	DrawFormatString(0, 40, WHITE, "←↑→:折る・開く");
+	DrawFormatString(0, 60, WHITE, "SPACE:開く");
+	//DrawFormatString(0, 80, WHITE, "重なっている枚数\n左：%d\n上：%d\n右：%d", body_one.overlap, body_two.overlap, body_three.overlap);
+	//DrawFormatString(0, 160, WHITE, "左右スライド：Z or X\n上下スライド：C or V");
+	//DrawFormatString(0, 200, WHITE, "%f   %f   %f", body_one.bodystartpos.x, body_one.bodyendpos.x, center_position.x);
+#pragma endregion
 }
 
 void Player::bodysetup(bool one, int one_type, bool two, int two_type, bool three, int three_type)

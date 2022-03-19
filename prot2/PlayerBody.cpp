@@ -183,22 +183,22 @@ void PlayerBody::Update(Vector3 center)
 		if (body_type == left)
 		{
 			bodystartpos = { ease.easeout(center.x - 90, center.x + 30, ease.timerate), center.y - 30.0f, 0.0f };
-			bodyendpos = { bodystartpos.x + static_cast<float>(-120 * Isfold + 60), center.y + 30.0f, 0.0f };
+			bodyendpos = { bodystartpos.x + 60.0f, center.y + 30.0f, 0.0f };
 		}
 		else if (body_type == right)
 		{
 			bodystartpos = { ease.easeout(center.x + 30, center.x - 90, ease.timerate), center.y - 30.0f, 0.0f };
-			bodyendpos = { bodystartpos.x + static_cast<float>(-120 * Isfold + 60), center.y + 30.0f, 0.0f };
+			bodyendpos = { bodystartpos.x + 60.0f, center.y + 30.0f, 0.0f };
 		}
 		else if (body_type == up)
 		{
 			bodystartpos = { center.x - 30.0f, ease.easeout(center.y - 90, center.y + 30, ease.timerate), 0.0f };
-			bodyendpos = { center.x + 30.0f, bodystartpos.y + static_cast<float>(-120 * Isfold + 60), 0.0f };
+			bodyendpos = { center.x + 30.0f, bodystartpos.y + 60.0f, 0.0f };
 		}
 		else if (body_type == down)
 		{
 			bodystartpos = { center.x - 30.0f, ease.easeout(center.y + 30, center.y - 90, ease.timerate), 0.0f };
-			bodyendpos = { center.x + 30.0f, bodystartpos.y + static_cast<float>(-120 * Isfold + 60), 0.0f };
+			bodyendpos = { center.x + 30.0f, bodystartpos.y + 60.0f, 0.0f };
 		}
 
 		if (ease.timerate >= 1.0f)
@@ -236,12 +236,13 @@ void PlayerBody::Update(Vector3 center)
 		{
 			if (slidepat == -1)
 			{
-				bodystartpos = { ease.easeout(center.x - 90, center.x - 150, ease.timerate), center.y - 30.0f, 0.0f };
+				bodyendpos = { ease.easeout(center.x - 30, center.x - 90, ease.timerate), center.y - 30.0f, 0.0f };
 			}
 			else
 			{
-				bodystartpos = { ease.easeout(center.x - 150, center.x - 90, ease.timerate), center.y - 30.0f, 0.0f };
+				bodyendpos = { ease.easeout(center.x - 90, center.x - 30, ease.timerate), center.y - 30.0f, 0.0f };
 			}
+			bodystartpos = { bodyendpos.x + static_cast<float>(120 * Isfold - 60), center.y + 30.0f, 0.0f };
 		}
 		else if (body_type == right)
 		{
@@ -253,9 +254,8 @@ void PlayerBody::Update(Vector3 center)
 			{
 				bodystartpos = { ease.easeout(center.x + 30, center.x + 90, ease.timerate), center.y - 30.0f, 0.0f };
 			}
+			bodyendpos = { bodystartpos.x + static_cast<float>(-120 * Isfold + 60), center.y + 30.0f, 0.0f };
 		}
-
-		bodyendpos = { bodystartpos.x + static_cast<float>(-120 * Isfold + 60), center.y + 30.0f, 0.0f };
 
 		if (ease.timerate >= 1.0f)
 		{
@@ -282,6 +282,7 @@ void PlayerBody::setactivate(Vector3 center)
 		Isfold = false;
 		Isopen = true;
 		bodydistance = 1;
+		overlap = 0;
 
 		if (body_type == left)
 		{

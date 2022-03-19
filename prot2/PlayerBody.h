@@ -43,10 +43,10 @@ public: //メンバ変数
 	//顔から見た体の位置
 	int body_type;
 
-	//体の座標
+	//体の座標(初期状態：左上)
 	Vector3 bodystartpos;
 
-	//端の座標
+	//体の座標(初期状態：右下)
 	Vector3 bodyendpos;
 
 	//スライドの開始座標

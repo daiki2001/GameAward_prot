@@ -426,10 +426,10 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 	{
 		for (j = 0; j < stageData[i].stageData.size(); j++)
 		{
-			if ((playerPos.x >= stageData[i].stageData[j].offsetX &&
-				playerPos.x < stageData[i].stageData[j].offsetX + stageData[i].stageData[j].width) &&
-				(playerPos.y >= stageData[i].stageData[j].offsetY &&
-				playerPos.y < stageData[i].stageData[j].offsetY + stageData[i].stageData[j].height))
+			if ((playerPos.x / blockSize >= stageData[i].stageData[j].offsetX &&
+				playerPos.x / blockSize < stageData[i].stageData[j].offsetX + stageData[i].stageData[j].width) &&
+				(playerPos.y / blockSize >= stageData[i].stageData[j].offsetY &&
+				playerPos.y / blockSize < stageData[i].stageData[j].offsetY + stageData[i].stageData[j].height))
 			{
 				onPlayerStageTile = stageData[i].stageData[j].stageNumber;
 			}
@@ -452,12 +452,6 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 				if (moveStageTile < 0 ||
 					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
-				{
-					break;
-				}
-
-				if (playerPos.x < stageData[i].stageData[moveStageData].offsetX ||
-					playerPos.x >= stageData[i].stageData[moveStageData].offsetX + stageData[i].stageData[moveStageData].width)
 				{
 					break;
 				}
@@ -487,12 +481,6 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 				if (moveStageTile >= static_cast<size_t>(stageData[i].width * stageData[i].height) ||
 					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
-				{
-					break;
-				}
-
-				if (playerPos.x < stageData[i].stageData[moveStageData].offsetX ||
-					playerPos.x >= stageData[i].stageData[moveStageData].offsetX + stageData[i].stageData[moveStageData].width)
 				{
 					break;
 				}
