@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include "LoadFile.h"
 #include "InputManger.h"
+#include "DrawShape.h"
 #include "General.h"
 #include "Colors.h"
 
@@ -10,6 +11,14 @@
 #define ContainerClear(container)\
 container.clear();\
 container.shrink_to_fit();
+
+enum bodytype
+{
+	left,
+	up,
+	right,
+	down
+};
 
 namespace
 {
@@ -22,7 +31,6 @@ static size_t mapchipPos = 0;
 }
 
 const int Stage::blockSize = 60;
-int Stage::foldGraph = -1;
 int Stage::startPlayerPosX = 0;
 int Stage::startPlayerPosY = 0;
 unsigned char Stage::initFoldCount[4] = { 0 };
@@ -59,6 +67,8 @@ void Stage::Draw(int offsetX, int offsetY)
 	static int posX = 0;
 	static int posY = 0;
 
+	static Vector3 pos1, pos2;
+
 	for (i = 0; i < stageData.size(); i++)
 	{
 		for (j = 0; j < stageData[i].stageData.size(); j++)
@@ -71,6 +81,11 @@ void Stage::Draw(int offsetX, int offsetY)
 					posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
 					mapchipPos = y * stageData[i].stageData[j].width + x;
 
+					pos1.x = static_cast<float>(posX * blockSize + offsetX);
+					pos2.x = static_cast<float>((posX + 1) * blockSize + offsetX);
+					pos1.y = static_cast<float>(posY * blockSize + offsetY);
+					pos2.y = static_cast<float>((posY + 1) * blockSize + offsetY);
+
 					switch (stageData[i].stageData[j].mapchip[mapchipPos])
 					{
 					case MapchipData::EMPTY_STAGE:
@@ -81,15 +96,13 @@ void Stage::Draw(int offsetX, int offsetY)
 					case MapchipData::BLOCK:
 					{
 						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
-						DxLib::DrawBox(posX * blockSize + offsetX, posY * blockSize + offsetY,
-							(posX + 1) * blockSize + offsetX, (posY + 1) * blockSize + offsetY, GRAY, true);
+						DrawShape::DrawPlane(pos1, pos2, GRAY);
 						break;
 					}
 					case MapchipData::GOAL:
 					{
 						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
-						DxLib::DrawBox(posX * blockSize + offsetX, posY * blockSize + offsetY,
-							(posX + 1) * blockSize + offsetX, (posY + 1) * blockSize + offsetY, YELLOW, true);
+						DrawShape::DrawPlane(pos1, pos2, YELLOW);
 						break;
 					}
 					case MapchipData::NONE:
@@ -97,8 +110,7 @@ void Stage::Draw(int offsetX, int offsetY)
 					default:
 					{
 						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0x80);
-						DxLib::DrawBox(posX * blockSize + offsetX, posY * blockSize + offsetY,
-							(posX + 1) * blockSize + offsetX, (posY + 1) * blockSize + offsetY, WHITE, true);
+						DrawShape::DrawPlane(pos1, pos2, WHITE);
 						break;
 					}
 					}
@@ -124,8 +136,12 @@ void Stage::Draw(int offsetX, int offsetY)
 						posX = static_cast<int>(0 + stageData[i].stageData[j].offsetX);
 						posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
 
-						DxLib::DrawBox(posX * blockSize + offsetX, posY * blockSize + blockSize * 1 / 4 + offsetY,
-							posX * blockSize + blockSize * 1 / 4 + offsetX, posY * blockSize + blockSize * 3 / 4 + offsetY, BLACK, true);
+						pos1.x = static_cast<float>(posX * blockSize + offsetX);
+						pos2.x = static_cast<float>(posX * blockSize + blockSize * 1 / 4 + offsetX);
+						pos1.y = static_cast<float>(posY * blockSize + blockSize * 1 / 4 + offsetY);
+						pos2.y = static_cast<float>(posY * blockSize + blockSize * 3 / 4 + offsetY);
+
+						DrawShape::DrawPlane(pos1, pos2, BLACK);
 					}
 				}
 			}
@@ -140,8 +156,12 @@ void Stage::Draw(int offsetX, int offsetY)
 						posX = static_cast<int>((stageData[i].stageData[j].width - 1) + stageData[i].stageData[j].offsetX);
 						posY = static_cast<int>(y + stageData[i].stageData[j].offsetY);
 
-						DxLib::DrawBox(posX * blockSize + blockSize * 3 / 4 + offsetX, posY * blockSize + blockSize * 1 / 4 + offsetY,
-							(posX + 1) * blockSize + offsetX, posY * blockSize + blockSize * 3 / 4 + offsetY, BLACK, true);
+						pos1.x = static_cast<float>(posX * blockSize + blockSize * 3 / 4 + offsetX);
+						pos2.x = static_cast<float>((posX + 1) * blockSize + offsetX);
+						pos1.y = static_cast<float>(posY * blockSize + blockSize * 1 / 4 + offsetY);
+						pos2.y = static_cast<float>(posY * blockSize + blockSize * 3 / 4 + offsetY);
+
+						DrawShape::DrawPlane(pos1, pos2, BLACK);
 					}
 				}
 			}
@@ -157,8 +177,12 @@ void Stage::Draw(int offsetX, int offsetY)
 						posX = static_cast<int>(x + stageData[i].stageData[sideStageData].offsetX);
 						posY = static_cast<int>(0 + stageData[i].stageData[sideStageData].offsetY);
 
-						DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4 + offsetX, posY * blockSize + offsetY,
-							posX * blockSize + blockSize * 3 / 4 + offsetX, posY * blockSize + blockSize * 1 / 4 + offsetY, BLACK, true);
+						pos1.x = static_cast<float>(posX * blockSize + blockSize * 1 / 4 + offsetX);
+						pos2.x = static_cast<float>(posX * blockSize + blockSize * 3 / 4 + offsetX);
+						pos1.y = static_cast<float>(posY * blockSize + offsetY);
+						pos2.y = static_cast<float>(posY * blockSize + blockSize * 1 / 4 + offsetY);
+
+						DrawShape::DrawPlane(pos1, pos2, BLACK);
 					}
 				}
 			}
@@ -173,8 +197,12 @@ void Stage::Draw(int offsetX, int offsetY)
 						posX = static_cast<int>(x + stageData[i].stageData[j].offsetX);
 						posY = static_cast<int>((stageData[i].stageData[j].height - 1) + stageData[i].stageData[j].offsetY);
 
-						DxLib::DrawBox(posX * blockSize + blockSize * 1 / 4 + offsetX, posY* blockSize + blockSize * 3 / 4 + offsetY,
-							posX* blockSize + blockSize * 3 / 4 + offsetX, (posY + 1)* blockSize + offsetY, BLACK, true);
+						pos1.x = static_cast<float>(posX * blockSize + blockSize * 1 / 4 + offsetX);
+						pos2.x = static_cast<float>(posX * blockSize + blockSize * 3 / 4 + offsetX);
+						pos1.y = static_cast<float>(posY * blockSize + blockSize * 3 / 4 + offsetY);
+						pos2.y = static_cast<float>((posY + 1) * blockSize + offsetY);
+
+						DrawShape::DrawPlane(pos1, pos2, BLACK);
 					}
 				}
 			}
@@ -207,9 +235,9 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 
 	for (i = 0; i < sizeof(initFoldCount) / sizeof(initFoldCount[0]); i++)
 	{
-		//foldCount[i] = initFoldCount[i];
-		foldCount[i] = 1;
-		initFoldCount[i] = 1;
+		foldCount[i] = initFoldCount[i];
+		//foldCount[i] = 1;
+		//initFoldCount[i] = 1;
 	}
 
 	static char stageCount = 0;
@@ -402,19 +430,19 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 	if (InputManger::SubUp())
 	{
-		direction = 0;
+		direction = bodytype::up;
 	}
 	else if (InputManger::SubDown())
 	{
-		direction = 1;
+		direction = bodytype::down;
 	}
 	else if (InputManger::SubLeft())
 	{
-		direction = 2;
+		direction = bodytype::left;
 	}
 	else if (InputManger::SubRight())
 	{
-		direction = 3;
+		direction = bodytype::right;
 	}
 
 	static size_t reverseMapchipPos = 0;
@@ -440,7 +468,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 			switch (direction)
 			{
-			case 0: //è„ì¸óÕ
+			case bodytype::up: //è„ì¸óÕ
 			{
 				if (onPlayerStageTile / stageData[i].width <= 0)
 				{
@@ -469,7 +497,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 				break;
 			}
-			case 1: //â∫ì¸óÕ
+			case bodytype::down: //â∫ì¸óÕ
 			{
 				if (onPlayerStageTile / stageData[i].width >= static_cast<size_t>(stageData[i].height - 1))
 				{
@@ -498,7 +526,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 				break;
 			}
-			case 2: //ç∂ì¸óÕ
+			case bodytype::left: //ç∂ì¸óÕ
 			{
 				if (onPlayerStageTile % stageData[i].width <= 0)
 				{
@@ -527,7 +555,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 				break;
 			}
-			case 3: //âEì¸óÕ
+			case bodytype::right: //âEì¸óÕ
 			{
 				if (onPlayerStageTile % stageData[i].width >= static_cast<size_t>(stageData[i].width - 1))
 				{
@@ -688,7 +716,7 @@ int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, con
 
 	static size_t reverseMapchipPos = 0;
 
-	if (direction == 0 || direction == 1)
+	if (direction == bodytype::up || direction == bodytype::down)
 	{
 		for (y = 0; y < static_cast<size_t>(stageData[onPlayerStage].stageData[moveStageData].height / 2); y++)
 		{
@@ -705,7 +733,7 @@ int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, con
 			}
 		}
 
-		if (direction % 2 == 0)
+		if (direction / 2 == 0)
 		{
 			stageData[onPlayerStage].stageData[moveStageData].offsetY += stageData[onPlayerStage].stageData[moveStageData].height;
 		}
@@ -714,7 +742,7 @@ int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, con
 			stageData[onPlayerStage].stageData[moveStageData].offsetY -= stageData[onPlayerStage].stageData[moveStageData].height;
 		}
 	}
-	if (direction == 2 || direction == 3)
+	if (direction == bodytype::left || direction == bodytype::right)
 	{
 		for (y = 0; y < stageData[onPlayerStage].stageData[moveStageData].height; y++)
 		{
@@ -732,7 +760,7 @@ int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, con
 			}
 		}
 
-		if (direction % 2 == 0)
+		if (direction / 2 == 0)
 		{
 			stageData[onPlayerStage].stageData[moveStageData].offsetX += stageData[onPlayerStage].stageData[moveStageData].width;
 		}
@@ -758,7 +786,7 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 
 	static size_t reverseMapchipPos = 0;
 
-	if (direction == 0 || direction == 1)
+	if (direction == bodytype::up || direction == bodytype::down)
 	{
 		for (y = 0; y < static_cast<size_t>(stageData[onPlayerStage].stageData[moveStageData].height / 2); y++)
 		{
@@ -775,7 +803,7 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 			}
 		}
 
-		if (direction % 2 == 0)
+		if (direction / 2 == 0)
 		{
 			stageData[onPlayerStage].stageData[moveStageData].offsetY -= stageData[onPlayerStage].stageData[moveStageData].height;
 		}
@@ -784,7 +812,7 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 			stageData[onPlayerStage].stageData[moveStageData].offsetY += stageData[onPlayerStage].stageData[moveStageData].height;
 		}
 	}
-	if (direction == 2 || direction == 3)
+	if (direction == bodytype::left || direction == bodytype::right)
 	{
 		for (y = 0; y < stageData[onPlayerStage].stageData[moveStageData].height; y++)
 		{
@@ -802,7 +830,7 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 			}
 		}
 
-		if (direction % 2 == 0)
+		if (direction / 2 == 0)
 		{
 			stageData[onPlayerStage].stageData[moveStageData].offsetX -= stageData[onPlayerStage].stageData[moveStageData].width;
 		}

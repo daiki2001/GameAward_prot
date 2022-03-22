@@ -40,6 +40,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// (ダブルバッファ)描画先グラフィック領域は裏面を指定
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	SetUseLighting(false);
+
 	// 画像などのリソースデータの変数宣言と読み込み
 
 	// ゲームループで使う変数の宣言
@@ -66,21 +68,25 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			stage->LoadStage("./Resources/stage1.csv", playerTile);
 			player->Init();
+			player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
 		}
 		if (Input::isKey(KEY_INPUT_2))
 		{
 			stage->LoadStage("./Resources/stage2.csv", playerTile);
 			player->Init();
+			player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
 		}
 		if (Input::isKey(KEY_INPUT_3))
 		{
 			stage->LoadStage("./Resources/stage3.csv", playerTile);
 			player->Init();
+			player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
 		}
 		if (InputManger::Reset())
 		{
 			stage->Reset();
 			stage->GetInitFoldCount(playerTile);
+			player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
 		}
 		if (InputManger::SubUpTrigger() || InputManger::SubDownTrigger() || InputManger::SubLeftTrigger() || InputManger::SubRightTrigger())
 		{

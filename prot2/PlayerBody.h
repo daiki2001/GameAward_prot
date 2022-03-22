@@ -1,4 +1,5 @@
 #pragma once
+#include <DxLib.h>
 #include "Vector3.h"
 #include "Easing.h"
 #include "Colors.h"
@@ -13,6 +14,9 @@ enum bodytype
 
 class PlayerBody
 {
+public: //静的メンバ関数
+	static void StaticInit();
+
 public: //メンバ関数
 	PlayerBody();
 	~PlayerBody();
@@ -55,6 +59,9 @@ public: //メンバ変数
 	//折る・開くフラグ
 	bool Isfold;
 	bool Isopen;
+
+	//この体が折られた回数
+	int foldcount;
 
 	//スライドフラグ・スライドする方向
 	bool Isslide;

@@ -52,9 +52,7 @@ public: //サブクラス
 public: //定数
 	static const int blockSize;
 
-public: //静的メンバ変数
-	static int foldGraph;
-private:
+private: //静的メンバ変数
 	static int startPlayerPosX;
 	static int startPlayerPosY;
 	static unsigned char initFoldCount[4];

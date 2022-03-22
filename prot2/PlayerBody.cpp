@@ -1,11 +1,13 @@
 #include "PlayerBody.h"
 #include <DxLib.h>
+#include "DrawShape.h"
 
 PlayerBody::PlayerBody() :
 	Isactivate(false),
 	body_type(),
 	Isfold(false),
 	Isopen(true),
+	foldcount(0),
 	Isslide(false),
 	slidepat(0),
 	Isaction(false),
@@ -48,128 +50,200 @@ void PlayerBody::Init(Vector3 position, bodytype number)
 
 void PlayerBody::Update(Vector3 center)
 {
-	//äJÇ¢ÇƒÇ¢ÇÈÇ∆Ç´
-	if (Isfold == false && Isopen == true)
+	//äJÇ¢ÇƒÇ¢ÇÈìríÜ
+	if (Isfold == false && Isopen == true && Isaction == true && Isslide == false)
 	{
-		if (ease.ismove == true && Isslide == false)
-		{
-			ease.addtime += ease.maxtime / 60.0f;
-			ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
+		ease.addtime += ease.maxtime / 60.0f;
+		ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
 
-			if (body_type == left)
+		if (body_type == left)
+		{
+			if (foldcount == 1)
 			{
-				bodyendpos = { center.x - static_cast<float>(30 + 60 * (bodydistance - 1)), center.y + 30.0f, 0.0f };
+				bodyendpos = Vector3(center.x - (30 + 60 * (bodydistance - 1)),center.y + 30, 0.0f);
 				bodystartpos.x = ease.easeout(bodyendpos.x + 60, bodyendpos.x - 60, ease.timerate);
 				bodystartpos.y = bodyendpos.y - 60;
 			}
-			if (body_type == up)
+			else if (foldcount == 2)
 			{
-				bodyendpos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
-				bodystartpos.y = ease.easeout(bodyendpos.y + 60, bodyendpos.y - 60, ease.timerate);
-				bodystartpos.x = bodyendpos.x - 60;
-			}
-			if (body_type == right)
-			{
-				bodystartpos = { center.x + static_cast<float>(30 + 60 * (bodydistance - 1)), center.y - 30.0f, 0.0f };
-				bodyendpos.x = ease.easeout(bodystartpos.x - 60, bodystartpos.x + 60, ease.timerate);
-				bodyendpos.y = bodystartpos.y + 60;
-			}
-			if (body_type == down)
-			{
-				bodystartpos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
-				bodyendpos.y = ease.easeout(bodystartpos.y + 60, bodystartpos.y - 60, ease.timerate);
-				bodyendpos.x = bodystartpos.x - 60;
-			}
-
-			if (ease.timerate >= 1.0f)
-			{
-				ease.ismove = false;
-				Isaction = false;
-			}
-		}
-		else if (Isaction == false)
-		{
-			if (body_type == left)
-			{
-				bodystartpos = { center.x - static_cast<float>(30 + bodydistance * 60), center.y - 30.0f, 0.0f };
-			}
-			if (body_type == up)
-			{
-				bodystartpos = { center.x - 30.0f, center.y - 90.0f, 0.0f };
-			}
-			if (body_type == right)
-			{
-				bodystartpos = { center.x + static_cast<float>(30 + (bodydistance - 1) * 60), center.y - 30.0f, 0.0f };
-			}
-			if (body_type == down)
-			{
-				bodystartpos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
-			}
-
-			bodyendpos = { bodystartpos.x + 60.0f, bodystartpos.y + 60.0f, 0.0f };
-		}
-	}
-	//ê‹ÇÈÇ∆Ç´
-	else if (Isfold == true && Isopen == false)
-	{
-		if (ease.ismove == true && Isslide == false)
-		{
-			ease.addtime += ease.maxtime / 60.0f;
-			ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
-
-			if (body_type == left)
-			{
-				bodyendpos = { center.x - static_cast<float>(30 + 60 * (bodydistance - 1)), center.y + 30.0f, 0.0f };
-				bodystartpos.x = ease.easeout(bodyendpos.x - 60, bodyendpos.x + 60, ease.timerate);
-				bodystartpos.y = bodyendpos.y - 60;
-			}
-			if (body_type == up)
-			{
-				bodyendpos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
-				bodystartpos.y = ease.easeout(bodyendpos.y - 60, bodyendpos.y + 60, ease.timerate);
-				bodystartpos.x = bodyendpos.x - 60;
-			}
-			if (body_type == right)
-			{
-				bodystartpos = { center.x + static_cast<float>(30 + 60 * (bodydistance - 1)), center.y - 30.0f, 0.0f };
+				bodystartpos = Vector3(center.x - 30,center.y - 30, 0.0f);
 				bodyendpos.x = ease.easeout(bodystartpos.x + 60, bodystartpos.x - 60, ease.timerate);
 				bodyendpos.y = bodystartpos.y + 60;
 			}
-			if (body_type == down)
+		}
+		if (body_type == up)
+		{
+			bodyendpos = Vector3(center.x + 30,center.y - 30, 0.0f);
+			bodystartpos.y = ease.easeout(bodyendpos.y + 60, bodyendpos.y - 60, ease.timerate);
+			bodystartpos.x = bodyendpos.x - 60;
+		}
+		if (body_type == right)
+		{
+			if (foldcount == 1)
 			{
-				bodystartpos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
-				bodyendpos.y = ease.easeout(bodystartpos.y + 60, bodystartpos.y - 60, ease.timerate);
-				bodyendpos.x = bodystartpos.x + 60;
+				bodystartpos = Vector3(center.x + (30 + 60 * (bodydistance - 1)),center.y - 30, 0.0f);
+				bodyendpos.x = ease.easeout(bodystartpos.x - 60, bodystartpos.x + 60, ease.timerate);
+				bodyendpos.y = bodystartpos.y + 60;
 			}
-
-			if (ease.timerate >= 1.0f)
+			else if (foldcount == 2)
 			{
-				ease.ismove = false;
-				Isaction = false;
+				bodyendpos = Vector3(center.x + 30,center.y + 30, 0.0f);
+				bodystartpos.x = ease.easeout(bodyendpos.x - 60, bodyendpos.x + 60, ease.timerate);
+				bodystartpos.y = bodyendpos.y - 60;
 			}
 		}
-		else
+		if (body_type == down)
 		{
-			if (body_type == left)
+			bodystartpos = Vector3(center.x + 30,center.y + 30, 0.0f);
+			bodyendpos.y = ease.easeout(bodystartpos.y - 60, bodystartpos.y + 60, ease.timerate);
+			bodyendpos.x = bodystartpos.x - 60;
+		}
+
+		if (ease.timerate >= 1.0f)
+		{
+			ease.ismove = false;
+			Isaction = false;
+			foldcount--;
+		}
+	}
+	//äJÇ¢ÇΩå„
+	if (Isfold == false && Isopen == true && Isaction == false)
+	{
+		if (body_type == left)
+		{
+			if (foldcount == 0)
 			{
-				bodyendpos = { center.x - static_cast<float>(30 + 60 * (bodydistance - 1)), center.y + 30.0f, 0.0f };
-				bodystartpos = { bodyendpos.x + 60.0f, bodyendpos.y - 60.0f, 0.0f };
+				bodystartpos = Vector3(center.x - (30 + bodydistance * 60),center.y - 30, 0.0f);
+				bodyendpos = Vector3(bodystartpos.x + 60,bodystartpos.y + 60, 0.0f);
 			}
-			else if (body_type == up)
+			else if (foldcount == 1)
 			{
-				bodystartpos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
-				bodyendpos = { bodystartpos.x + 60.0f, bodystartpos.y - 60.0f, 0.0f };
+				bodystartpos = Vector3(center.x - 30,center.y - 30, 0.0f);
+				bodyendpos = Vector3(bodystartpos.x - 60,bodystartpos.y + 60, 0.0f);
+				Isfold = true;
+				Isopen = false;
 			}
-			else if (body_type == right)
+		}
+		if (body_type == up)
+		{
+			bodystartpos = Vector3(center.x - 30,center.y - 90, 0.0f);
+			bodyendpos = Vector3(bodystartpos.x + 60,bodystartpos.y + 60, 0.0f);
+		}
+		if (body_type == right)
+		{
+			if (foldcount == 0)
 			{
-				bodystartpos = { center.x + static_cast<float>(30 + 60 * (bodydistance - 1)), center.y - 30.0f, 0.0f };
-				bodyendpos = { bodystartpos.x - 60.0f, bodystartpos.y + 60.0f, 0.0f };
+				bodystartpos = Vector3(center.x + (30 + (bodydistance - 1) * 60),center.y - 30, 0.0f);
+				bodyendpos = Vector3(bodystartpos.x + 60,bodystartpos.y + 60, 0.0f);
 			}
-			else if (body_type == down)
+			else if (foldcount == 1)
 			{
-				bodystartpos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
-				bodyendpos = { bodystartpos.x + 60.0f, bodystartpos.y - 60.0f, 0.0f };
+				bodyendpos = Vector3(center.x + 30,center.y + 30, 0.0f);
+				bodystartpos = Vector3(bodyendpos.x + 60,bodyendpos.y - 60, 0.0f);
+				Isfold = true;
+				Isopen = false;
 			}
+		}
+		if (body_type == down)
+		{
+			bodystartpos = Vector3(center.x - 30,center.y + 30, 0.0f);
+			bodyendpos = Vector3(bodystartpos.x + 60,bodystartpos.y + 60, 0.0f);
+		}
+	}
+	//ê‹Ç¡ÇƒÇ¢ÇÈìríÜ
+	if (Isfold == true && Isopen == false && Isaction == true && Isslide == false)
+	{
+		ease.addtime += ease.maxtime / 60.0f;
+		ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
+
+		if (body_type == left)
+		{
+			if (foldcount == 0)
+			{
+				bodyendpos = Vector3(center.x - (30 + 60 * (bodydistance - 1)), center.y + 30, 0.0f);
+				bodystartpos.x = ease.easeout(bodyendpos.x - 60, bodyendpos.x + 60, ease.timerate);
+				bodystartpos.y = bodyendpos.y - 60;
+			}
+			else if (foldcount == 1)
+			{
+				bodystartpos = Vector3(center.x - 30, center.y - 30, 0.0f);
+				bodyendpos.x = ease.easeout(bodystartpos.x - 60, bodystartpos.x + 60, ease.timerate);
+				bodyendpos.y = bodystartpos.y + 60;
+			}
+		}
+		if (body_type == up)
+		{
+			bodyendpos = Vector3(center.x + 30, center.y - 30, 0.0f);
+			bodystartpos.y = ease.easeout(bodyendpos.y - 60, bodyendpos.y + 60, ease.timerate);
+			bodystartpos.x = bodyendpos.x - 60;
+		}
+		if (body_type == right)
+		{
+			if (foldcount == 0)
+			{
+				bodystartpos = Vector3(center.x + (30 + 60 * (bodydistance - 1)), center.y - 30, 0.0f);
+				bodyendpos.x = ease.easeout(bodystartpos.x + 60, bodystartpos.x - 60, ease.timerate);
+				bodyendpos.y = bodystartpos.y + 60;
+			}
+			else if (foldcount == 1)
+			{
+				bodyendpos = Vector3(center.x + 30, center.y + 30, 0.0f);
+				bodystartpos.x = ease.easeout(bodyendpos.x + 60, bodyendpos.x - 60, ease.timerate);
+				bodystartpos.y = bodyendpos.y - 60;
+			}
+		}
+		if (body_type == down)
+		{
+			bodystartpos = Vector3(center.x - 30, center.y + 30, 0.0f);
+			bodyendpos.y = ease.easeout(bodystartpos.y + 60, bodystartpos.y - 60, ease.timerate);
+			bodyendpos.x = bodystartpos.x + 60;
+		}
+
+		if (ease.timerate >= 1.0f)
+		{
+			ease.ismove = false;
+			Isaction = false;
+			foldcount++;
+		}
+	}
+	//ê‹Ç¡ÇΩå„
+	if (Isfold == true && Isopen == false && Isaction == false)
+	{
+		if (body_type == left)
+		{
+			if (foldcount == 1)
+			{
+				bodyendpos = Vector3(center.x - (30 + 60 * (bodydistance - 1)), center.y + 30, 0.0f);
+				bodystartpos = Vector3(bodyendpos.x + 60, bodyendpos.y - 60, 0.0f);
+			}
+			else if (foldcount == 2)
+			{
+				bodystartpos = Vector3(center.x - 30, center.y - 30, 0.0f);
+				bodyendpos = Vector3(bodystartpos.x + 60, bodystartpos.y + 60, 0.0f);
+			}
+		}
+		else if (body_type == up)
+		{
+			bodystartpos = Vector3(center.x - 30, center.y + 30, 0.0f);
+			bodyendpos = Vector3(bodystartpos.x + 60, bodystartpos.y - 60, 0.0f);
+		}
+		else if (body_type == right)
+		{
+			if (foldcount == 1)
+			{
+				bodystartpos = Vector3(center.x + (30 + 60 * (bodydistance - 1)), center.y - 30, 0.0f);
+				bodyendpos = Vector3(bodystartpos.x - 60, bodystartpos.y + 60, 0.0f);
+			}
+			else if (foldcount == 2)
+			{
+				bodystartpos = Vector3(center.x - 30, center.y - 30, 0.0f);
+				bodyendpos = Vector3(bodystartpos.x + 60, bodystartpos.y + 60, 0.0f);
+			}
+		}
+		else if (body_type == down)
+		{
+			bodystartpos = Vector3(center.x - 30, center.y + 30, 0.0f);
+			bodyendpos = Vector3(bodystartpos.x + 60, bodystartpos.y - 60, 0.0f);
 		}
 	}
 
@@ -182,23 +256,23 @@ void PlayerBody::Update(Vector3 center)
 
 		if (body_type == left)
 		{
-			bodystartpos = { ease.easeout(center.x - 90, center.x + 30, ease.timerate), center.y - 30.0f, 0.0f };
-			bodyendpos = { bodystartpos.x + 60.0f, center.y + 30.0f, 0.0f };
+			bodystartpos = Vector3(ease.easeout(center.x - 90, center.x + 30, ease.timerate), center.y - 30, 0.0f);
+			bodyendpos = Vector3(bodystartpos.x + 60, center.y + 30, 0.0f);
 		}
 		else if (body_type == right)
 		{
-			bodystartpos = { ease.easeout(center.x + 30, center.x - 90, ease.timerate), center.y - 30.0f, 0.0f };
-			bodyendpos = { bodystartpos.x + 60.0f, center.y + 30.0f, 0.0f };
+			bodystartpos = Vector3(ease.easeout(center.x + 30, center.x - 90, ease.timerate), center.y - 30, 0.0f);
+			bodyendpos = Vector3(bodystartpos.x + 60, center.y + 30, 0.0f);
 		}
 		else if (body_type == up)
 		{
-			bodystartpos = { center.x - 30.0f, ease.easeout(center.y - 90, center.y + 30, ease.timerate), 0.0f };
-			bodyendpos = { center.x + 30.0f, bodystartpos.y + 60.0f, 0.0f };
+			bodystartpos = Vector3(center.x - 30, ease.easeout(center.y - 90, center.y + 30, ease.timerate), 0.0f);
+			bodyendpos = Vector3(center.x + 30, bodystartpos.y + 60, 0.0f);
 		}
 		else if (body_type == down)
 		{
-			bodystartpos = { center.x - 30.0f, ease.easeout(center.y + 30, center.y - 90, ease.timerate), 0.0f };
-			bodyendpos = { center.x + 30.0f, bodystartpos.y + 60.0f, 0.0f };
+			bodystartpos = Vector3(center.x - 30, ease.easeout(center.y + 30, center.y - 90, ease.timerate), 0.0f);
+			bodyendpos = Vector3(center.x + 30, bodystartpos.y + 60, 0.0f);
 		}
 
 		if (ease.timerate >= 1.0f)
@@ -236,25 +310,25 @@ void PlayerBody::Update(Vector3 center)
 		{
 			if (slidepat == -1)
 			{
-				bodyendpos = { ease.easeout(center.x - 30, center.x - 90, ease.timerate), center.y - 30.0f, 0.0f };
+				bodyendpos = Vector3(ease.easeout(center.x - 30, center.x - 90, ease.timerate), center.y - 30, 0.0f);
 			}
 			else
 			{
-				bodyendpos = { ease.easeout(center.x - 90, center.x - 30, ease.timerate), center.y - 30.0f, 0.0f };
+				bodyendpos = Vector3(ease.easeout(center.x - 90, center.x - 30, ease.timerate), center.y - 30, 0.0f);
 			}
-			bodystartpos = { bodyendpos.x + static_cast<float>(120 * Isfold - 60), center.y + 30.0f, 0.0f };
+			bodystartpos = Vector3(bodyendpos.x + (120 * Isfold - 60), center.y + 30, 0.0f);
 		}
 		else if (body_type == right)
 		{
 			if (slidepat == -1)
 			{
-				bodystartpos = { ease.easeout(center.x + 90, center.x + 30, ease.timerate), center.y - 30.0f, 0.0f };
+				bodystartpos = Vector3(ease.easeout(center.x + 90, center.x + 30, ease.timerate), center.y - 30, 0.0f);
 			}
 			else
 			{
-				bodystartpos = { ease.easeout(center.x + 30, center.x + 90, ease.timerate), center.y - 30.0f, 0.0f };
+				bodystartpos = Vector3(ease.easeout(center.x + 30, center.x + 90, ease.timerate), center.y - 30, 0.0f);
 			}
-			bodyendpos = { bodystartpos.x + static_cast<float>(-120 * Isfold + 60), center.y + 30.0f, 0.0f };
+			bodyendpos = Vector3(bodystartpos.x + (-120 * Isfold + 60), center.y + 30, 0.0f);
 		}
 
 		if (ease.timerate >= 1.0f)
@@ -270,8 +344,10 @@ void PlayerBody::Draw(int offsetX, int offsetY)
 {
 	if (Isactivate == true)
 	{
-		DrawBox(static_cast<int>(bodystartpos.x) + offsetX, static_cast<int>(bodystartpos.y) + offsetY,
-			static_cast<int>(bodyendpos.x) + offsetX, static_cast<int>(bodyendpos.y) + offsetY, bodycolor, true);
+		DrawShape::DrawPlane(
+			Vector3(bodystartpos.x + offsetX, bodystartpos.y + offsetY, 0.0f),
+			Vector3(bodyendpos.x + offsetX, bodyendpos.y + offsetY, 0.0f),
+			bodycolor);
 	}
 }
 
@@ -281,27 +357,29 @@ void PlayerBody::setactivate(Vector3 center)
 	{
 		Isfold = false;
 		Isopen = true;
+		Isslide = false;
 		bodydistance = 1;
 		overlap = 0;
+		foldcount = 0;
 
 		if (body_type == left)
 		{
-			bodystartpos = { center.x - 90.0f, center.y - 30.0f, 0.0f };
+			bodystartpos = Vector3(center.x - 90, center.y - 30, 0.0f);
 		}
 		else if (body_type == right)
 		{
-			bodystartpos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
+			bodystartpos = Vector3(center.x + 30, center.y - 30, 0.0f);
 		}
 		else if (body_type == up)
 		{
-			bodystartpos = { center.x - 30.0f, center.y - 90.0f, 0.0f };
+			bodystartpos = Vector3(center.x - 30, center.y - 90, 0.0f);
 		}
 		else if (body_type == down)
 		{
-			bodystartpos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
+			bodystartpos = Vector3(center.x - 30, center.y + 30, 0.0f);
 		}
 
-		bodyendpos = { bodystartpos.x + 60.0f, bodystartpos.y + 60.0f, 0.0f };
+		bodyendpos = Vector3(bodystartpos.x + 60, bodystartpos.y + 60, 0.0f);
 	}
 }
 
