@@ -224,7 +224,7 @@ void PlayerBody::Update(Vector3 center)
 		}
 		else if (body_type == up)
 		{
-			bodystartpos = Vector3(center.x - 30.0f, center.y + 30.0f, 0.0f };
+			bodystartpos = Vector3(center.x - 30.0f, center.y + 30.0f, 0.0f);
 			bodyendpos = Vector3(bodystartpos.x + 60.0f, bodystartpos.y - 60.0f, 0.0f);
 		}
 		else if (body_type == right)
@@ -401,17 +401,17 @@ void PlayerBody::setslide(int slidepat, int move_dis)
 void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall, bool& isjump)
 {
 	//全体的なマップチップの座標
-	int center_x_mapchip = (center.x - stage.offset.x) / 60;
-	int center_y_mapchip = (center.y - stage.offset.y) / 60;
+	int center_x_mapchip = static_cast<int>(center.x - stage.offset.x) / 60;
+	int center_y_mapchip = static_cast<int>(center.y - stage.offset.y) / 60;
 
 	//今いるタイル内でのプレイヤーのマップチップ座標
 	int center_x_mapchip_tile = (int)center_x_mapchip % 5;
 	int center_y_mapchip_tile = (int)center_y_mapchip % 5;
 
 	//ステージの数
-	int i = 0;
+	size_t i = 0;
 	//タイルの数
-	int j = 0;
+	size_t j = 0;
 
 	//マップチップの座標
 	size_t mapchipPos = 0;
@@ -428,11 +428,11 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 		Extrude(center, stage.offset, 30, up, isfall, isjump);
 	}
 
-	for (i = 0; i < stage.getstagedatasize(); i++)
+	for (i = 0; i < stage.GetStageDataSize(); i++)
 	{
-		for (j = 0; j < stage.getstagetiledatasize(i); j++)
+		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
 		{
-			if (stage.getplayertile(center, i, j))
+			if (stage.GetPlayerTile(center, i, j))
 			{
 				if (Isfold == false)
 				{
@@ -440,28 +440,30 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 					{
 					case left:
 						//左側
-						mapchipPos = center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - bodydistance - 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance - 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { 60 + (center_x_mapchip - bodydistance - 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30 + bodydistance * 60, left, isfall, isjump);
+							Extrude(center,
+								Vector3(60.0f + (center_x_mapchip - bodydistance - 1) * 60.0f, center_y_mapchip * 60.0f, 0.0f),
+								30.0f + bodydistance * 60.0f, left, isfall, isjump);
 						}
 						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - bodydistance - 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance - 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { 60 + (center_x_mapchip - bodydistance - 1) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 						}
 						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - bodydistance - 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance - 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { 60 + (center_x_mapchip - bodydistance - 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 						}
 
 						if (bodydistance == 2)
 						{
-							mapchipPos = center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + 1);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip + 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30, right, isfall, isjump);
 							}
@@ -469,28 +471,30 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						break;
 					case right:
 						//右側
-						mapchipPos = center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance + 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance + 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { (center_x_mapchip + bodydistance + 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30 + bodydistance * 60, right, isfall, isjump);
+							Extrude(center,
+								Vector3((center_x_mapchip + bodydistance + 1) * 60.0f, center_y_mapchip * 60.0f, 0.0f),
+								30.0f + bodydistance * 60.0f, right, isfall, isjump);
 						}
 						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance + 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance + 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { (center_x_mapchip + bodydistance + 1) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 						}
 						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance + 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance + 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { (center_x_mapchip + bodydistance + 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 						}
 
 						if (bodydistance == 2)
 						{
-							mapchipPos = center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - 1);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip - 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30, left, isfall, isjump);
 							}
@@ -498,52 +502,52 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						break;
 					case up:
 						//上
-						mapchipPos = (center_y_mapchip_tile - 2) * stage.getstagetilewidth(i, j) + center_x_mapchip_tile;
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { center_x_mapchip * 60.0f,60 + (center_y_mapchip - 2) * 60.0f,0.0f }, 90, up, isfall, isjump);
 						}
 						//左
-						mapchipPos = (center_y_mapchip_tile - 2) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { (center_x_mapchip - 1) * 60.0f,60 + (center_y_mapchip - 1) * 60.0f,0.0f }, 30, left, isfall, isjump);
 						}
 						//右
-						mapchipPos = (center_y_mapchip_tile - 2) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { (center_x_mapchip + 1) * 60.0f,60 + (center_y_mapchip - 1) * 60.0f,0.0f }, 30, right, isfall, isjump);
 						}
 						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + center_x_mapchip_tile;
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 						}
 						break;
 					case down:
 						//下
-						mapchipPos = (center_y_mapchip_tile + 2) * stage.getstagetilewidth(i, j) + center_x_mapchip_tile;
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile + 2) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip - 2) * 60.0f,0.0f }, 90, down, isfall, isjump);
 						}
 						//左
-						mapchipPos = (center_y_mapchip_tile + 2) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile + 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { (center_x_mapchip - 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, left, isfall, isjump);
 						}
 						//右
-						mapchipPos = (center_y_mapchip_tile + 2) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + 1);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile + 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { (center_x_mapchip + 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, right, isfall, isjump);
 						}
 						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.getstagetilewidth(i, j) + center_x_mapchip_tile;
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 						}
@@ -556,22 +560,24 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 					{
 					case left:
 						//左側
-						mapchipPos = center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - bodydistance);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { (center_x_mapchip - bodydistance) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30 + (bodydistance - 1) * 60, left, isfall, isjump);
+							Extrude(center,
+								Vector3((center_x_mapchip - bodydistance) * 60.0f, center_y_mapchip * 60.0f, 0.0f),
+								30.0f + (bodydistance - 1) * 60.0f, left, isfall, isjump);
 						}
 						if (foldcount < 2)
 						{
 							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - bodydistance);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip - bodydistance) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 							}
 							//下
-							mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - bodydistance);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip - bodydistance) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 							}
@@ -579,22 +585,22 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						else
 						{
 							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 							}
 							//下
-							mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 							}
 						}
 						if (bodydistance == 2)
 						{
-							mapchipPos = center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + 1);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip + 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30, right, isfall, isjump);
 							}
@@ -602,22 +608,24 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						break;
 					case right:
 						//右側
-						mapchipPos = center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance);
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance);
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { (center_x_mapchip + bodydistance) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30 + (bodydistance - 1), right, isfall, isjump);
+							Extrude(center,
+								Vector3((center_x_mapchip + bodydistance) * 60.0f, center_y_mapchip * 60.0f, 0.0f),
+								30.0f + (bodydistance - 1), right, isfall, isjump);
 						}
 						if (foldcount < 2)
 						{
 							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip + bodydistance) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 							}
 							//下
-							mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip + bodydistance) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 							}
@@ -625,22 +633,22 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						else
 						{
 							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 							}
 							//下
-							mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 							}
 						}
 						if (bodydistance == 2)
 						{
-							mapchipPos = center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile - 1);
-							if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
+							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
 								Extrude(center, { (center_x_mapchip - 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30, left, isfall, isjump);
 							}
@@ -648,28 +656,28 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						break;
 					case up:
 						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.getstagetilewidth(i, j) + center_x_mapchip_tile;
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 90, up, isfall, isjump);
 						}
 						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + center_x_mapchip_tile;
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 						}
 						break;
 					case down:
 						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + center_x_mapchip_tile;
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 90, down, isfall, isjump);
 						}
 						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.getstagetilewidth(i, j) + center_x_mapchip_tile;
-						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
+						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 						}

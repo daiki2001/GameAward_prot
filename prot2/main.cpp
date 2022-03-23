@@ -53,6 +53,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	player->Init();
 	player->bodysetup(playerTile);
 
+	const int drawOffsetX = 320, drawOffsetY = 0;
+
 	// ƒQ[ƒ€ƒ‹[ƒv
 	while (1)
 	{
@@ -86,6 +88,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			stage->Reset();
 			stage->GetInitFoldCount(playerTile);
+			player->Init();
 			player->bodysetup(playerTile);
 		}
 		if (InputManger::SubUpTrigger() || InputManger::SubDownTrigger() || InputManger::SubLeftTrigger() || InputManger::SubRightTrigger())
@@ -94,8 +97,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		// •`‰æˆ—
-		stage->Draw();
-		player->Draw(0, 0);
+		stage->Draw(drawOffsetX, drawOffsetY);
+		player->Draw(drawOffsetX, drawOffsetY);
 
 		DrawFormatString(0, 100, WHITE, "%d\n%d", ((int)player->center_position.x / 60), ((int)player->center_position.y / 60));
 		DrawFormatString(0, 150, WHITE, "%f\n%f", player->center_position.x, player->center_position.y);
