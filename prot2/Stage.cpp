@@ -60,6 +60,13 @@ void Stage::Init()
 
 void Stage::Updata()
 {
+	if (stageEase.ismove)
+	{
+		if (stageEase.timerate >= 1.0f)
+		{
+			stageEase.ismove = false;
+		}
+	}
 }
 
 void Stage::Draw(int offsetX, int offsetY)

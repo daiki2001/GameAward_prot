@@ -561,7 +561,7 @@ void Player::Draw(int offsetX, int offsetY)
 			RED);
 	}
 
-	DrawLine(0, floorHeight + offsetY, 1280, floorHeight + offsetY, WHITE, true);
+	DrawLine(0, static_cast<int>(floorHeight) + offsetY, 1280, static_cast<int>(floorHeight) + offsetY, WHITE, true);
 
 #pragma region UI
 	DrawFormatString(0, 0, WHITE, "AD:ç∂âEà⁄ìÆ");
@@ -604,4 +604,32 @@ void Player::bodysetup(bool one, int one_type, bool two, int two_type, bool thre
 	{
 		foldlist[i] = 0;
 	}
+}
+
+void Player::bodysetup(const unsigned char foldCount[4])
+{
+	static int bodyTile[3] = { 0 };
+	static size_t j = 0;
+
+	j = 0;
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		bodyTile[i] = -1;
+
+		for (; j < 4; j++)
+		{
+			if (foldCount[j] != 0)
+			{
+				bodyTile[i] = j;
+				j++;
+				break;
+			}
+		}
+	}
+
+	bodysetup(
+		bodyTile[0] != -1, bodyTile[0],
+		bodyTile[1] != -1, bodyTile[1],
+		bodyTile[2] != -1, bodyTile[2]);
 }

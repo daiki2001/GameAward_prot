@@ -51,7 +51,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Stage* stage = Stage::Get();
 	stage->LoadStage("./Resources/stage1.csv", playerTile);
 	player->Init();
-	player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
+	player->bodysetup(playerTile);
 
 	// ƒQ[ƒ€ƒ‹[ƒv
 	while (1)
@@ -68,25 +68,25 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			stage->LoadStage("./Resources/stage1.csv", playerTile);
 			player->Init();
-			player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
+			player->bodysetup(playerTile);
 		}
 		if (Input::isKey(KEY_INPUT_2))
 		{
 			stage->LoadStage("./Resources/stage2.csv", playerTile);
 			player->Init();
-			player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
+			player->bodysetup(playerTile);
 		}
 		if (Input::isKey(KEY_INPUT_3))
 		{
 			stage->LoadStage("./Resources/stage3.csv", playerTile);
 			player->Init();
-			player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
+			player->bodysetup(playerTile);
 		}
 		if (InputManger::Reset())
 		{
 			stage->Reset();
 			stage->GetInitFoldCount(playerTile);
-			player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
+			player->bodysetup(playerTile);
 		}
 		if (InputManger::SubUpTrigger() || InputManger::SubDownTrigger() || InputManger::SubLeftTrigger() || InputManger::SubRightTrigger())
 		{

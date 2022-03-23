@@ -1,4 +1,5 @@
 #include "Easing.h"
+#include "Vector3.h"
 
 Easing::Easing() :
 	maxtime(2.0f),
