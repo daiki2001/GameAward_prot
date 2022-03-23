@@ -16,7 +16,7 @@ public: //メンバ関数
 	// 初期化
 	void Init();
 	// 更新
-	void Updata();
+	void Update(Stage& stage);
 	// 描画
 	void Draw(int offsetX, int offsetY);
 
@@ -51,5 +51,5 @@ public: //メンバ変数
 	bool IsJump;
 	float jumpspeed;
 	float fallspeed;
-	bool IsLand;
+	bool IsFall;
 };

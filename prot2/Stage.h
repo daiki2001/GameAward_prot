@@ -44,13 +44,15 @@ public: //サブクラス
 		char offsetY = 0;
 		unsigned char width = 1;
 		unsigned char height = 1;
-		std::vector<StageTileData> stageData;
+		std::vector<StageTileData> stageTileData;
 		std::vector<char> stageOffsetX;
 		std::vector<char> stageOffsetY;
 	};
 
 public: //定数
 	static const int blockSize;
+
+	Vector3 offset = { 0,0,0 };
 
 private: //静的メンバ変数
 	static int startPlayerPosX;
@@ -92,6 +94,18 @@ public: //メンバ関数
 	inline StageData* GetStageData(const short& stageNumber);
 	// 全ステージのデータを取得
 	inline StageData* GetAllStageData();
+	//StageDataのサイズを取得
+	size_t GetStageDataSize();
+	//StageTileDataのサイズを取得
+	size_t GetStageTileDataSize(int i);
+
+	char GetStageTileWidth(int i, int j);
+	char GetStageTileHeight(int i, int j);
+
+	char GetStageMapchip(int i, int j, int mapchipPos);
+
+	bool GetPlayerTile(Vector3 center, int i, int j);
+
 private:
 	// ステージを折る
 	int Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData);
