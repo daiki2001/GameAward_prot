@@ -6,7 +6,7 @@
 
 namespace
 {
-static size_t i = 0;
+	static size_t i = 0;
 }
 
 Player* Player::Get()
@@ -43,9 +43,13 @@ void Player::Init()
 
 	body_three.Init(center_position, right);
 	body_three.bodycolor = MAGENTA;
+
+	IsFall = false;
+
+	//bodysetup(true, left, true, up, true, right);
 }
 
-void Player::Updata()
+void Player::Update(Stage& stage)
 {
 	//左右移動
 	if (InputManger::Right() && !InputManger::Act1())
@@ -58,36 +62,36 @@ void Player::Updata()
 	}
 
 	//ジャンプ
-	if (InputManger::Up() && !InputManger::Act1() && IsJump == false)
+	if (InputManger::Up() && !InputManger::Act1() && IsJump == false && IsFall == false)
 	{
 		IsJump = true;
-		fallspeed = 8.0f;
+		IsFall = true;
+		fallspeed = -8.0f;
 	}
 
 	if (IsJump == true)
 	{
-		center_position.y -= fallspeed;
-		fallspeed -= 0.5f;
+		center_position.y += fallspeed;
+		fallspeed += 0.5f;
 
-		if (center_position.y >= floorHeight - 30)
+		if (fallspeed > 0)
 		{
-			center_position.y = floorHeight - 30;
 			IsJump = false;
 		}
 	}
 
 	//落下判定
-	if (center_position.y < floorHeight - 31 && IsJump == false)
+	if (IsFall == true && IsJump == false)
 	{
 		center_position.y += fallspeed;
 
-		if (fallspeed <= 5.0)
+		if (fallspeed <= 8.0)
 		{
 			fallspeed += 0.1f;
 		}
 	}
 
-	//折る・開く
+	//折る
 	//左
 	if (InputManger::SubLeftTrigger() && body_one.ease.ismove == false && body_one.body_type == left)
 	{
@@ -103,14 +107,41 @@ void Player::Updata()
 			body_one.Isopen = false;
 			body_one.Isaction = true;
 
-			if (body_two.Isfold == true)
+			if (body_two.Isfold == true && body_one.bodydistance == 1)
 			{
 				body_two.overlap++;
 			}
-			if (body_three.Isfold == true)
+			if (body_three.Isfold == true || body_one.bodydistance == 2)
 			{
 				body_three.overlap++;
 			}
+		}
+
+		if (body_one.Isfold == true && body_one.Isopen == false && body_one.foldcount == 1 && body_one.Isaction == false && body_three.body_type == left)
+		{
+			body_three.ease.addtime = 0.1f;
+			body_three.ease.maxtime = 1.5f;
+			body_three.ease.timerate = 0.0f;
+
+			body_three.ease.ismove = true;
+			body_three.Isfold = true;
+			body_three.Isopen = false;
+			body_three.Isaction = true;
+			body_three.overlap = 0;
+
+			body_one.Isaction = true;
+			body_one.ease.ismove = true;
+			body_one.overlap = 1;
+
+			if (body_two.Isfold == true)
+			{
+				body_two.overlap = 2;
+			}
+		}
+
+		if (body_one.bodydistance == 2 && body_two.Isfold == true)
+		{
+			isopentwo = false;
 		}
 	}
 	//上
@@ -128,13 +159,24 @@ void Player::Updata()
 			body_two.Isopen = false;
 			body_two.Isaction = true;
 
-			if (body_one.Isfold == true)
+			if (body_one.foldcount == 1 && body_one.body_type == left)
 			{
 				body_one.overlap++;
 			}
-			if (body_three.Isfold == true)
+			if (body_three.foldcount == 1 && body_three.body_type == right)
 			{
 				body_three.overlap++;
+			}
+
+			if (body_one.foldcount == 2)
+			{
+				body_one.overlap = 2;
+				body_three.overlap = 1;
+			}
+			if (body_three.foldcount == 2)
+			{
+				body_three.overlap = 2;
+				body_one.overlap = 1;
 			}
 		}
 	}
@@ -153,17 +195,42 @@ void Player::Updata()
 			body_three.Isopen = false;
 			body_three.Isaction = true;
 
-			if (body_one.Isfold == true)
+			if (body_one.Isfold == true || body_three.bodydistance == 2)
 			{
 				body_one.overlap++;
 			}
-			if (body_two.Isfold == true)
+			if (body_two.Isfold == true && body_three.bodydistance == 1)
 			{
 				body_two.overlap++;
 			}
 		}
 
+		if (body_three.Isfold == true && body_three.Isopen == false && body_three.foldcount == 1 && body_three.Isaction == false && body_one.body_type == right)
+		{
+			body_one.ease.addtime = 0.1f;
+			body_one.ease.maxtime = 1.5f;
+			body_one.ease.timerate = 0.0f;
 
+			body_one.ease.ismove = true;
+			body_one.Isfold = true;
+			body_one.Isopen = false;
+			body_one.Isaction = true;
+			body_one.overlap = 0;
+
+			body_three.Isaction = true;
+			body_three.ease.ismove = true;
+			body_three.overlap = 1;
+
+			if (body_two.Isfold == true)
+			{
+				body_two.overlap = 2;
+			}
+		}
+
+		if (body_three.bodydistance == 2 && body_two.Isfold == true)
+		{
+			isopentwo = false;
+		}
 	}
 	//下
 	if (InputManger::SubDownTrigger() && body_two.ease.ismove == false && body_two.body_type == down)
@@ -180,11 +247,20 @@ void Player::Updata()
 			body_two.Isopen = false;
 			body_two.Isaction = true;
 
-			if (body_one.Isfold == true)
+			if (body_one.foldcount < 2 && body_one.bodydistance == 1)
 			{
 				body_one.overlap++;
 			}
-			if (body_three.Isfold == true)
+			if (body_three.foldcount < 2 && body_three.bodydistance == 1)
+			{
+				body_three.overlap++;
+			}
+
+			if (body_one.foldcount == 2)
+			{
+				body_one.overlap++;
+			}
+			if (body_three.foldcount == 2)
 			{
 				body_three.overlap++;
 			}
@@ -195,7 +271,8 @@ void Player::Updata()
 	if (InputManger::Act1Trigger())
 	{
 		//左
-		if (body_one.Isfold == true && body_one.Isopen == false && body_one.Isaction == false && body_one.overlap == 0)
+		if (body_one.Isfold == true && body_one.Isaction == false && body_one.body_type == left && body_one.overlap == 0 ||
+			body_three.body_type == left && body_three.Isfold == true && body_three.overlap == 0)
 		{
 			body_one.ease.addtime = 0.1f;
 			body_one.ease.maxtime = 1.5f;
@@ -206,17 +283,42 @@ void Player::Updata()
 			body_one.Isopen = true;
 			body_one.Isaction = true;
 
-			if (body_two.Isfold == true)
+			if (body_one.foldcount == 2)
+			{
+				body_three.ease.addtime = 0.1f;
+				body_three.ease.maxtime = 1.5f;
+				body_three.ease.timerate = 0.0f;
+
+				body_three.ease.ismove = true;
+				body_three.Isfold = false;
+				body_three.Isopen = true;
+				body_three.Isaction = true;
+
+				body_three.overlap = 1;
+				body_one.overlap = 0;
+
+				if (body_two.Isfold == true)
+				{
+					body_two.overlap = 0;
+				}
+			}
+
+			if (body_two.Isfold == true && body_one.bodydistance == 1)
 			{
 				body_two.overlap--;
 			}
-			if (body_three.Isfold == true || (body_three.Isopen == true && body_three.body_type == left))
+			if (body_three.body_type == right && body_three.Isfold == true || body_one.foldcount == 1 && body_three.body_type == left)
 			{
 				body_three.overlap--;
 			}
+
+			if (body_one.bodydistance == 2 && body_one.foldcount == 1 && isopentwo == false)
+			{
+				isopentwo = true;
+			}
 		}
 		//上
-		else if (body_two.Isfold == true && body_two.Isopen == false && body_two.Isaction == false && body_two.overlap == 0)
+		else if (body_two.Isfold == true && body_two.Isaction == false && body_two.overlap == 0 && isopentwo == true)
 		{
 			body_two.ease.addtime = 0.1f;
 			body_two.ease.maxtime = 1.5f;
@@ -231,13 +333,14 @@ void Player::Updata()
 			{
 				body_one.overlap--;
 			}
-			if (body_three.Isfold == true)
+			if (body_three.Isfold == true && body_three.overlap > 0)
 			{
 				body_three.overlap--;
 			}
 		}
 		//右
-		else if (body_three.Isfold == true && body_three.Isopen == false && body_three.Isaction == false && body_three.overlap == 0)
+		else if (body_three.Isfold == true && body_three.Isaction == false && body_three.body_type == right && body_three.overlap == 0 ||
+			body_one.body_type == right && body_one.Isfold == true)
 		{
 			body_three.ease.addtime = 0.1f;
 			body_three.ease.maxtime = 1.5f;
@@ -248,73 +351,137 @@ void Player::Updata()
 			body_three.Isopen = true;
 			body_three.Isaction = true;
 
-			if (body_one.Isfold == true)
+			if (body_three.foldcount == 2)
 			{
-				body_one.overlap--;
+				body_one.ease.addtime = 0.1f;
+				body_one.ease.maxtime = 1.5f;
+				body_one.ease.timerate = 0.0f;
+
+				body_one.ease.ismove = true;
+				body_one.Isfold = false;
+				body_one.Isopen = true;
+				body_one.Isaction = true;
+
+				body_one.overlap = 1;
+				body_three.overlap = 0;
+
+				if (body_two.Isfold == true)
+				{
+					body_two.overlap = 0;
+				}
 			}
-			if (body_two.Isfold == true || (body_one.Isopen == true && body_one.body_type == right))
+
+			if (body_two.Isfold == true && body_three.bodydistance == 1)
 			{
 				body_two.overlap--;
 			}
+			if (body_one.body_type == left && body_one.Isfold == true || body_three.foldcount == 1 && body_one.body_type == right)
+			{
+				body_one.overlap--;
+			}
+
+			if (body_three.bodydistance == 2 && body_three.foldcount == 1 && isopentwo == false)
+			{
+				isopentwo = true;
+			}
 		}
 	}
 
+	//体のリセット
+	if (Input::isKeyTrigger(KEY_INPUT_R))
+	{
+		bodysetup(false, left, true, up, true, right);
+	}
 
 	//体のスライド
 	//左にスライド
-	if (Input::isKeyTrigger(KEY_INPUT_Z) && body_one.bodydistance < 2 && body_one.Isaction == false)
+	if (Input::isKeyTrigger(KEY_INPUT_Z) && body_one.bodydistance < 2 && body_one.Isaction == false && body_three.foldcount < 2)
 	{
-		if (body_one.body_type == right)
+		if (body_one.Isactivate == true && body_three.Isactivate == true)
+		{
+			if (body_one.body_type == right)
+			{
+				body_one.overlap = 0;
+				body_one.setslide(-1, 2);
+				body_three.bodydistance = 1;
+				body_three.setslide(-1, 1);
+			}
+			if (body_one.body_type == left && body_one.bodydistance == 1 && body_three.Isfold == false)
+			{
+				if (body_one.Isfold == true)
+				{
+					body_three.overlap = 1;
+					body_one.bodydistance = 2;
+					body_one.setslide(-1, 1);
+					body_three.setslide(-1, 2);
+
+					if (body_two.Isfold == true)
+					{
+						body_two.overlap = 0;
+					}
+				}
+				else
+				{
+					body_one.bodydistance = 2;
+					body_one.setslide(-1, 1);
+					body_three.setslide(-1, 2);
+				}
+			}
+		}
+		else if (body_three.Isactivate == true && body_three.body_type == right && body_three.Isfold == false && body_three.Isaction == false)
+		{
+			body_three.setslide(-1, 2);
+		}
+		else if (body_one.Isactivate == true && body_one.body_type == right && body_one.Isfold == false)
 		{
 			body_one.setslide(-1, 2);
-			body_three.bodydistance = 1;
-			body_three.setslide(-1, 1);
-		}
-		if (body_one.body_type == left && body_one.bodydistance == 1 && body_three.Isfold == false)
-		{
-			if (body_one.Isfold == true)
-			{
-				body_three.overlap = 1;
-				body_one.bodydistance = 2;
-				body_one.setslide(-1, 1);
-				body_three.setslide(-1, 2);
-			}
-			else
-			{
-				body_one.bodydistance = 2;
-				body_one.setslide(-1, 1);
-				body_three.setslide(-1, 2);
-			}
 		}
 	}
 	//右にスライド
-	if (Input::isKeyTrigger(KEY_INPUT_X) && body_three.bodydistance < 2 && body_three.Isaction == false)
+	if (Input::isKeyTrigger(KEY_INPUT_X) && body_three.bodydistance < 2 && body_three.Isaction == false && body_one.foldcount < 2)
 	{
-		if (body_three.body_type == left)
+		if (body_one.Isactivate == true && body_three.Isactivate == true)
+		{
+			if (body_three.body_type == left)
+			{
+				body_three.overlap = 0;
+				body_three.setslide(1, 2);
+				body_one.bodydistance = 1;
+				body_one.setslide(1, 1);
+			}
+			if (body_three.body_type == right && body_three.bodydistance == 1 && body_one.Isfold == false)
+			{
+				if (body_three.Isfold == true)
+				{
+					body_one.overlap = 1;
+					body_three.bodydistance = 2;
+					body_three.setslide(1, 1);
+					body_one.setslide(1, 2);
+
+					if (body_two.Isfold == true)
+					{
+						body_two.overlap = 0;
+					}
+				}
+				else
+				{
+					body_three.bodydistance = 2;
+					body_three.setslide(1, 1);
+					body_one.setslide(1, 2);
+				}
+			}
+		}
+		else if (body_one.Isactivate == true && body_one.body_type == left && body_one.Isfold == false && body_one.Isaction == false)
+		{
+			body_one.setslide(1, 2);
+		}
+		else if (body_three.Isactivate == true && body_three.body_type == left && body_three.Isfold == false)
 		{
 			body_three.setslide(1, 2);
-			body_one.bodydistance = 1;
-			body_one.setslide(1, 1);
-		}
-		if (body_three.body_type == right && body_three.bodydistance == 1 && body_one.Isfold == false)
-		{
-			if (body_three.Isfold == true)
-			{
-				body_one.overlap = 1;
-				body_three.bodydistance = 2;
-				body_three.setslide(1, 1);
-				body_one.setslide(1, 2);
-			}
-			else
-			{
-				body_three.bodydistance = 2;
-				body_three.setslide(1, 1);
-				body_one.setslide(1, 2);
-			}
 		}
 	}
 	//上下のスライド
-	if (Input::isKeyTrigger(KEY_INPUT_C) && body_two.Isaction == false)
+	if (Input::isKeyTrigger(KEY_INPUT_C) && body_two.Isfold == false && body_two.Isaction == false && body_two.Isactivate == true)
 	{
 		if (body_two.body_type == up)
 		{
@@ -328,14 +495,17 @@ void Player::Updata()
 
 	if (body_one.Isactivate == true)
 	{
+		body_one.IsHitBody(stage, center_position, body_two, body_three, IsFall, IsJump);
 		body_one.Update(center_position);
 	}
 	if (body_two.Isactivate == true)
 	{
+		body_two.IsHitBody(stage, center_position, body_one, body_three, IsFall, IsJump);
 		body_two.Update(center_position);
 	}
 	if (body_three.Isactivate == true)
 	{
+		body_three.IsHitBody(stage, center_position, body_one, body_two, IsFall, IsJump);
 		body_three.Update(center_position);
 	}
 }

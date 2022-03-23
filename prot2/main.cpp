@@ -49,7 +49,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Stage* stage = Stage::Get();
 	stage->LoadStage("./Resources/stage1.csv", playerTile);
 	player->Init();
-	player->bodysetup(playerTile[0], 0, playerTile[1], 1, playerTile[2], 2);
+	player->bodysetup(false, left, true, up, true, right);
 
 	// ゲームループ
 	while (1)
@@ -61,7 +61,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
-		player->Updata();
+		player->Update(*stage);
 		if (Input::isKey(KEY_INPUT_1))
 		{
 			stage->LoadStage("./Resources/stage1.csv", playerTile);
@@ -88,8 +88,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		// 描画処理
-		stage->Draw(320, 0);
-		player->Draw(320, 0);
+		stage->Draw();
+		player->Draw(0, 0);
+
+		DrawFormatString(0, 100, GetColor(255, 255, 255), "%d\n%d", ((int)player->center_position.x / 60), ((int)player->center_position.y / 60));
+		DrawFormatString(0, 150, GetColor(255, 255, 255), "%f\n%f", player->center_position.x, player->center_position.y);
+		DrawFormatString(0, 190, GetColor(255, 255, 255), "%ff", player->fallspeed);
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

@@ -8,10 +8,10 @@
 enum MapchipData
 {
 	EMPTY_STAGE = 0,
-	NONE = 1,
-	BLOCK = 2,
-	GOAL = 3,
-	START = 4
+	NONE,
+	BLOCK,
+	GOAL,
+	START
 };
 
 class Stage final
@@ -44,13 +44,15 @@ public: //サブクラス
 		char offsetY = 0;
 		unsigned char width = 1;
 		unsigned char height = 1;
-		std::vector<StageTileData> stageData;
+		std::vector<StageTileData> stageTileData;
 		std::vector<char> stageOffsetX;
 		std::vector<char> stageOffsetY;
 	};
 
 public: //定数
 	static const int blockSize;
+
+	Vector3 offset = { 0,0,0 };
 
 public: //静的メンバ変数
 	static int foldGraph;
@@ -65,7 +67,7 @@ public: //メンバ関数
 	// 更新
 	void Updata();
 	// 描画
-	void Draw(int offsetX, int offsetY);
+	void Draw();
 
 	/// <summary>
 	/// ステージファイルの読み込み
@@ -94,6 +96,18 @@ public: //メンバ関数
 	inline StageData* GetStageData(const short& stageNumber);
 	// 全ステージのデータを取得
 	inline StageData* GetAllStageData();
+	//Stagedataのsizeを取得
+	size_t getstagedatasize();
+	//Stagetiledataのsizeを取得
+	size_t getstagetiledatasize(int i);
+
+	char getstagetileheight(int i, int j);
+	char getstagetilewidth(int i, int j);
+
+	char getstagemapchip(int i, int j, int mapchipPos);
+
+	bool getplayertile(Vector3 center, int i, int j);
+
 private:
 	// ステージを折る
 	int Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData);

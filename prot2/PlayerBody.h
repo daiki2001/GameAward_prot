@@ -2,6 +2,7 @@
 #include "Vector3.h"
 #include "Easing.h"
 #include "Colors.h"
+#include "Stage.h"
 
 enum bodytype
 {
@@ -36,6 +37,23 @@ public: //メンバ関数
 	/// <param name="move_dis">スライドする距離(隣:1 顔をまたぐ:2)</param>
 	void setslide(int slidepat, int move_dis);
 
+	/// <summary>
+	/// プレイヤーの当たり判定
+	/// </summary>
+	/// <param name="stage">ステージデータ</param>
+	/// <param name="center">プレイヤーの中心</param>
+	/// <returns></returns>
+	void IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall,bool& isjump);
+
+	/// <summary>
+	/// 押し出し処理
+	/// </summary>
+	/// <param name="center">押し出される側の座標</param>
+	/// <param name="extrudepos">押し出す側の座標</param>
+	/// <param name="extrudedis">押し出す距離</param>
+	/// <param name="extrudetype">どの方向"から"押し出すか</param>
+	void Extrude(Vector3& center, Vector3 extrudepos, float extrudedis, bodytype extrudetype, bool& isfall, bool& isjump);
+
 public: //メンバ変数
 	//有効化フラグ
 	bool Isactivate;
@@ -55,6 +73,9 @@ public: //メンバ変数
 	//折る・開くフラグ
 	bool Isfold;
 	bool Isopen;
+
+	//この体が折られた回数
+	int foldcount = 0;
 
 	//スライドフラグ・スライドする方向
 	bool Isslide;

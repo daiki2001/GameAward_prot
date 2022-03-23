@@ -16,7 +16,7 @@ public: //メンバ関数
 	// 初期化
 	void Init();
 	// 更新
-	void Updata();
+	void Update(Stage& stage);
 	// 描画
 	void Draw(int offsetX, int offsetY);
 
@@ -30,7 +30,7 @@ public: //メンバ関数
 
 public: //メンバ変数
 	//床の高さ
-	float floorHeight = 500;
+	float floorHeight = 640;
 
 	//体の構成要素
 	Vector3 center_position = { 100.0f, 100.0f, 0.0f };
@@ -40,9 +40,12 @@ public: //メンバ変数
 	PlayerBody body_two;
 	PlayerBody body_three;
 
+	//body_twoを優先的に開くか
+	bool isopentwo = true;
+
 	//ジャンプ
 	bool IsJump = false;
 	float jumpspeed = 3.0f;
 	float fallspeed = 3.0f;
-	bool IsLand = false;
+	bool IsFall = false;
 };
