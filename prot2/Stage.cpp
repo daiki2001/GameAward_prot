@@ -706,8 +706,8 @@ char Stage::getstagemapchip(int i, int j, int mapchipPos)
 
 bool Stage::getplayertile(Vector3 center, int i, int j)
 {
-	int center_x_mapchip = (center.x - this->offset.x) / 60;
-	int center_y_mapchip = (center.y - this->offset.y) / 60;
+	int center_x_mapchip = (center.x - this->offset.x) / blockSize;
+	int center_y_mapchip = (center.y - this->offset.y) / blockSize;
 
 	float left = (float)stageData[i].stageTileData[j].offsetX * blockSize;
 	float up = (float)stageData[i].stageTileData[j].offsetY * blockSize;

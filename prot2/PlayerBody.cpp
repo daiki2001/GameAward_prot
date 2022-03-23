@@ -465,7 +465,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						break;
 					case right:
 						//‰E‘¤
-						mapchipPos = center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance + 1);
+						mapchipPos = (center_y_mapchip_tile * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance + 1))-2;
 						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { (center_x_mapchip + bodydistance + 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30 + bodydistance * 60, right, isfall, isjump);
@@ -477,7 +477,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 							Extrude(center, { (center_x_mapchip + bodydistance + 1) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 						}
 						//‰º
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance + 1);
+						mapchipPos = ((center_y_mapchip_tile + 1) * stage.getstagetilewidth(i, j) + (center_x_mapchip_tile + bodydistance + 1))-2;
 						if (stage.getstagemapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
 							Extrude(center, { (center_x_mapchip + bodydistance + 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
