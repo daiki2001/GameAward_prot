@@ -22,15 +22,14 @@ enum bodytype
 
 namespace
 {
-static size_t i = 0;
-static size_t j = 0;
-static size_t x = 0;
-static size_t y = 0;
+static size_t i = 0, j = 0; //for文のループカウンタ
+static size_t x = 0, y = 0; //マップチップ上の座標
 
-static size_t mapchipPos = 0;
+static size_t mapchipPos = 0; //マップチップの要素番号
 }
 
 const int Stage::blockSize = 60;
+const int Stage::halfBlockSize = Stage::blockSize / 2;
 int Stage::startPlayerPosX = 0;
 int Stage::startPlayerPosY = 0;
 unsigned char Stage::initFoldCount[4] = { 0 };
@@ -127,6 +126,7 @@ void Stage::Draw(int offsetX, int offsetY)
 
 		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0xFF);
 
+		// つなぎ目
 		for (j = 0; j < stageData[i].stageTileData.size(); j++)
 		{
 			static char sideStageTile = 0;
@@ -724,6 +724,16 @@ size_t Stage::GetStageTileDataSize(int i)
 	return stageData[i].stageTileData.size();
 }
 
+char Stage::GetStageWidth(int i)
+{
+	return stageData[i].width;
+}
+
+char Stage::GetStageHeight(int i)
+{
+	return stageData[i].height;
+}
+
 char Stage::GetStageTileWidth(int i, int j)
 {
 	return stageData[i].stageTileData[j].width;
@@ -741,15 +751,15 @@ char Stage::GetStageMapchip(int i, int j, int mapchipPos)
 
 bool Stage::GetPlayerTile(Vector3 center, int i, int j)
 {
-	int center_x_mapchip = static_cast<int>(center.x - this->offset.x) / 60;
-	int center_y_mapchip = static_cast<int>(center.y - this->offset.y) / 60;
+	int center_x_mapchip = static_cast<int>(center.x - stageData[i].offsetX) / blockSize;
+	int center_y_mapchip = static_cast<int>(center.y - stageData[i].offsetY) / blockSize;
 
 	float left = (float)stageData[i].stageTileData[j].offsetX * blockSize;
 	float up = (float)stageData[i].stageTileData[j].offsetY * blockSize;
-	float right = left + blockSize * 5;
-	float down = up + blockSize * 5;
+	float right = left + blockSize * stageData[i].stageTileData[j].width;
+	float down = up + blockSize * stageData[i].stageTileData[j].height;
 
-	if (center.x - 30 >= left && center.x + 30 <= right && center.y - 30 >= up && center.y + 30 <= down)
+	if (center.x - halfBlockSize >= left && center.x + halfBlockSize <= right && center.y - halfBlockSize >= up && center.y + halfBlockSize <= down)
 	{
 		return true;
 	}

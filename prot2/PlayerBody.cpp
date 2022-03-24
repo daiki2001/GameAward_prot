@@ -401,8 +401,8 @@ void PlayerBody::setslide(int slidepat, int move_dis)
 void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall, bool& isjump)
 {
 	//全体的なマップチップの座標
-	int center_x_mapchip = static_cast<int>(center.x - stage.offset.x) / 60;
-	int center_y_mapchip = static_cast<int>(center.y - stage.offset.y) / 60;
+	int center_x_mapchip = static_cast<int>(center.x - stage.offset.x) / Stage::blockSize;
+	int center_y_mapchip = static_cast<int>(center.y - stage.offset.y) / Stage::blockSize;
 
 	//今いるタイル内でのプレイヤーのマップチップ座標
 	int center_x_mapchip_tile = (int)center_x_mapchip % 5;

@@ -51,6 +51,7 @@ public: //サブクラス
 
 public: //定数
 	static const int blockSize;
+	static const int halfBlockSize;
 
 	Vector3 offset = { 0,0,0 };
 
@@ -98,6 +99,9 @@ public: //メンバ関数
 	size_t GetStageDataSize();
 	//StageTileDataのサイズを取得
 	size_t GetStageTileDataSize(int i);
+
+	char GetStageWidth(int i);
+	char GetStageHeight(int i);
 
 	char GetStageTileWidth(int i, int j);
 	char GetStageTileHeight(int i, int j);

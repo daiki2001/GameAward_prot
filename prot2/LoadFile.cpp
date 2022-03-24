@@ -363,7 +363,7 @@ int LoadFile::LoadCSV(char* mapArray, const size_t& mapSize, FILE* fileHandle, c
 	}
 	for (i = 0; i < mapSize; i++)
 	{
-		mapArray[i] = '\0';
+		mapArray[i] = 0;
 	}
 
 	for (i = 0; i < sizeof(string) / sizeof(string[0]); i++) string[i] = '\0';
@@ -449,7 +449,7 @@ int LoadFile::LoadCSV(char* mapArray, const size_t& mapSize, FILE* fileHandle, c
 	}
 	for (i = 0; i < mapSize; i++)
 	{
-		mapArray[i] = '\0';
+		mapArray[i] = 0;
 	}
 
 	for (i = 0; i < sizeof(string) / sizeof(string[0]); i++) string[i] = '\0';
