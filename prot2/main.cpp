@@ -47,9 +47,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	unsigned char playerTile[4] = { 0 };
 
 	Stage* stage = Stage::Get();
-	stage->LoadStage("./Resources/stage1.csv", playerTile);
+	stage->LoadStage("./Resources/stage2.csv", playerTile);
 	player->Init();
-	player->bodysetup(false, left, true, up, true, right);
+	player->bodysetup(false, left, true, down, true, right);
 
 	// ƒQ[ƒ€ƒ‹[ƒv
 	while (1)

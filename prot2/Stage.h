@@ -97,16 +97,17 @@ public: //メンバ関数
 	// 全ステージのデータを取得
 	inline StageData* GetAllStageData();
 	//Stagedataのsizeを取得
-	size_t getstagedatasize();
+	size_t GetStageDataSize();
 	//Stagetiledataのsizeを取得
-	size_t getstagetiledatasize(int i);
-
-	char getstagetileheight(int i, int j);
-	char getstagetilewidth(int i, int j);
-
-	char getstagemapchip(int i, int j, int mapchipPos);
-
-	bool getplayertile(Vector3 center, int i, int j);
+	size_t GetStageTileDataSize(int i);
+	//任意のStageTileの高さを取得
+	char GetStageTileHeight(int i, int j);
+	//任意のStageTileの幅を取得
+	char GetStageTileWidth(int i, int j);
+	//任意の場所のマップチップ情報を取得
+	char GetStageMapChip(int i, int j, int mapchipPos);
+	//任意の座標からどのStageTileにいるかを取得
+	bool GetPositionTile(Vector3 center, int i, int j);
 
 private:
 	// ステージを折る

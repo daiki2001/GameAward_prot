@@ -679,32 +679,32 @@ inline Stage::StageData* Stage::GetAllStageData()
 	return stageData.data();
 }
 
-size_t Stage::getstagedatasize()
+size_t Stage::GetStageDataSize()
 {
 	return stageData.size();
 }
 
-size_t Stage::getstagetiledatasize(int i)
+size_t Stage::GetStageTileDataSize(int i)
 {
 	return stageData[i].stageTileData.size();
 }
 
-char Stage::getstagetileheight(int i, int j)
+char Stage::GetStageTileHeight(int i, int j)
 {
 	return stageData[i].stageTileData[j].height;
 }
 
-char Stage::getstagetilewidth(int i, int j)
+char Stage::GetStageTileWidth(int i, int j)
 {
 	return stageData[i].stageTileData[j].width;
 }
 
-char Stage::getstagemapchip(int i, int j, int mapchipPos)
+char Stage::GetStageMapChip(int i, int j, int mapchipPos)
 {
 	return stageData[i].stageTileData[j].mapchip[mapchipPos];
 }
 
-bool Stage::getplayertile(Vector3 center, int i, int j)
+bool Stage::GetPositionTile(Vector3 center, int i, int j)
 {
 	int center_x_mapchip = (center.x - this->offset.x) / blockSize;
 	int center_y_mapchip = (center.y - this->offset.y) / blockSize;

@@ -2,6 +2,16 @@
 #include "PlayerBody.h"
 #include "Vector3.h"
 
+class Foot
+{
+	Vector3 Position;
+	Easing ease;
+
+	bool IsAction = false;
+
+	int FootHandle;
+};
+
 class Player final
 {
 public: //シングルトン化
@@ -48,4 +58,8 @@ public: //メンバ変数
 	float JumpSpeed = 3.0f;
 	float FallSpeed = 3.0f;
 	bool IsFall = false;
+
+	bool Player_IsAction = false;
+
+	int FaceHandle[2];
 };

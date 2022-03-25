@@ -45,6 +45,10 @@ void Player::Init()
 	Body_Three.BodyColor = MAGENTA;
 
 	IsFall = false;
+	Player_IsAction = false;
+
+	FaceHandle[0] = LoadGraph("Resources/face.png");
+	FaceHandle[1] = LoadGraph("Resources/face_fold.png");
 }
 
 void Player::Update(Stage& stage)
@@ -91,10 +95,10 @@ void Player::Update(Stage& stage)
 
 	//折る
 	//左
-	if (InputManger::SubLeftTrigger() && Body_One.Ease.ismove == false && Body_One.Body_Type == left)
+	if (InputManger::SubLeftTrigger() && Body_One.Ease.ismove == false && Body_One.Body_Type == left && Body_One.IsActivate == true)
 	{
 		Body_One.Ease.addtime = 0.1f;
-		Body_One.Ease.maxtime = 1.5f;
+		Body_One.Ease.maxtime = 1.2f;
 		Body_One.Ease.timerate = 0.0f;
 
 		//折る
@@ -118,7 +122,7 @@ void Player::Update(Stage& stage)
 		if (Body_One.IsFold == true && Body_One.IsOpen == false && Body_One.FoldCount == 1 && Body_One.IsAction == false && Body_Three.Body_Type == left)
 		{
 			Body_Three.Ease.addtime = 0.1f;
-			Body_Three.Ease.maxtime = 1.5f;
+			Body_Three.Ease.maxtime = 1.2f;
 			Body_Three.Ease.timerate = 0.0f;
 
 			Body_Three.Ease.ismove = true;
@@ -143,10 +147,10 @@ void Player::Update(Stage& stage)
 		}
 	}
 	//上
-	if (InputManger::SubUpTrigger() && Body_Two.Ease.ismove == false && Body_Two.Body_Type == up)
+	if (InputManger::SubUpTrigger() && Body_Two.Ease.ismove == false && Body_Two.Body_Type == up && Body_Two.IsActivate == true)
 	{
 		Body_Two.Ease.addtime = 0.1f;
-		Body_Two.Ease.maxtime = 1.5f;
+		Body_Two.Ease.maxtime = 1.2f;
 		Body_Two.Ease.timerate = 0.0f;
 
 		//折る
@@ -179,10 +183,10 @@ void Player::Update(Stage& stage)
 		}
 	}
 	//右
-	if (InputManger::SubRightTrigger() && Body_Three.Ease.ismove == false && Body_Three.Body_Type == right)
+	if (InputManger::SubRightTrigger() && Body_Three.Ease.ismove == false && Body_Three.Body_Type == right && Body_Three.IsActivate == true)
 	{
 		Body_Three.Ease.addtime = 0.1f;
-		Body_Three.Ease.maxtime = 1.5f;
+		Body_Three.Ease.maxtime = 1.2f;
 		Body_Three.Ease.timerate = 0.0f;
 
 		//折る
@@ -206,7 +210,7 @@ void Player::Update(Stage& stage)
 		if (Body_Three.IsFold == true && Body_Three.IsOpen == false && Body_Three.FoldCount == 1 && Body_Three.IsAction == false && Body_One.Body_Type == right)
 		{
 			Body_One.Ease.addtime = 0.1f;
-			Body_One.Ease.maxtime = 1.5f;
+			Body_One.Ease.maxtime = 1.2f;
 			Body_One.Ease.timerate = 0.0f;
 
 			Body_One.Ease.ismove = true;
@@ -231,10 +235,10 @@ void Player::Update(Stage& stage)
 		}
 	}
 	//下
-	if (InputManger::SubDownTrigger() && Body_Two.Ease.ismove == false && Body_Two.Body_Type == down)
+	if (InputManger::SubDownTrigger() && Body_Two.Ease.ismove == false && Body_Two.Body_Type == down && Body_Two.IsActivate == true)
 	{
 		Body_Two.Ease.addtime = 0.1f;
-		Body_Two.Ease.maxtime = 1.5f;
+		Body_Two.Ease.maxtime = 1.2f;
 		Body_Two.Ease.timerate = 0.0f;
 
 		//折る
@@ -273,7 +277,7 @@ void Player::Update(Stage& stage)
 			Body_Three.Body_Type == left && Body_Three.IsFold == true && Body_Three.Overlap == 0)
 		{
 			Body_One.Ease.addtime = 0.1f;
-			Body_One.Ease.maxtime = 1.5f;
+			Body_One.Ease.maxtime = 1.2f;
 			Body_One.Ease.timerate = 0.0f;
 
 			Body_One.Ease.ismove = true;
@@ -284,7 +288,7 @@ void Player::Update(Stage& stage)
 			if (Body_One.FoldCount == 2)
 			{
 				Body_Three.Ease.addtime = 0.1f;
-				Body_Three.Ease.maxtime = 1.5f;
+				Body_Three.Ease.maxtime = 1.2f;
 				Body_Three.Ease.timerate = 0.0f;
 
 				Body_Three.Ease.ismove = true;
@@ -319,7 +323,7 @@ void Player::Update(Stage& stage)
 		else if (Body_Two.IsFold == true && Body_Two.IsAction == false && Body_Two.Overlap == 0 && IsOpenTwo == true)
 		{
 			Body_Two.Ease.addtime = 0.1f;
-			Body_Two.Ease.maxtime = 1.5f;
+			Body_Two.Ease.maxtime = 1.2f;
 			Body_Two.Ease.timerate = 0.0f;
 
 			Body_Two.Ease.ismove = true;
@@ -341,7 +345,7 @@ void Player::Update(Stage& stage)
 			Body_One.Body_Type == right && Body_One.IsFold == true)
 		{
 			Body_Three.Ease.addtime = 0.1f;
-			Body_Three.Ease.maxtime = 1.5f;
+			Body_Three.Ease.maxtime = 1.2f;
 			Body_Three.Ease.timerate = 0.0f;
 
 			Body_Three.Ease.ismove = true;
@@ -352,7 +356,7 @@ void Player::Update(Stage& stage)
 			if (Body_Three.FoldCount == 2)
 			{
 				Body_One.Ease.addtime = 0.1f;
-				Body_One.Ease.maxtime = 1.5f;
+				Body_One.Ease.maxtime = 1.2f;
 				Body_One.Ease.timerate = 0.0f;
 
 				Body_One.Ease.ismove = true;
@@ -506,13 +510,23 @@ void Player::Update(Stage& stage)
 		Body_Three.IsHitBody(stage, CenterPosition, Body_One, Body_Two, IsFall, IsJump);
 		Body_Three.Update(CenterPosition);
 	}
+
+	if (Body_One.IsAction == true || Body_Two.IsAction == true || Body_Three.IsAction == true)
+	{
+		Player_IsAction = true;
+	}
+	else
+	{
+		Player_IsAction = false;
+	}
 }
 
 void Player::Draw(int offsetX, int offsetY)
 {
 	if (Body_One.IsSlide == false && Body_Two.IsSlide == false && Body_Three.IsSlide == false)
 	{
-		DrawBox(CenterPosition.x - 30 + offsetX, CenterPosition.y - 30 + offsetY, CenterPosition.x + 30 + offsetX, CenterPosition.y + 30 + offsetY, GetColor(255, 0, 0), true);
+		//DrawBox(CenterPosition.x - 30 + offsetX, CenterPosition.y - 30 + offsetY, CenterPosition.x + 30 + offsetX, CenterPosition.y + 30 + offsetY, GetColor(255, 0, 0), true);
+		DrawExtendGraph(CenterPosition.x - 30, CenterPosition.y - 30, CenterPosition.x + 30, CenterPosition.y + 30, FaceHandle[Player_IsAction], true);
 	}
 
 #pragma region 重なっている枚数ごとに順番に描画
@@ -567,7 +581,9 @@ void Player::Draw(int offsetX, int offsetY)
 			DrawBox(CenterPosition.x + 30 + offsetX, CenterPosition.y - 30 + offsetY, Body_Three.BodyStartPos.x + offsetX, Body_Three.BodyEndPos.y + offsetY, Body_One.BodyColor, true);
 		}
 
-		DrawBox(CenterPosition.x - 30 + offsetX, CenterPosition.y - 30 + offsetY, CenterPosition.x + 30 + offsetX, CenterPosition.y + 30 + offsetY, GetColor(255, 0, 0), true);
+		//DrawBox(CenterPosition.x - 30 + offsetX, CenterPosition.y - 30 + offsetY, CenterPosition.x + 30 + offsetX, CenterPosition.y + 30 + offsetY, GetColor(255, 0, 0), true);
+		DrawExtendGraph(CenterPosition.x - 30, CenterPosition.y - 30, CenterPosition.x + 30, CenterPosition.y + 30, FaceHandle[Player_IsAction], true);
+
 	}
 
 	DrawLine(0, FloorHeight + offsetY, 1280, FloorHeight + offsetY, WHITE, true);
@@ -577,9 +593,11 @@ void Player::Draw(int offsetX, int offsetY)
 	DrawFormatString(0, 20, WHITE, "W:ジャンプ");
 	DrawFormatString(0, 40, WHITE, "←↑→:折る・開く");
 	DrawFormatString(0, 60, WHITE, "SPACE:開く");
-	//DrawFormatString(0, 80, WHITE, "重なっている枚数\n左：%d\n上：%d\n右：%d", body_one.overlap, body_two.overlap, body_three.overlap);
-	//DrawFormatString(0, 160, WHITE, "左右スライド：Z or X\n上下スライド：C or V");
-	//DrawFormatString(0, 200, WHITE, "%f   %f   %f", body_one.bodystartpos.x, body_one.bodyendpos.x, center_position.x);
+	if (Body_One.IsGoal == true || Body_Two.IsGoal == true || Body_Three.IsGoal == true)
+	{
+		DrawFormatString(300, 100, YELLOW, "GOAL");
+	}
+
 #pragma endregion
 }
 
