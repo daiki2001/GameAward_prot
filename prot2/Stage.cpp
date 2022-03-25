@@ -59,6 +59,30 @@ void Stage::Init()
 
 void Stage::Updata()
 {
+	static int posX = 0;
+	static int posY = 0;
+
+	for (i = 0; i < stageData.size(); i++)
+	{
+		for (j = 0; j < stageData[i].stageTileData.size(); j++)
+		{
+			for (y = 0; y < stageData[i].stageTileData[j].height; y++)
+			{
+				for (x = 0; x < stageData[i].stageTileData[j].width; x++)
+				{
+					posX = static_cast<int>(x + stageData[i].stageTileData[j].offsetX);
+					posY = static_cast<int>(y + stageData[i].stageTileData[j].offsetY);
+					mapchipPos = y * stageData[i].stageTileData[j].width + x;
+
+					stageData[i].stageTileData[j].leftUpPos[mapchipPos].x = static_cast<float>(posX * blockSize);
+					stageData[i].stageTileData[j].leftUpPos[mapchipPos].y = static_cast<float>(posY * blockSize);
+					stageData[i].stageTileData[j].rightDownPos[mapchipPos].x = static_cast<float>((posX + 1) * blockSize);
+					stageData[i].stageTileData[j].rightDownPos[mapchipPos].y = static_cast<float>((posY + 1) * blockSize);
+				}
+			}
+		}
+	}
+
 	if (stageEase.ismove)
 	{
 		if (stageEase.timerate >= 1.0f)
@@ -83,14 +107,12 @@ void Stage::Draw(int offsetX, int offsetY)
 			{
 				for (x = 0; x < stageData[i].stageTileData[j].width; x++)
 				{
-					posX = static_cast<int>(x + stageData[i].stageTileData[j].offsetX);
-					posY = static_cast<int>(y + stageData[i].stageTileData[j].offsetY);
 					mapchipPos = y * stageData[i].stageTileData[j].width + x;
 
-					pos1.x = static_cast<float>(posX * blockSize + offsetX);
-					pos2.x = static_cast<float>((posX + 1) * blockSize + offsetX);
-					pos1.y = static_cast<float>(posY * blockSize + offsetY);
-					pos2.y = static_cast<float>((posY + 1) * blockSize + offsetY);
+					pos1.x = stageData[i].stageTileData[j].leftUpPos[mapchipPos].x + static_cast<float>(offsetX);
+					pos1.y = stageData[i].stageTileData[j].leftUpPos[mapchipPos].y + static_cast<float>(offsetY);
+					pos2.x = stageData[i].stageTileData[j].rightDownPos[mapchipPos].x + static_cast<float>(offsetX);
+					pos2.y = stageData[i].stageTileData[j].rightDownPos[mapchipPos].y + static_cast<float>(offsetY);
 
 					switch (stageData[i].stageTileData[j].mapchip[mapchipPos])
 					{
@@ -332,6 +354,13 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].height;
 			stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].mapchip =
 				(char*)malloc(sizeof(char) * stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].size);
+			for (size_t k = 0; k < stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].size; k++)
+			{
+				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].leftUpPos.push_back({});
+				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].rightDownPos.push_back({});
+				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].startPos.push_back({});
+				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].endPos.push_back({});
+			}
 
 			if (stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].mapchip == nullptr)
 			{
@@ -647,6 +676,11 @@ void Stage::DataClear()
 				free(stageData[i].stageTileData[j].mapchip);
 				stageData[i].stageTileData[j].mapchip = nullptr;
 			}
+
+			ContainerClear(stageData[i].stageTileData[j].leftUpPos);
+			ContainerClear(stageData[i].stageTileData[j].rightDownPos);
+			ContainerClear(stageData[i].stageTileData[j].startPos);
+			ContainerClear(stageData[i].stageTileData[j].endPos);
 		}
 
 		ContainerClear(stageData[i].stageTileData);
@@ -668,6 +702,11 @@ void Stage::DataClear()
 				free(initStageData[i].stageTileData[j].mapchip);
 				initStageData[i].stageTileData[j].mapchip = nullptr;
 			}
+
+			ContainerClear(initStageData[i].stageTileData[j].leftUpPos);
+			ContainerClear(initStageData[i].stageTileData[j].rightDownPos);
+			ContainerClear(initStageData[i].stageTileData[j].startPos);
+			ContainerClear(initStageData[i].stageTileData[j].endPos);
 		}
 
 		ContainerClear(initStageData[i].stageTileData);

@@ -65,7 +65,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
+		stage->Updata();
 		player->Update(*stage);
+
 		if (Input::isKey(KEY_INPUT_1))
 		{
 			stage->LoadStage("./Resources/stage1.csv", playerTile);

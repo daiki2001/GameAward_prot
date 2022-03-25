@@ -31,10 +31,15 @@ public: //サブクラス
 		char stageNumber = 0;
 		char offsetX = 0;
 		char offsetY = 0;
+		std::vector<Vector3> leftUpPos = {};
+		std::vector<Vector3> rightDownPos = {};
 		size_t size = 1;
 		unsigned char width = 1;
 		unsigned char height = 1;
 		unsigned char direction = 0;
+		bool isEase = false;
+		std::vector<Vector3> startPos = {};
+		std::vector<Vector3> endPos = {};
 		bool isTop = true;
 	};
 	struct StageData

@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseBlock.cpp" />
     <ClCompile Include="DrawShape.cpp" />
     <ClCompile Include="Easing.cpp" />
     <ClCompile Include="Input.cpp" />
@@ -141,6 +142,7 @@
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseBlock.h" />
     <ClInclude Include="Colors.h" />
     <ClInclude Include="DrawShape.h" />
     <ClInclude Include="Easing.h" />
