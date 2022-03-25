@@ -66,11 +66,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			stage->LoadStage("./Resources/stage1.csv", playerTile);
 			player->Init();
+			player->bodysetup(false, left, true, up, true, right);
 		}
 		if (Input::isKey(KEY_INPUT_2))
 		{
 			stage->LoadStage("./Resources/stage2.csv", playerTile);
 			player->Init();
+			player->bodysetup(false, left, true, down, true, right);
 		}
 		if (Input::isKey(KEY_INPUT_3))
 		{
@@ -84,16 +86,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 		if (InputManger::SubUpTrigger() || InputManger::SubDownTrigger() || InputManger::SubLeftTrigger() || InputManger::SubRightTrigger())
 		{
-			stage->FoldAndOpen(player->center_position, playerTile);
+			stage->FoldAndOpen(player->CenterPosition, playerTile);
 		}
 
 		// 描画処理
 		stage->Draw();
 		player->Draw(0, 0);
 
-		DrawFormatString(0, 100, GetColor(255, 255, 255), "%d\n%d", ((int)player->center_position.x / 60), ((int)player->center_position.y / 60));
-		DrawFormatString(0, 150, GetColor(255, 255, 255), "%f\n%f", player->center_position.x, player->center_position.y);
-		DrawFormatString(0, 190, GetColor(255, 255, 255), "%ff", player->fallspeed);
+		DrawFormatString(0, 100, GetColor(255, 255, 255), "%d\n%d", ((int)player->CenterPosition.x / 60), ((int)player->CenterPosition.y / 60));
+		DrawFormatString(0, 150, GetColor(255, 255, 255), "%f\n%f", player->CenterPosition.x, player->CenterPosition.y);
+		DrawFormatString(0, 190, GetColor(255, 255, 255), "%ff", player->FallSpeed);
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

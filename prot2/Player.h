@@ -30,22 +30,22 @@ public: //メンバ関数
 
 public: //メンバ変数
 	//床の高さ
-	float floorHeight = 640;
+	float FloorHeight = 640;
 
 	//体の構成要素
-	Vector3 center_position = { 100.0f, 100.0f, 0.0f };
+	Vector3 CenterPosition = { 100.0f, 100.0f, 0.0f };
 
 	//体(折るほう)
-	PlayerBody body_one;
-	PlayerBody body_two;
-	PlayerBody body_three;
+	PlayerBody Body_One;
+	PlayerBody Body_Two;
+	PlayerBody Body_Three;
 
 	//body_twoを優先的に開くか
-	bool isopentwo = true;
+	bool IsOpenTwo = true;
 
 	//ジャンプ
 	bool IsJump = false;
-	float jumpspeed = 3.0f;
-	float fallspeed = 3.0f;
+	float JumpSpeed = 3.0f;
+	float FallSpeed = 3.0f;
 	bool IsFall = false;
 };
