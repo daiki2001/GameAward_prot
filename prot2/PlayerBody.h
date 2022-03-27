@@ -21,7 +21,7 @@ public: //メンバ関数
 	// 初期化
 	void Init(Vector3 position, bodytype number);
 	// 更新
-	void Update(Vector3 center);
+	void Update(Vector3& center);
 	/// <summary>
 	// 描画
 	void Draw(int offsetX, int offsetY);
@@ -66,9 +66,6 @@ public: //メンバ変数
 
 	//体の座標(初期状態：右下)
 	Vector3 BodyEndPos;
-
-	//体の中心座標
-	Vector3 BodyCenterPos;
 
 	//スライドの開始座標
 	Vector3 SlideStartPos;

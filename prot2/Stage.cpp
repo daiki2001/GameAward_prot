@@ -706,15 +706,12 @@ char Stage::GetStageMapChip(int i, int j, int mapchipPos)
 
 bool Stage::GetPositionTile(Vector3 center, int i, int j)
 {
-	int center_x_mapchip = (center.x - this->offset.x) / blockSize;
-	int center_y_mapchip = (center.y - this->offset.y) / blockSize;
-
 	float left = (float)stageData[i].stageTileData[j].offsetX * blockSize;
 	float up = (float)stageData[i].stageTileData[j].offsetY * blockSize;
-	float right = left + blockSize * 5;
-	float down = up + blockSize * 5;
+	float right = left + blockSize * (float)stageData[i].stageTileData[j].width;
+	float down = up + blockSize * (float)stageData[i].stageTileData[j].height;
 
-	if (center.x - 30 >= left && center.x + 30 <= right && center.y - 30 >= up && center.y + 30 <= down)
+	if (center.x >= left && center.x <= right && center.y >= up && center.y <= down)
 	{
 		return true;
 	}
@@ -864,6 +861,11 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 	return 0;
 }
 
+int Stage::GetStageTileOffsetX(int i, int j)
+{
+	return stageData[i].stageTileData[j].offsetX;
+}
+
 int Stage::SearchTopStageTile()
 {
 	std::vector<Vector3> topStageTile; //x‚Ì’l‚ÉstageData‚Ì—v‘f”Ô†Ay‚Ì’l‚ÉstageData[i].stageData‚Ì—v‘f”Ô†‚ğŠi”[‚·‚é
@@ -883,4 +885,9 @@ int Stage::SearchTopStageTile()
 	}
 
 	return 0;
+}
+
+int Stage::GetStageTileOffsetY(int i, int j)
+{
+	return stageData[i].stageTileData[j].offsetY;
 }

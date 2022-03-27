@@ -59,7 +59,10 @@ public: //ƒƒ“ƒo•Ï”
 	float FallSpeed = 3.0f;
 	bool IsFall = false;
 
+	//‚Ç‚ê‚©ˆê‚Â‚Å‚à‘Ì“®‚©‚µ‚Ä‚¢‚½‚çtrue
 	bool Player_IsAction = false;
-
+	//‰æ‘œƒnƒ“ƒhƒ‹(Šç)
 	int FaceHandle[2];
+
+	bool IsGoal = false;
 };

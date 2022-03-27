@@ -66,9 +66,14 @@ void Player::Update(Stage& stage)
 	//ジャンプ
 	if (InputManger::Up() && !InputManger::Act1() && IsJump == false && IsFall == false)
 	{
+		//CenterPosition.y -= 2.0f;
 		IsJump = true;
 		IsFall = true;
-		FallSpeed = -8.0f;
+		FallSpeed = -9.0f;
+	}
+	if (InputManger::Down() && !InputManger::Act1())
+	{
+		//CenterPosition.y += 2.0f;
 	}
 
 	if (IsJump == true)
@@ -497,18 +502,18 @@ void Player::Update(Stage& stage)
 
 	if (Body_One.IsActivate == true)
 	{
-		Body_One.IsHitBody(stage, CenterPosition, Body_Two, Body_Three, IsFall, IsJump);
 		Body_One.Update(CenterPosition);
+		Body_One.IsHitBody(stage, CenterPosition, Body_Two, Body_Three, IsFall, IsJump);
 	}
 	if (Body_Two.IsActivate == true)
 	{
-		Body_Two.IsHitBody(stage, CenterPosition, Body_One, Body_Three, IsFall, IsJump);
 		Body_Two.Update(CenterPosition);
+		Body_Two.IsHitBody(stage, CenterPosition, Body_One, Body_Three, IsFall, IsJump);
 	}
 	if (Body_Three.IsActivate == true)
 	{
-		Body_Three.IsHitBody(stage, CenterPosition, Body_One, Body_Two, IsFall, IsJump);
 		Body_Three.Update(CenterPosition);
+		Body_Three.IsHitBody(stage, CenterPosition, Body_One, Body_Two, IsFall, IsJump);
 	}
 
 	if (Body_One.IsAction == true || Body_Two.IsAction == true || Body_Three.IsAction == true)
@@ -518,6 +523,15 @@ void Player::Update(Stage& stage)
 	else
 	{
 		Player_IsAction = false;
+	}
+
+	if (Body_One.IsGoal == true || Body_Two.IsGoal == true || Body_Three.IsGoal == true)
+	{
+		IsGoal = true;
+	}
+	else
+	{
+		IsGoal = false;
 	}
 }
 
@@ -587,15 +601,22 @@ void Player::Draw(int offsetX, int offsetY)
 	}
 
 	DrawLine(0, FloorHeight + offsetY, 1280, FloorHeight + offsetY, WHITE, true);
+	DrawLine(0, 360, 1280, 360, RED, true);
 
 #pragma region UI
 	DrawFormatString(0, 0, WHITE, "AD:左右移動");
 	DrawFormatString(0, 20, WHITE, "W:ジャンプ");
 	DrawFormatString(0, 40, WHITE, "←↑→:折る・開く");
 	DrawFormatString(0, 60, WHITE, "SPACE:開く");
-	if (Body_One.IsGoal == true || Body_Two.IsGoal == true || Body_Three.IsGoal == true)
+	DrawFormatString(0, 220, WHITE, "%f", CenterPosition.x - Body_Two.BodyStartPos.x);
+	DrawFormatString(0, 240, WHITE, "%f", CenterPosition.y - Body_Two.BodyStartPos.y);
+	if (IsGoal == true)
 	{
 		DrawFormatString(300, 100, YELLOW, "GOAL");
+	}
+	else
+	{
+		DrawFormatString(300, 100, YELLOW, "NO GOAL");
 	}
 
 #pragma endregion
