@@ -42,8 +42,7 @@ Stage* Stage::Get()
 
 Stage::Stage() :
 	stageData{},
-	initStageData{},
-	isEase(false)
+	initStageData{}
 {
 	Init();
 }
@@ -62,10 +61,7 @@ void Stage::Updata()
 	static int posX = 0;
 	static int posY = 0;
 
-	if (isEase)
-	{
-		EaseingUpdate();
-	}
+	EaseingUpdate();
 
 	for (i = 0; i < stageData.size(); i++)
 	{
@@ -187,7 +183,7 @@ void Stage::Updata()
 
 							if ((stageData[i].stageTileData[j].width - x - 1) - 1 == static_cast<size_t>(-1))
 							{
-								posX = static_cast<int>(stageData[i].stageTileData[j].startPos[reverseMapchipPos].x  - blockSize);
+								posX = static_cast<int>(stageData[i].stageTileData[j].startPos[reverseMapchipPos].x - blockSize);
 								posY = static_cast<int>(stageData[i].stageTileData[j].startPos[reverseMapchipPos].y);
 							}
 							else
@@ -676,20 +672,16 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					break;
 				}
 
-				if (isEase)
+				if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
 				{
-					if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
-					{
-						stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
-						stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
-					}
+					stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
+					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 				}
 
 				if (stageData[i].stageTileData[moveStageData].isFold)
 				{
 					Open(playerTile, direction, i, moveStageTile, moveStageData);
 
-					isEase = true;
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
@@ -699,7 +691,6 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 				{
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
-					isEase = true;
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
@@ -726,20 +717,16 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					break;
 				}
 
-				if (isEase)
+				if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
 				{
-					if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
-					{
-						stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
-						stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
-					}
+					stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
+					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 				}
 
 				if (stageData[i].stageTileData[moveStageData].isFold)
 				{
 					Open(playerTile, direction, i, moveStageTile, moveStageData);
 
-					isEase = true;
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
@@ -749,7 +736,6 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 				{
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
-					isEase = true;
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
@@ -776,20 +762,16 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					break;
 				}
 
-				if (isEase)
+				if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
 				{
-					if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
-					{
-						stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
-						stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
-					}
+					stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
+					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 				}
 
 				if (stageData[i].stageTileData[moveStageData].isFold)
 				{
 					Open(playerTile, direction, i, moveStageTile, moveStageData);
 
-					isEase = true;
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
@@ -799,7 +781,6 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 				{
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
-					isEase = true;
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
@@ -826,20 +807,16 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					break;
 				}
 
-				if (isEase)
+				if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
 				{
-					if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
-					{
-						stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
-						stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
-					}
+					stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
+					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 				}
 
 				if (stageData[i].stageTileData[moveStageData].isFold)
 				{
 					Open(playerTile, direction, i, moveStageTile, moveStageData);
 
-					isEase = true;
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
@@ -849,7 +826,6 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 				{
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
-					isEase = true;
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.timerate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
@@ -901,8 +877,6 @@ void Stage::Reset()
 			stageData[i].stageTileData[j].stageEase.timerate = 0.0f;
 		}
 	}
-
-	isEase = false;
 }
 
 void Stage::DataClear()
@@ -1368,7 +1342,6 @@ void Stage::EaseingUpdate()
 			if (stageData[i].stageTileData[j].stageEase.timerate >= 1.0f)
 			{
 				stageData[i].stageTileData[j].stageEase.isMove = false;
-				isEase = false;
 				break;
 			}
 		}

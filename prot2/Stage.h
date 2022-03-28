@@ -141,6 +141,4 @@ private:
 private: //ƒƒ“ƒo•Ï”
 	std::vector<StageData> stageData;
 	std::vector<StageData> initStageData;
-
-	bool isEase;
 };
