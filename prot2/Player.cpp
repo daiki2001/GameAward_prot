@@ -46,6 +46,7 @@ void Player::Init()
 
 	IsFall = false;
 	Player_IsAction = false;
+	IsColide = false;
 
 	FaceHandle[0] = LoadGraph("Resources/face.png");
 	FaceHandle[1] = LoadGraph("Resources/face_fold.png");
@@ -66,7 +67,7 @@ void Player::Update(Stage& stage)
 	//ジャンプ
 	if (InputManger::Up() && !InputManger::Act1() && IsJump == false && IsFall == false)
 	{
-		//CenterPosition.y -= 2.0f;
+		CenterPosition.y -= 2.0f;
 		IsJump = true;
 		IsFall = true;
 		FallSpeed = -9.0f;
@@ -78,11 +79,13 @@ void Player::Update(Stage& stage)
 
 	if (IsJump == true)
 	{
+		Player_IsAction = true;
 		CenterPosition.y += FallSpeed;
 		FallSpeed += 0.5f;
 
 		if (FallSpeed > 0)
 		{
+			Player_IsAction = false;
 			IsJump = false;
 		}
 	}
@@ -503,20 +506,24 @@ void Player::Update(Stage& stage)
 	if (Body_One.IsActivate == true)
 	{
 		Body_One.Update(CenterPosition);
-		Body_One.IsHitBody(stage, CenterPosition, Body_Two, Body_Three, IsFall, IsJump);
+		Body_One.IsHitBody(stage, CenterPosition, Body_Two, Body_Three, IsFall, IsJump, IsColide);
 	}
 	if (Body_Two.IsActivate == true)
 	{
 		Body_Two.Update(CenterPosition);
-		Body_Two.IsHitBody(stage, CenterPosition, Body_One, Body_Three, IsFall, IsJump);
+		Body_Two.IsHitBody(stage, CenterPosition, Body_One, Body_Three, IsFall, IsJump, IsColide);
 	}
 	if (Body_Three.IsActivate == true)
 	{
 		Body_Three.Update(CenterPosition);
-		Body_Three.IsHitBody(stage, CenterPosition, Body_One, Body_Two, IsFall, IsJump);
+		Body_Three.IsHitBody(stage, CenterPosition, Body_One, Body_Two, IsFall, IsJump, IsColide);
 	}
 
 	if (Body_One.IsAction == true || Body_Two.IsAction == true || Body_Three.IsAction == true)
+	{
+		Player_IsAction = true;
+	}
+	else if (IsColide == true && FallSpeed < 0 || (IsColide == true && (InputManger::Right() || InputManger::Left())))
 	{
 		Player_IsAction = true;
 	}
@@ -592,7 +599,7 @@ void Player::Draw(int offsetX, int offsetY)
 		}
 		if (Body_One.SlideDis == 2)
 		{
-			DrawBox(CenterPosition.x + 30 + offsetX, CenterPosition.y - 30 + offsetY, Body_Three.BodyStartPos.x + offsetX, Body_Three.BodyEndPos.y + offsetY, Body_One.BodyColor, true);
+			//DrawBox(CenterPosition.x + 30 + offsetX, CenterPosition.y - 30 + offsetY, Body_Three.BodyStartPos.x + offsetX, Body_Three.BodyEndPos.y + offsetY, Body_One.BodyColor, true);
 		}
 
 		//DrawBox(CenterPosition.x - 30 + offsetX, CenterPosition.y - 30 + offsetY, CenterPosition.x + 30 + offsetX, CenterPosition.y + 30 + offsetY, GetColor(255, 0, 0), true);
@@ -608,8 +615,10 @@ void Player::Draw(int offsetX, int offsetY)
 	DrawFormatString(0, 20, WHITE, "W:ジャンプ");
 	DrawFormatString(0, 40, WHITE, "←↑→:折る・開く");
 	DrawFormatString(0, 60, WHITE, "SPACE:開く");
-	DrawFormatString(0, 220, WHITE, "%f", CenterPosition.x - Body_Two.BodyStartPos.x);
-	DrawFormatString(0, 240, WHITE, "%f", CenterPosition.y - Body_Two.BodyStartPos.y);
+	DrawFormatString(0, 220, WHITE, "%f", Body_Two.BodyStartPos.x);
+	DrawFormatString(0, 240, WHITE, "%f", Body_Two.BodyStartPos.y);
+	DrawFormatString(0, 260, WHITE, "%d", (int)(Body_Two.BodyStartPos.y / 60) * 60.0f);
+	DrawFormatString(0, 280, WHITE, "%d", IsColide);
 	if (IsGoal == true)
 	{
 		DrawFormatString(300, 100, YELLOW, "GOAL");
@@ -645,4 +654,104 @@ void Player::bodysetup(bool one, int one_type, bool two, int two_type, bool thre
 	Body_One.setactivate(CenterPosition);
 	Body_Two.setactivate(CenterPosition);
 	Body_Three.setactivate(CenterPosition);
+}
+
+void Player::IsHitPlayerBody(Stage& stage)
+{
+	//ステージの数
+	int i = 0;
+	//タイルの数
+	int j = 0;
+
+	//全体的なマップチップの座標
+	int center_x_mapchip = (CenterPosition.x - stage.offset.x) / 60;
+	int center_y_mapchip = (CenterPosition.y - stage.offset.y) / 60;
+
+	//上下左右(プレイヤーの顔)
+	int left_mapchip = (int)((CenterPosition.x - 30) - stage.offset.x) / 60;
+	int up_mapchip = (int)((CenterPosition.y - 30) - stage.offset.y) / 60;
+	int right_mapchip = (int)((CenterPosition.x + 30) - stage.offset.x) / 60;
+	int down_mapchip = (int)((CenterPosition.y + 30) - stage.offset.y) / 60;
+
+	//タイル内のマップチップ座標
+	int left_mapchip_tile;
+	int up_mapchip_tile;
+	int right_mapchip_tile;
+	int down_mapchip_tile;
+
+	int MapchipPos = 0;
+
+	for (i = 0; i < stage.GetStageDataSize(); i++)
+	{
+		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
+		{
+			if (stage.GetPositionTile({ CenterPosition.x - 30,CenterPosition.y - 30,0.0f }, i, j))
+			{
+				left_mapchip_tile = left_mapchip % stage.GetStageTileWidth(i, j);
+				up_mapchip_tile = up_mapchip % stage.GetStageTileHeight(i, j);
+
+				MapchipPos = (up_mapchip_tile)*stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
+				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
+				{
+					ExtrudePlayer({ CenterPosition.x,60 + (up_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, 30, up);
+				}
+			}
+		}
+	}
+
+}
+
+void Player::ExtrudePlayer(Vector3 ExtrudePos, float ExtrudeDis, bodytype ExtrudeType)
+{
+	switch (ExtrudeType)
+	{
+	case left:
+		if (CenterPosition.x - ExtrudePos.x < ExtrudeDis)
+		{
+			CenterPosition.x = ExtrudePos.x + ExtrudeDis;
+			IsColide = true;
+		}
+		else
+		{
+			IsColide = false;
+		}
+		break;
+	case right:
+		if (ExtrudePos.x - CenterPosition.x < ExtrudeDis)
+		{
+			CenterPosition.x = ExtrudePos.x - ExtrudeDis;
+			IsColide = true;
+		}
+		else
+		{
+			IsColide = false;
+		}
+		break;
+	case up:
+		if (CenterPosition.y - ExtrudePos.y < ExtrudeDis)
+		{
+			CenterPosition.y = ExtrudePos.y + ExtrudeDis;
+			IsColide = true;
+		}
+		else
+		{
+			IsColide = false;
+		}
+		break;
+	case down:
+		if (ExtrudePos.y - CenterPosition.y < ExtrudeDis)
+		{
+			CenterPosition.y = ExtrudePos.y - ExtrudeDis;
+			IsColide = true;
+			IsFall = false;
+			IsJump = false;
+		}
+		else
+		{
+			IsColide = false;
+		}
+		break;
+	default:
+		break;
+	}
 }

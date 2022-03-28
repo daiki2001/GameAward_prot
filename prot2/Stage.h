@@ -110,8 +110,9 @@ public: //メンバ関数
 	bool GetPositionTile(Vector3 center, int i, int j);
 	//ステージタイルのオフセットを返す(それぞれ横・縦)
 	int GetStageTileOffsetX(int i, int j);
-
 	int GetStageTileOffsetY(int i, int j);
+	//任意の方向に特定のマップチップがあるかどうか
+	bool IsNeighberMapchip(int i, int j, int MapchipPos, MapchipData mapchipData);
 
 private:
 	// ステージを折る

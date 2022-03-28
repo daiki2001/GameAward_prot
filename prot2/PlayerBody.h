@@ -43,7 +43,7 @@ public: //メンバ関数
 	/// <param name="stage">ステージデータ</param>
 	/// <param name="center">プレイヤーの中心</param>
 	/// <returns></returns>
-	void IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall,bool& isjump);
+	void IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall, bool& isjump, bool& iscolide);
 
 	/// <summary>
 	/// 押し出し処理
@@ -52,7 +52,7 @@ public: //メンバ関数
 	/// <param name="extrudepos">押し出す側の座標</param>
 	/// <param name="extrudedis">押し出す距離</param>
 	/// <param name="extrudetype">どの方向"から"押し出すか</param>
-	void Extrude(Vector3& center, Vector3 extrudepos, float extrudedis, bodytype extrudetype, bool& isfall, bool& isjump);
+	void Extrude(Vector3& center, Vector3 extrudepos, float extrudedis, bodytype extrudetype, bool& isfall, bool& isjump, bool& iscolide);
 
 public: //メンバ変数
 	//有効化フラグ
@@ -66,6 +66,9 @@ public: //メンバ変数
 
 	//体の座標(初期状態：右下)
 	Vector3 BodyEndPos;
+
+	//体の中心座標
+	Vector3 BodyCenterPos;
 
 	//スライドの開始座標
 	Vector3 SlideStartPos;

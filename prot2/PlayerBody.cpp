@@ -1,5 +1,6 @@
 #include "PlayerBody.h"
 #include <DxLib.h>
+#include "InputManger.h"
 
 PlayerBody::PlayerBody() :
 	IsActivate(false),
@@ -62,12 +63,28 @@ void PlayerBody::Update(Vector3& center)
 				BodyEndPos = { center.x - static_cast<float>(30 + 60 * (BodyDistance - 1)),center.y + 30 ,0.0f };
 				BodyStartPos.x = Ease.easeout(BodyEndPos.x + 60, BodyEndPos.x - 60, Ease.timerate);
 				BodyStartPos.y = BodyEndPos.y - 60;
+				if (Ease.timerate < 0.5)
+				{
+					BodyCenterPos.x = BodyEndPos.x + (BodyStartPos.x - BodyEndPos.x) / 2;
+				}
+				else
+				{
+					BodyCenterPos.x = BodyStartPos.x + (BodyEndPos.x - BodyStartPos.x) / 2;
+				}
 			}
 			else if (FoldCount == 2)
 			{
 				BodyStartPos = { center.x - 30,center.y - 30 ,0.0f };
 				BodyEndPos.x = Ease.easeout(BodyStartPos.x + 60, BodyStartPos.x - 60, Ease.timerate);
 				BodyEndPos.y = BodyStartPos.y + 60;
+				if (Ease.timerate < 0.5)
+				{
+					BodyCenterPos.x = BodyStartPos.x + (BodyEndPos.x - BodyStartPos.x) / 2;
+				}
+				else
+				{
+					BodyCenterPos.x = BodyEndPos.x + (BodyStartPos.x - BodyEndPos.x) / 2;
+				}
 			}
 		}
 		if (Body_Type == up)
@@ -75,6 +92,14 @@ void PlayerBody::Update(Vector3& center)
 			BodyEndPos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
 			BodyStartPos.y = Ease.easeout(BodyEndPos.y + 60, BodyEndPos.y - 60, Ease.timerate);
 			BodyStartPos.x = BodyEndPos.x - 60;
+			if (Ease.timerate < 0.5)
+			{
+				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+			}
+			else
+			{
+				BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+			}
 		}
 		if (Body_Type == right)
 		{
@@ -83,12 +108,28 @@ void PlayerBody::Update(Vector3& center)
 				BodyStartPos = { center.x + static_cast<float>(30 + 60 * (BodyDistance - 1)),center.y - 30 ,0.0f };
 				BodyEndPos.x = Ease.easeout(BodyStartPos.x - 60, BodyStartPos.x + 60, Ease.timerate);
 				BodyEndPos.y = BodyStartPos.y + 60;
+				if (Ease.timerate < 0.5)
+				{
+					BodyCenterPos.x = BodyEndPos.x + (BodyStartPos.x - BodyEndPos.x) / 2;
+				}
+				else
+				{
+					BodyCenterPos.x = BodyStartPos.x + (BodyEndPos.x - BodyStartPos.x) / 2;
+				}
 			}
 			else if (FoldCount == 2)
 			{
 				BodyEndPos = { center.x + 30,center.y + 30 ,0.0f };
 				BodyStartPos.x = Ease.easeout(BodyEndPos.x - 60, BodyEndPos.x + 60, Ease.timerate);
 				BodyStartPos.y = BodyEndPos.y - 60;
+				if (Ease.timerate < 0.5)
+				{
+					BodyCenterPos.x = BodyStartPos.x + (BodyEndPos.x - BodyStartPos.x) / 2;
+				}
+				else
+				{
+					BodyCenterPos.x = BodyEndPos.x + (BodyStartPos.x - BodyEndPos.x) / 2;
+				}
 			}
 		}
 		if (Body_Type == down)
@@ -96,6 +137,14 @@ void PlayerBody::Update(Vector3& center)
 			BodyStartPos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
 			BodyEndPos.y = Ease.easeout(BodyStartPos.y - 60, BodyStartPos.y + 60, Ease.timerate);
 			BodyEndPos.x = BodyStartPos.x - 60;
+			if (Ease.timerate < 0.5)
+			{
+				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+			}
+			else
+			{
+				BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+			}
 		}
 
 		if (Ease.timerate >= 1.0f)
@@ -114,11 +163,13 @@ void PlayerBody::Update(Vector3& center)
 			{
 				BodyStartPos = { center.x - (30 + BodyDistance * 60),center.y - 30,0.0f };
 				BodyEndPos = { BodyStartPos.x + 60,BodyStartPos.y + 60,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30,0.0f };
 			}
 			else if (FoldCount == 1)
 			{
 				BodyStartPos = { center.x - 30,center.y - 30 ,0.0f };
 				BodyEndPos = { BodyStartPos.x - 60,BodyStartPos.y + 60 ,0.0f };
+				BodyCenterPos = { BodyStartPos.x - 30,BodyStartPos.y + 30 ,0.0f };
 				IsFold = true;
 				IsOpen = false;
 			}
@@ -127,6 +178,7 @@ void PlayerBody::Update(Vector3& center)
 		{
 			BodyStartPos = { center.x - 30.0f,center.y - 90.0f,0.0f };
 			BodyEndPos = { BodyStartPos.x + 60,BodyStartPos.y + 60,0.0f };
+			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30,0.0f };
 		}
 		if (Body_Type == right)
 		{
@@ -134,11 +186,13 @@ void PlayerBody::Update(Vector3& center)
 			{
 				BodyStartPos = { center.x + (30 + (BodyDistance - 1) * 60),center.y - 30,0.0f };
 				BodyEndPos = { BodyStartPos.x + 60,BodyStartPos.y + 60 ,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30 ,0.0f };
 			}
 			else if (FoldCount == 1)
 			{
 				BodyEndPos = { center.x + 30,center.y + 30,0.0f };
 				BodyStartPos = { BodyEndPos.x + 60,BodyEndPos.y - 60,0.0f };
+				BodyCenterPos = { BodyEndPos.x + 30,BodyEndPos.y - 30,0.0f };
 				IsFold = true;
 				IsOpen = false;
 			}
@@ -147,6 +201,7 @@ void PlayerBody::Update(Vector3& center)
 		{
 			BodyStartPos = { center.x - 30,center.y + 30 ,0.0f };
 			BodyEndPos = { BodyStartPos.x + 60,BodyStartPos.y + 60 ,0.0f };
+			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30 ,0.0f };
 		}
 	}
 	//折るとき
@@ -162,12 +217,28 @@ void PlayerBody::Update(Vector3& center)
 				BodyEndPos = { center.x - static_cast<float>(30 + 60 * (BodyDistance - 1)),center.y + 30 ,0.0f };
 				BodyStartPos.x = Ease.easeout(BodyEndPos.x - 60, BodyEndPos.x + 60, Ease.timerate);
 				BodyStartPos.y = BodyEndPos.y - 60;
+				if (Ease.timerate < 0.5)
+				{
+					BodyCenterPos.x = BodyStartPos.x + (BodyEndPos.x - BodyStartPos.x) / 2;
+				}
+				else
+				{
+					BodyCenterPos.x = BodyEndPos.x + (BodyStartPos.x - BodyEndPos.x) / 2;
+				}
 			}
 			else if (FoldCount == 1)
 			{
 				BodyStartPos = { center.x - 30,center.y - 30 ,0.0f };
 				BodyEndPos.x = Ease.easeout(BodyStartPos.x - 60, BodyStartPos.x + 60, Ease.timerate);
 				BodyEndPos.y = BodyStartPos.y + 60;
+				if (Ease.timerate < 0.5)
+				{
+					BodyCenterPos.x = BodyEndPos.x + (BodyStartPos.x - BodyEndPos.x) / 2;
+				}
+				else
+				{
+					BodyCenterPos.x = BodyStartPos.x + (BodyEndPos.x - BodyStartPos.x) / 2;
+				}
 			}
 		}
 		if (Body_Type == up)
@@ -175,6 +246,14 @@ void PlayerBody::Update(Vector3& center)
 			BodyEndPos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
 			BodyStartPos.y = Ease.easeout(BodyEndPos.y - 60, BodyEndPos.y + 60, Ease.timerate);
 			BodyStartPos.x = BodyEndPos.x - 60;
+			if (Ease.timerate < 0.5)
+			{
+				BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+			}
+			else
+			{
+				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+			}
 		}
 		if (Body_Type == right)
 		{
@@ -183,12 +262,28 @@ void PlayerBody::Update(Vector3& center)
 				BodyStartPos = { center.x + static_cast<float>(30 + 60 * (BodyDistance - 1)),center.y - 30 ,0.0f };
 				BodyEndPos.x = Ease.easeout(BodyStartPos.x + 60, BodyStartPos.x - 60, Ease.timerate);
 				BodyEndPos.y = BodyStartPos.y + 60;
+				if (Ease.timerate < 0.5)
+				{
+					BodyCenterPos.x = BodyStartPos.x + (BodyEndPos.x - BodyStartPos.x) / 2;
+				}
+				else
+				{
+					BodyCenterPos.x = BodyEndPos.x + (BodyStartPos.x - BodyEndPos.x) / 2;
+				}
 			}
 			else if (FoldCount == 1)
 			{
 				BodyEndPos = { center.x + 30,center.y + 30 ,0.0f };
 				BodyStartPos.x = Ease.easeout(BodyEndPos.x + 60, BodyEndPos.x - 60, Ease.timerate);
 				BodyStartPos.y = BodyEndPos.y - 60;
+				if (Ease.timerate < 0.5)
+				{
+					BodyCenterPos.x = BodyEndPos.x + (BodyStartPos.x - BodyEndPos.x) / 2;
+				}
+				else
+				{
+					BodyCenterPos.x = BodyStartPos.x + (BodyEndPos.x - BodyStartPos.x) / 2;
+				}
 			}
 		}
 		if (Body_Type == down)
@@ -196,6 +291,14 @@ void PlayerBody::Update(Vector3& center)
 			BodyStartPos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
 			BodyEndPos.y = Ease.easeout(BodyStartPos.y + 60, BodyStartPos.y - 60, Ease.timerate);
 			BodyEndPos.x = BodyStartPos.x + 60;
+			if (Ease.timerate < 0.5)
+			{
+				BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+			}
+			else
+			{
+				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+			}
 		}
 
 		if (Ease.timerate >= 1.0f)
@@ -214,17 +317,20 @@ void PlayerBody::Update(Vector3& center)
 			{
 				BodyEndPos = { center.x - (30 + 60 * (BodyDistance - 1)),center.y + 30 ,0.0f };
 				BodyStartPos = { BodyEndPos.x + 60, BodyEndPos.y - 60 ,0.0f };
+				BodyCenterPos = { BodyEndPos.x + 30, BodyEndPos.y - 30 ,0.0f };
 			}
 			else if (FoldCount == 2)
 			{
 				BodyStartPos = { center.x - 30,center.y - 30,0.0f };
 				BodyEndPos = { BodyStartPos.x + 60, BodyStartPos.y + 60 ,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30, BodyStartPos.y + 30 ,0.0f };
 			}
 		}
 		else if (Body_Type == up)
 		{
 			BodyStartPos = { center.x - 30,center.y + 30 ,0.0f };
 			BodyEndPos = { BodyStartPos.x + 60,BodyStartPos.y - 60 ,0.0f };
+			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y - 30 ,0.0f };
 		}
 		else if (Body_Type == right)
 		{
@@ -232,17 +338,20 @@ void PlayerBody::Update(Vector3& center)
 			{
 				BodyStartPos = { center.x + (30 + 60 * (BodyDistance - 1)),center.y - 30 ,0.0f };
 				BodyEndPos = { BodyStartPos.x - 60,BodyStartPos.y + 60 ,0.0f };
+				BodyCenterPos = { BodyStartPos.x - 30,BodyStartPos.y + 30 ,0.0f };
 			}
 			else if (FoldCount == 2)
 			{
 				BodyStartPos = { center.x - 30,center.y - 30 ,0.0f };
 				BodyEndPos = { BodyStartPos.x + 60, BodyStartPos.y + 60 ,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30, BodyStartPos.y + 30 ,0.0f };
 			}
 		}
 		else if (Body_Type == down)
 		{
 			BodyStartPos = { center.x - 30,center.y + 30 ,0.0f };
 			BodyEndPos = { BodyStartPos.x + 60,BodyStartPos.y - 60 ,0.0f };
+			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y - 30 ,0.0f };
 		}
 	}
 
@@ -257,21 +366,25 @@ void PlayerBody::Update(Vector3& center)
 		{
 			BodyStartPos = { Ease.easeout(center.x - 90, center.x + 30, Ease.timerate), center.y - 30.0f, 0.0f };
 			BodyEndPos = { BodyStartPos.x + 60.0f, center.y + 30.0f, 0.0f };
+			BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30.0f, 0.0f };
 		}
 		else if (Body_Type == right)
 		{
 			BodyStartPos = { Ease.easeout(center.x + 30, center.x - 90, Ease.timerate), center.y - 30.0f, 0.0f };
 			BodyEndPos = { BodyStartPos.x + 60.0f, center.y + 30.0f, 0.0f };
+			BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30.0f, 0.0f };
 		}
 		else if (Body_Type == up)
 		{
 			BodyStartPos = { center.x - 30.0f, Ease.easeout(center.y - 90, center.y + 30, Ease.timerate), 0.0f };
 			BodyEndPos = { center.x + 30.0f, BodyStartPos.y + 60.0f, 0.0f };
+			BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30.0f, 0.0f };
 		}
 		else if (Body_Type == down)
 		{
 			BodyStartPos = { center.x - 30.0f, Ease.easeout(center.y + 30, center.y - 90, Ease.timerate), 0.0f };
 			BodyEndPos = { center.x + 30.0f, BodyStartPos.y + 60.0f, 0.0f };
+			BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30.0f, 0.0f };
 		}
 
 		if (Ease.timerate >= 1.0f)
@@ -310,10 +423,12 @@ void PlayerBody::Update(Vector3& center)
 			if (SlidePat == -1)
 			{
 				BodyEndPos = { Ease.easeout(center.x - 30, center.x - 90, Ease.timerate), center.y - 30.0f, 0.0f };
+				BodyCenterPos = { BodyEndPos.x - 30.0f, BodyEndPos.y + 30, 0.0f };
 			}
 			else
 			{
 				BodyEndPos = { Ease.easeout(center.x - 90, center.x - 30, Ease.timerate), center.y - 30.0f, 0.0f };
+				BodyCenterPos = { BodyEndPos.x - 30.0f, BodyEndPos.y + 30, 0.0f };
 			}
 			BodyStartPos = { BodyEndPos.x + static_cast<float>(120 * IsFold - 60), center.y + 30.0f, 0.0f };
 		}
@@ -322,10 +437,12 @@ void PlayerBody::Update(Vector3& center)
 			if (SlidePat == -1)
 			{
 				BodyStartPos = { Ease.easeout(center.x + 90, center.x + 30, Ease.timerate), center.y - 30.0f, 0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30, 0.0f };
 			}
 			else
 			{
 				BodyStartPos = { Ease.easeout(center.x + 30, center.x + 90, Ease.timerate), center.y - 30.0f, 0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30, 0.0f };
 			}
 			BodyEndPos = { BodyStartPos.x + static_cast<float>(-120 * IsFold + 60), center.y + 30.0f, 0.0f };
 		}
@@ -347,6 +464,11 @@ void PlayerBody::Draw(int offsetX, int offsetY)
 			static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, BodyColor, true);*/
 		DrawExtendGraph(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
 			static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, Bodyhandle, true);
+		DrawCircle(BodyStartPos.x, BodyStartPos.y, 1, GetColor(255, 255, 255));
+		DrawCircle(BodyStartPos.x, BodyEndPos.y, 1, GetColor(255, 255, 255));
+		DrawCircle(BodyEndPos.x, BodyStartPos.y, 1, GetColor(255, 255, 255));
+		DrawCircle(BodyEndPos.x, BodyEndPos.y, 1, GetColor(255, 255, 255));
+		DrawCircle(BodyCenterPos.x, BodyCenterPos.y, 1, GetColor(255, 255, 255));
 	}
 }
 
@@ -397,27 +519,19 @@ void PlayerBody::setslide(int slidepat, int move_dis)
 	SlideDis = move_dis;
 }
 
-void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall, bool& isjump)
+void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall, bool& isjump, bool& iscolide)
 {
-	//全体的なマップチップの座標
-	int center_x_mapchip = (center.x - stage.offset.x) / 60;
-	int center_y_mapchip = (center.y - stage.offset.y) / 60;
-
 	//上下左右(プレイヤーの顔)
 	int left_mapchip = ((int)((center.x - 30) - stage.offset.x) / 60) % 5;
 	int up_mapchip = ((int)((center.y - 30) - stage.offset.y) / 60) % 5;
 	int right_mapchip = ((int)((center.x + 30) - stage.offset.x) / 60) % 5;
 	int down_mapchip = ((int)((center.y + 30) - stage.offset.y) / 60) % 5;
 
-	//今いるタイル内でのプレイヤーのマップチップ座標
-	int center_x_mapchip_tile = (int)center_x_mapchip % 5;
-	int center_y_mapchip_tile = (int)center_y_mapchip % 5;
-
 	//BodyのStartPos・EndPosのマップチップ座標
-	int BodyStartX_mapchip = (int)(BodyStartPos.x - stage.offset.x) / 60;
-	int BodyStartY_mapchip = (int)(BodyStartPos.y - stage.offset.y) / 60;
-	int BodyEndX_mapchip = (int)(BodyEndPos.x - stage.offset.x) / 60;
-	int BodyEndY_mapchip = (int)(BodyEndPos.y - stage.offset.y) / 60;
+	int BodyStartX_mapchip = (int)((BodyCenterPos.x - 30) - stage.offset.x) / 60;
+	int BodyStartY_mapchip = (int)((BodyCenterPos.y - 30) - stage.offset.y) / 60;
+	int BodyEndX_mapchip = (int)((BodyCenterPos.x + 30) - stage.offset.x) / 60;
+	int BodyEndY_mapchip = (int)((BodyCenterPos.y + 30) - stage.offset.y) / 60;
 
 	//タイル内のマップチップ座標
 	int BodyStartX_mapchip_tile;
@@ -425,6 +539,9 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 	int BodyEndX_mapchip_tile;
 	int BodyEndY_mapchip_tile;
 
+	//押し出す方向を決めるための距離
+	float BuriedX = 0;
+	float BuriedY = 0;
 
 	//ステージの数
 	int i = 0;
@@ -436,62 +553,112 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 
 	if (center.x - 30 <= stage.offset.x || Body_Type == left && IsFold == true)
 	{
-		Extrude(center, stage.offset, 30, left, isfall, isjump);
+		Extrude(center, stage.offset, 30, left, isfall, isjump, iscolide);
+		iscolide = true;
 	}
 	if (center.y - 30 <= stage.offset.y || Body_Type == up && IsFold == true)
 	{
-		Extrude(center, stage.offset, 30, up, isfall, isjump);
+		Extrude(center, stage.offset, 30, up, isfall, isjump, iscolide);
+		iscolide = true;
 	}
 
 	for (i = 0; i < stage.GetStageDataSize(); i++)
 	{
 		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
 		{
-			if (stage.GetPositionTile({ BodyStartPos.x,BodyStartPos.y,0.0f }, i, j))
+			//左上
+			if (stage.GetPositionTile({ BodyCenterPos.x - 30,BodyCenterPos.y - 30,0.0f }, i, j))
 			{
 				BodyStartX_mapchip_tile = BodyStartX_mapchip % stage.GetStageTileWidth(i, j);
 				BodyStartY_mapchip_tile = BodyStartY_mapchip % stage.GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyStartY_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyStartX_mapchip_tile);
+				//今いる座標のマップチップを確認
+				mapchipPos = BodyStartY_mapchip_tile * stage.GetStageTileWidth(i, j) + BodyStartX_mapchip_tile;
 				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
-					Extrude(center, { center.x,60 + (BodyStartY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - BodyStartPos.y, up, isfall, isjump);
+					BuriedX = (BodyStartX_mapchip * 60) - (BodyCenterPos.x - 30);
+					BuriedY = (BodyStartY_mapchip * 60) - (BodyCenterPos.y - 30);
+
+					if (BuriedX > BuriedY)
+					{
+						Extrude(center, { center.x,60 + (BodyStartY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - (BodyCenterPos.y - 30), up, isfall, isjump, iscolide);
+					}
+					else
+					{
+						Extrude(center, { 60 + (BodyStartX_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, center.x - (BodyCenterPos.x - 30), left, isfall, isjump, iscolide);
+					}
 				}
 			}
-
-			if (stage.GetPositionTile({ BodyStartPos.x,BodyEndPos.y,0.0f }, i, j))
+			//左下
+			if (stage.GetPositionTile({ BodyCenterPos.x - 30,BodyCenterPos.y + 30,0.0f }, i, j))
 			{
 				BodyStartX_mapchip_tile = BodyStartX_mapchip % stage.GetStageTileWidth(i, j);
 				BodyEndY_mapchip_tile = BodyEndY_mapchip % stage.GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyEndY_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + (BodyStartX_mapchip_tile);
+				mapchipPos = (BodyEndY_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyStartX_mapchip_tile);
 				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
+					BuriedX = (BodyStartX_mapchip * 60) - (BodyCenterPos.x - 30);
+					BuriedY = ((BodyCenterPos.y + 30) - 60) - (BodyEndY_mapchip * 60);
 
+					if (BuriedX > BuriedY)
+					{
+						Extrude(center, { center.x,(BodyEndY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (BodyCenterPos.y + 30) - center.y, down, isfall, isjump, iscolide);
+						isfall = false;
+						isjump = false;
+					}
+					else
+					{
+						Extrude(center, { 60 + (BodyStartX_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, center.x - (BodyCenterPos.x - 30), left, isfall, isjump, iscolide);
+						isfall = true;
+					}
 				}
 			}
-
-			if (stage.GetPositionTile({ BodyEndPos.x,BodyStartPos.y,0.0f }, i, j))
+			//右上
+			if (stage.GetPositionTile({ BodyCenterPos.x + 30,BodyCenterPos.y - 30,0.0f }, i, j))
 			{
 				BodyEndX_mapchip_tile = BodyEndX_mapchip % stage.GetStageTileWidth(i, j);
 				BodyStartY_mapchip_tile = BodyStartY_mapchip % stage.GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyStartY_mapchip_tile) * stage.GetStageTileWidth(i, j) + (BodyEndX_mapchip_tile);
+				mapchipPos = (BodyStartY_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyEndX_mapchip_tile);
 				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
-					Extrude(center, { center.x,60 + (BodyStartY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - BodyStartPos.y, up, isfall, isjump);
+					BuriedX = ((BodyCenterPos.x + 30) - 60) - (BodyEndX_mapchip * 60);
+					BuriedY = (BodyStartY_mapchip * 60) - (BodyCenterPos.y - 30);
+
+					if (BuriedX > BuriedY)
+					{
+						Extrude(center, { center.x,60 + (BodyStartY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - (BodyCenterPos.y - 30), up, isfall, isjump, iscolide);
+					}
+					else
+					{
+						Extrude(center, { (BodyEndX_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, (BodyCenterPos.x + 30) - center.x, right, isfall, isjump, iscolide);
+					}
 				}
 			}
-
-			if (stage.GetPositionTile({ BodyEndPos.x,BodyEndPos.y,0.0f }, i, j))
+			//右下
+			if (stage.GetPositionTile({ BodyCenterPos.x + 30,BodyCenterPos.y + 30,0.0f }, i, j))
 			{
 				BodyEndX_mapchip_tile = BodyEndX_mapchip % stage.GetStageTileWidth(i, j);
 				BodyEndY_mapchip_tile = BodyEndY_mapchip % stage.GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyEndY_mapchip - 1) * stage.GetStageTileWidth(i, j) + (BodyEndX_mapchip);
+				mapchipPos = (BodyEndY_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyEndX_mapchip_tile);
 				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
+					BuriedX = ((BodyCenterPos.x + 30) - 60) - (BodyEndX_mapchip * 60);
+					BuriedY = ((BodyCenterPos.y + 30) - 60) - (BodyEndY_mapchip * 60);
 
+					if (BuriedX > BuriedY)
+					{
+						Extrude(center, { center.x,(BodyEndY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (BodyCenterPos.y + 30) - center.y, down, isfall, isjump, iscolide);
+						isfall = false;
+						isjump = false;
+					}
+					else
+					{
+						Extrude(center, { (BodyEndX_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, (BodyCenterPos.x + 30) - center.x, right, isfall, isjump, iscolide);
+						isfall = true;
+					}
 				}
 			}
 		}
@@ -523,255 +690,12 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 				{
 					IsGoal = true;
 				}
-
-				if (IsFold == false)
-				{
-					switch (Body_Type)
-					{
-					case left:
-						//左側
-						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance - 1);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { 60 + (center_x_mapchip - BodyDistance - 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30 + BodyDistance * 60, left, isfall, isjump);
-						}
-						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance - 1);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { 60 + (center_x_mapchip - BodyDistance - 1) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
-						}
-						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance - 1);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { 60 + (center_x_mapchip - BodyDistance - 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
-						}
-
-						if (BodyDistance == 2)
-						{
-							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip + 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30, right, isfall, isjump);
-							}
-						}
-						break;
-					case right:
-						//右側
-						mapchipPos = (center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance + 1));
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { (center_x_mapchip + BodyDistance + 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30 + BodyDistance * 60, right, isfall, isjump);
-						}
-						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance + 1);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { (center_x_mapchip + BodyDistance + 1) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
-						}
-						//下
-						mapchipPos = ((center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance));
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { (center_x_mapchip + BodyDistance + 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
-						}
-
-						if (BodyDistance == 2)
-						{
-							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip - 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30, left, isfall, isjump);
-							}
-						}
-						break;
-					case up:
-						//上
-						mapchipPos = (center_y_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							//Extrude(center, { center_x_mapchip * 60.0f,60 + (center_y_mapchip - 2) * 60.0f,0.0f }, 90, up, isfall, isjump);
-						}
-						//左
-						mapchipPos = (center_y_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { (center_x_mapchip - 1) * 60.0f,60 + (center_y_mapchip - 1) * 60.0f,0.0f }, 30, left, isfall, isjump);
-						}
-						//右
-						mapchipPos = (center_y_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							//Extrude(center, { (center_x_mapchip + 1) * 60.0f,60 + (center_y_mapchip - 1) * 60.0f,0.0f }, 30, right, isfall, isjump);
-						}
-						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
-						}
-						break;
-					case down:
-						//下
-						mapchipPos = (center_y_mapchip_tile + 2) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip - 2) * 60.0f,0.0f }, 90, down, isfall, isjump);
-						}
-						//左
-						mapchipPos = (center_y_mapchip_tile + 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { (center_x_mapchip - 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, left, isfall, isjump);
-						}
-						//右
-						mapchipPos = (center_y_mapchip_tile + 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { (center_x_mapchip + 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, right, isfall, isjump);
-						}
-						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
-						}
-						break;
-					}
-				}
-				else
-				{
-					switch (Body_Type)
-					{
-					case left:
-						//左側
-						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { (center_x_mapchip - BodyDistance) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30 + (BodyDistance - 1) * 60, left, isfall, isjump);
-						}
-						if (FoldCount < 2)
-						{
-							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip - BodyDistance) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
-							}
-							//下
-							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip - BodyDistance) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
-							}
-						}
-						else
-						{
-							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
-							}
-							//下
-							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
-							}
-						}
-						if (BodyDistance == 2)
-						{
-							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip + 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30, right, isfall, isjump);
-							}
-						}
-						break;
-					case right:
-						//右側
-						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance);
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { (center_x_mapchip + BodyDistance) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30 + (BodyDistance - 1), right, isfall, isjump);
-						}
-						if (FoldCount < 2)
-						{
-							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip + BodyDistance) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
-							}
-							//下
-							mapchipPos = (center_y_mapchip_tile)*stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip + BodyDistance) * 60.0f,(center_y_mapchip) * 60.0f,0.0f }, 30, down, isfall, isjump);
-							}
-						}
-						else
-						{
-							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
-							}
-							//下
-							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip) * 60.0f,0.0f }, 30, down, isfall, isjump);
-							}
-						}
-						if (BodyDistance == 2)
-						{
-							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
-							if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-							{
-								Extrude(center, { (center_x_mapchip - 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30, left, isfall, isjump);
-							}
-						}
-						break;
-					case up:
-						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 90, up, isfall, isjump);
-						}
-						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
-						}
-						break;
-					case down:
-						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
-						}
-						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
-						if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
-						{
-							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
-						}
-						break;
-					}
-				}
 			}
 		}
 	}
 }
 
-void PlayerBody::Extrude(Vector3& center, Vector3 extrudepos, float extrudedis, bodytype extrudetype, bool& isfall, bool& isjump)
+void PlayerBody::Extrude(Vector3& center, Vector3 extrudepos, float extrudedis, bodytype extrudetype, bool& isfall, bool& isjump, bool& iscolide)
 {
 	switch (extrudetype)
 	{
@@ -779,26 +703,44 @@ void PlayerBody::Extrude(Vector3& center, Vector3 extrudepos, float extrudedis, 
 		if (center.x - extrudepos.x < extrudedis)
 		{
 			center.x = extrudepos.x + extrudedis;
+			iscolide = true;
+		}
+		else
+		{
+			iscolide = false;
 		}
 		break;
 	case right:
 		if (extrudepos.x - center.x < extrudedis)
 		{
 			center.x = extrudepos.x - extrudedis;
+			iscolide = true;
+		}
+		else
+		{
+			iscolide = false;
 		}
 		break;
 	case up:
 		if (center.y - extrudepos.y < extrudedis)
 		{
 			center.y = extrudepos.y + extrudedis;
+			iscolide = true;
+		}
+		else
+		{
+			iscolide = false;
 		}
 		break;
 	case down:
 		if (extrudepos.y - center.y < extrudedis)
 		{
 			center.y = extrudepos.y - extrudedis;
-			isfall = false;
-			isjump = false;
+			iscolide = true;
+		}
+		else
+		{
+			iscolide = false;
 		}
 		break;
 	default:

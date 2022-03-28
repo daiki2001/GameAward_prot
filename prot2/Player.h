@@ -38,6 +38,9 @@ public: //ƒƒ“ƒoŠÖ”
 	/// <param name="three">body_three</param>
 	void bodysetup(bool one, int one_type, bool two, int two_type, bool three, int three_type);
 
+	void IsHitPlayerBody(Stage& stage);
+
+	void ExtrudePlayer(Vector3 ExtrudePos, float ExtrudeDis, bodytype ExtrudeType);
 public: //ƒƒ“ƒo•Ï”
 	//°‚Ì‚‚³
 	float FloorHeight = 640;
@@ -65,4 +68,6 @@ public: //ƒƒ“ƒo•Ï”
 	int FaceHandle[2];
 
 	bool IsGoal = false;
+
+	bool IsColide = false;
 };
