@@ -2,10 +2,10 @@
 #include "Vector3.h"
 
 Easing::Easing() :
-	maxtime(2.0f),
+	maxTime(2.0f),
 	timerate(0.0f),
-	addtime(0.1f),
-	ismove(false)
+	addTime(0.1f),
+	isMove(false)
 {
 }
 

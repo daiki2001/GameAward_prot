@@ -89,6 +89,12 @@
     <ClInclude Include="Easing.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Emitter.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
     <ClInclude Include="DrawShape.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -112,5 +118,16 @@
     <None Include="Resources\stage3.csv">
       <Filter>リソース ファイル\ステージ</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Body.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Resources\face.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Resources\face_fold.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
   </ItemGroup>
 </Project>

@@ -2,6 +2,16 @@
 #include "PlayerBody.h"
 #include "Vector3.h"
 
+class Foot
+{
+	Vector3 Position;
+	Easing ease;
+
+	bool IsAction = false;
+
+	int FootHandle;
+};
+
 class Player final
 {
 public: //シングルトン化
@@ -31,25 +41,29 @@ public: //メンバ関数
 
 public: //メンバ変数
 	//床の高さ
-	float floorHeight;
+	float FloorHeight;
 
 	//体の構成要素
-	Vector3 center_position;
+	Vector3 CenterPosition;
 
-	//体
-	PlayerBody body_one;
-	PlayerBody body_two;
-	PlayerBody body_three;
-
-	//折った体の順番
-	int foldlist[3];
+	//体(折るほう)
+	PlayerBody Body_One;
+	PlayerBody Body_Two;
+	PlayerBody Body_Three;
 
 	//body_twoを優先的に開くか
-	bool isopentwo;
+	bool IsOpenTwo;
 
 	//ジャンプ
 	bool IsJump;
-	float jumpspeed;
-	float fallspeed;
+	float JumpSpeed;
+	float FallSpeed;
 	bool IsFall;
+
+	//どれか一つでも体動かしていたらtrue
+	bool Player_IsAction;
+	//画像ハンドル(顔)
+	int FaceHandle[2];
+
+	bool IsGoal;
 };

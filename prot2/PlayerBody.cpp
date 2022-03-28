@@ -3,17 +3,17 @@
 #include "DrawShape.h"
 
 PlayerBody::PlayerBody() :
-	Isactivate(false),
-	body_type(),
-	Isfold(false),
-	Isopen(true),
-	foldcount(0),
-	Isslide(false),
-	slidepat(0),
-	Isaction(false),
-	slide_dis(),
-	overlap(0),
-	bodydistance(1)
+	IsActivate(false),
+	Body_Type(),
+	IsFold(false),
+	IsOpen(true),
+	FoldCount(0),
+	IsSlide(false),
+	SlidePat(0),
+	IsAction(false),
+	SlideDis(),
+	Overlap(0),
+	BodyDistance(1)
 {
 }
 
@@ -23,379 +23,380 @@ PlayerBody::~PlayerBody()
 
 void PlayerBody::Init(Vector3 position, bodytype number)
 {
-	body_type = number;
+	Body_Type = number;
 
-	if (body_type == left)
+	if (Body_Type == left)
 	{
-		bodystartpos = { position.x - 90.0f, position.y - 30.0f, 0.0f };
+		BodyStartPos = { position.x - 90.0f, position.y - 30.0f, 0.0f };
 	}
-	else if (body_type == up)
+	else if (Body_Type == up)
 	{
-		bodystartpos = { position.x - 30.0f, position.y - 90.0f, 0.0f };
+		BodyStartPos = { position.x - 30.0f, position.y - 90.0f, 0.0f };
 	}
-	else if (body_type == right)
+	else if (Body_Type == right)
 	{
-		bodystartpos = { position.x + 30.0f, position.y - 30.0f, 0.0f };
+		BodyStartPos = { position.x + 30.0f, position.y - 30.0f, 0.0f };
 	}
-	else if (body_type == down)
+	else if (Body_Type == down)
 	{
-		bodystartpos = { position.x - 30.0f, position.y + 30.0f, 0.0f };
+		BodyStartPos = { position.x - 30.0f, position.y + 30.0f, 0.0f };
 	}
 
-	bodyendpos = { bodystartpos.x + 60.0f, bodystartpos.y + 60.0f, 0.0f };
+	BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y + 60.0f, 0.0f };
 
-	Isopen = true;
-	Isfold = false;
+	IsOpen = true;
+	IsFold = false;
+	IsGoal = false;
 }
 
-void PlayerBody::Update(Vector3 center)
+void PlayerBody::Update(Vector3& center)
 {
 	//開いている途中
-	if (Isfold == false && Isopen == true && Isaction == true && Isslide == false)
+	if (IsFold == false && IsOpen == true && IsAction == true && IsSlide == false)
 	{
-		ease.addtime += ease.maxtime / 60.0f;
-		ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
+		Ease.addTime += Ease.maxTime / 25.0f;
+		Ease.timerate = min(Ease.addTime / Ease.maxTime, 1.0f);
 
-		if (body_type == left)
+		if (Body_Type == left)
 		{
-			if (foldcount == 1)
+			if (FoldCount == 1)
 			{
-				bodyendpos = Vector3(center.x - static_cast<float>(30 + 60 * (bodydistance - 1)), center.y + 30.0f ,0.0f);
-				bodystartpos.x = ease.easeout(bodyendpos.x + 60, bodyendpos.x - 60, ease.timerate);
-				bodystartpos.y = bodyendpos.y - 60;
+				BodyEndPos = { center.x - static_cast<float>(30 + 60 * (BodyDistance - 1)), center.y + 30.0f, 0.0f };
+				BodyStartPos.x = Ease.easeout(BodyEndPos.x + 60, BodyEndPos.x - 60, Ease.timerate);
+				BodyStartPos.y = BodyEndPos.y - 60;
 			}
-			else if (foldcount == 2)
+			else if (FoldCount == 2)
 			{
-				bodystartpos = Vector3(center.x - 30.0f, center.y - 30.0f, 0.0f);
-				bodyendpos.x = ease.easeout(bodystartpos.x + 60, bodystartpos.x - 60, ease.timerate);
-				bodyendpos.y = bodystartpos.y + 60.0f;
-			}
-		}
-		if (body_type == up)
-		{
-			bodyendpos = Vector3(center.x + 30.0f, center.y - 30.0f, 0.0f);
-			bodystartpos.y = ease.easeout(bodyendpos.y + 60, bodyendpos.y - 60, ease.timerate);
-			bodystartpos.x = bodyendpos.x - 60.0f;
-		}
-		if (body_type == right)
-		{
-			if (foldcount == 1)
-			{
-				bodystartpos = Vector3(center.x + static_cast<float>(30 + 60 * (bodydistance - 1)), center.y - 30.0f, 0.0f);
-				bodyendpos.x = ease.easeout(bodystartpos.x - 60, bodystartpos.x + 60, ease.timerate);
-				bodyendpos.y = bodystartpos.y + 60.0f;
-			}
-			else if (foldcount == 2)
-			{
-				bodyendpos = Vector3(center.x + 30.0f, center.y + 30.0f, 0.0f);
-				bodystartpos.x = ease.easeout(bodyendpos.x - 60.0f, bodyendpos.x + 60.0f, ease.timerate);
-				bodystartpos.y = bodyendpos.y - 60.0f;
+				BodyStartPos = { center.x - 30.0f, center.y - 30.0f, 0.0f };
+				BodyEndPos.x = Ease.easeout(BodyStartPos.x + 60, BodyStartPos.x - 60, Ease.timerate);
+				BodyEndPos.y = BodyStartPos.y + 60.0f;
 			}
 		}
-		if (body_type == down)
+		if (Body_Type == up)
 		{
-			bodystartpos = Vector3(center.x + 30.0f, center.y + 30.0f, 0.0f);
-			bodyendpos.y = ease.easeout(bodystartpos.y - 60.0f, bodystartpos.y + 60.0f, ease.timerate);
-			bodyendpos.x = bodystartpos.x - 60.0f;
+			BodyEndPos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
+			BodyStartPos.y = Ease.easeout(BodyEndPos.y + 60, BodyEndPos.y - 60, Ease.timerate);
+			BodyStartPos.x = BodyEndPos.x - 60.0f;
+		}
+		if (Body_Type == right)
+		{
+			if (FoldCount == 1)
+			{
+				BodyStartPos = { center.x + static_cast<float>(30 + 60 * (BodyDistance - 1)), center.y - 30.0f, 0.0f };
+				BodyEndPos.x = Ease.easeout(BodyStartPos.x - 60, BodyStartPos.x + 60, Ease.timerate);
+				BodyEndPos.y = BodyStartPos.y + 60.0f;
+			}
+			else if (FoldCount == 2)
+			{
+				BodyEndPos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
+				BodyStartPos.x = Ease.easeout(BodyEndPos.x - 60, BodyEndPos.x + 60, Ease.timerate);
+				BodyStartPos.y = BodyEndPos.y - 60.0f;
+			}
+		}
+		if (Body_Type == down)
+		{
+			BodyStartPos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
+			BodyEndPos.y = Ease.easeout(BodyStartPos.y - 60, BodyStartPos.y + 60, Ease.timerate);
+			BodyEndPos.x = BodyStartPos.x - 60.0f;
 		}
 
-		if (ease.timerate >= 1.0f)
+		if (Ease.timerate >= 1.0f)
 		{
-			ease.ismove = false;
-			Isaction = false;
-			foldcount--;
+			Ease.isMove = false;
+			IsAction = false;
+			FoldCount--;
 		}
 	}
 	//開いた後
-	if (Isfold == false && Isopen == true && Isaction == false)
+	if (IsFold == false && IsOpen == true && IsAction == false)
 	{
-		if (body_type == left)
+		if (Body_Type == left)
 		{
-			if (foldcount == 0)
+			if (FoldCount == 0)
 			{
-				bodystartpos = Vector3(center.x - (30 + bodydistance * 60), center.y - 30.0f, 0.0f);
-				bodyendpos = Vector3(bodystartpos.x + 60.0f, bodystartpos.y + 60.0f, 0.0f);
+				BodyStartPos = { center.x - (30 + BodyDistance * 60), center.y - 30.0f, 0.0f };
+				BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y + 60.0f, 0.0f };
 			}
-			else if (foldcount == 1)
+			else if (FoldCount == 1)
 			{
-				bodystartpos = Vector3(center.x - 30.0f, center.y - 30.0f, 0.0f);
-				bodyendpos = Vector3(bodystartpos.x - 60.0f, bodystartpos.y + 60.0f, 0.0f);
-				Isfold = true;
-				Isopen = false;
-			}
-		}
-		if (body_type == up)
-		{
-			bodystartpos = Vector3(center.x - 30.0f, center.y - 90.0f, 0.0f);
-			bodyendpos = Vector3(bodystartpos.x + 60.0f, bodystartpos.y + 60.0f, 0.0f);
-		}
-		if (body_type == right)
-		{
-			if (foldcount == 0)
-			{
-				bodystartpos = Vector3(center.x + (30 + (bodydistance - 1) * 60), center.y - 30.0f, 0.0f);
-				bodyendpos = Vector3(bodystartpos.x + 60.0f, bodystartpos.y + 60.0f, 0.0f);
-			}
-			else if (foldcount == 1)
-			{
-				bodyendpos = Vector3(center.x + 30.0f, center.y + 30.0f, 0.0f);
-				bodystartpos = Vector3(bodyendpos.x + 60.0f, bodyendpos.y - 60.0f, 0.0f);
-				Isfold = true;
-				Isopen = false;
+				BodyStartPos = { center.x - 30.0f, center.y - 30.0f, 0.0f };
+				BodyEndPos = { BodyStartPos.x - 60.0f, BodyStartPos.y + 60.0f, 0.0f };
+				IsFold = true;
+				IsOpen = false;
 			}
 		}
-		if (body_type == down)
+		if (Body_Type == up)
 		{
-			bodystartpos = Vector3(center.x - 30.0f, center.y + 30.0f, 0.0f);
-			bodyendpos = Vector3(bodystartpos.x + 60.0f, bodystartpos.y + 60.0f, 0.0f);
+			BodyStartPos = { center.x - 30.0f, center.y - 90.0f, 0.0f };
+			BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y + 60.0f, 0.0f };
+		}
+		if (Body_Type == right)
+		{
+			if (FoldCount == 0)
+			{
+				BodyStartPos = { center.x + (30 + (BodyDistance - 1) * 60), center.y - 30.0f, 0.0f };
+				BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y + 60.0f, 0.0f };
+			}
+			else if (FoldCount == 1)
+			{
+				BodyEndPos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
+				BodyStartPos = { BodyEndPos.x + 60.0f, BodyEndPos.y - 60.0f, 0.0f };
+				IsFold = true;
+				IsOpen = false;
+			}
+		}
+		if (Body_Type == down)
+		{
+			BodyStartPos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
+			BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y + 60.0f, 0.0f };
 		}
 	}
 	//折るとき
-	if (Isfold == true && Isopen == false && Isaction == true && Isslide == false)
+	if (IsFold == true && IsOpen == false && IsAction == true && IsSlide == false)
 	{
-		ease.addtime += ease.maxtime / 60.0f;
-		ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
+		Ease.addTime += Ease.maxTime / 25.0f;
+		Ease.timerate = min(Ease.addTime / Ease.maxTime, 1.0f);
 
-		if (body_type == left)
+		if (Body_Type == left)
 		{
-			if (foldcount == 0)
+			if (FoldCount == 0)
 			{
-				bodyendpos = Vector3(center.x - static_cast<float>(30 + 60 * (bodydistance - 1)), center.y + 30.0f, 0.0f);
-				bodystartpos.x = ease.easeout(bodyendpos.x - 60, bodyendpos.x + 60, ease.timerate);
-				bodystartpos.y = bodyendpos.y - 60;
+				BodyEndPos = { center.x - static_cast<float>(30 + 60 * (BodyDistance - 1)), center.y + 30.0f, 0.0f };
+				BodyStartPos.x = Ease.easeout(BodyEndPos.x - 60, BodyEndPos.x + 60, Ease.timerate);
+				BodyStartPos.y = BodyEndPos.y - 60;
 			}
-			else if (foldcount == 1)
+			else if (FoldCount == 1)
 			{
-				bodystartpos = Vector3(center.x - 30.0f, center.y - 30.0f, 0.0f);
-				bodyendpos.x = ease.easeout(bodystartpos.x - 60, bodystartpos.x + 60, ease.timerate);
-				bodyendpos.y = bodystartpos.y + 60;
-			}
-		}
-		if (body_type == up)
-		{
-			bodyendpos = Vector3(center.x + 30.0f, center.y - 30.0f, 0.0f);
-			bodystartpos.y = ease.easeout(bodyendpos.y - 60, bodyendpos.y + 60, ease.timerate);
-			bodystartpos.x = bodyendpos.x - 60;
-		}
-		if (body_type == right)
-		{
-			if (foldcount == 0)
-			{
-				bodystartpos = Vector3(center.x + static_cast<float>(30 + 60 * (bodydistance - 1)), center.y - 30.0f, 0.0f);
-				bodyendpos.x = ease.easeout(bodystartpos.x + 60, bodystartpos.x - 60, ease.timerate);
-				bodyendpos.y = bodystartpos.y + 60;
-			}
-			else if (foldcount == 1)
-			{
-				bodyendpos = Vector3(center.x + 30.0f, center.y + 30.0f ,0.0f);
-				bodystartpos.x = ease.easeout(bodyendpos.x + 60, bodyendpos.x - 60, ease.timerate);
-				bodystartpos.y = bodyendpos.y - 60;
+				BodyStartPos = { center.x - 30.f, center.y - 30.0f, 0.0f };
+				BodyEndPos.x = Ease.easeout(BodyStartPos.x - 60, BodyStartPos.x + 60, Ease.timerate);
+				BodyEndPos.y = BodyStartPos.y + 60;
 			}
 		}
-		if (body_type == down)
+		if (Body_Type == up)
 		{
-			bodystartpos = Vector3(center.x - 30.0f, center.y + 30.0f, 0.0f);
-			bodyendpos.y = ease.easeout(bodystartpos.y + 60, bodystartpos.y - 60, ease.timerate);
-			bodyendpos.x = bodystartpos.x + 60;
+			BodyEndPos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
+			BodyStartPos.y = Ease.easeout(BodyEndPos.y - 60, BodyEndPos.y + 60, Ease.timerate);
+			BodyStartPos.x = BodyEndPos.x - 60;
+		}
+		if (Body_Type == right)
+		{
+			if (FoldCount == 0)
+			{
+				BodyStartPos = { center.x + static_cast<float>(30 + 60 * (BodyDistance - 1)), center.y - 30.0f, 0.0f };
+				BodyEndPos.x = Ease.easeout(BodyStartPos.x + 60, BodyStartPos.x - 60, Ease.timerate);
+				BodyEndPos.y = BodyStartPos.y + 60;
+			}
+			else if (FoldCount == 1)
+			{
+				BodyEndPos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
+				BodyStartPos.x = Ease.easeout(BodyEndPos.x + 60, BodyEndPos.x - 60, Ease.timerate);
+				BodyStartPos.y = BodyEndPos.y - 60;
+			}
+		}
+		if (Body_Type == down)
+		{
+			BodyStartPos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
+			BodyEndPos.y = Ease.easeout(BodyStartPos.y + 60, BodyStartPos.y - 60, Ease.timerate);
+			BodyEndPos.x = BodyStartPos.x + 60;
 		}
 
-		if (ease.timerate >= 1.0f)
+		if (Ease.timerate >= 1.0f)
 		{
-			ease.ismove = false;
-			Isaction = false;
-			foldcount++;
+			Ease.isMove = false;
+			IsAction = false;
+			FoldCount++;
 		}
 	}
 	//折った後
-	if (Isfold == true && Isopen == false && Isaction == false)
+	if (IsFold == true && IsOpen == false && IsAction == false)
 	{
-		if (body_type == left)
+		if (Body_Type == left)
 		{
-			if (foldcount == 1)
+			if (FoldCount == 1)
 			{
-				bodyendpos = Vector3(center.x - (30 + 60 * (bodydistance - 1)), center.y + 30.0f ,0.0f);
-				bodystartpos = Vector3(bodyendpos.x + 60.0f, bodyendpos.y - 60.0f, 0.0f);
+				BodyEndPos = { center.x - (30 + 60 * (BodyDistance - 1)), center.y + 30.0f, 0.0f };
+				BodyStartPos = { BodyEndPos.x + 60.0f, BodyEndPos.y - 60.0f, 0.0f };
 			}
-			else if (foldcount == 2)
+			else if (FoldCount == 2)
 			{
-				bodystartpos = Vector3(center.x - 30.0f, center.y - 30.0f, 0.0f);
-				bodyendpos = Vector3(bodystartpos.x + 60.0f, bodystartpos.y + 60.0f, 0.0f);
-			}
-		}
-		else if (body_type == up)
-		{
-			bodystartpos = Vector3(center.x - 30.0f, center.y + 30.0f, 0.0f);
-			bodyendpos = Vector3(bodystartpos.x + 60.0f, bodystartpos.y - 60.0f, 0.0f);
-		}
-		else if (body_type == right)
-		{
-			if (foldcount == 1)
-			{
-				bodystartpos = Vector3(center.x + (30 + 60 * (bodydistance - 1)), center.y - 30.0f, 0.0f);
-				bodyendpos = Vector3(bodystartpos.x - 60.0f, bodystartpos.y + 60.0f, 0.0f);
-			}
-			else if (foldcount == 2)
-			{
-				bodystartpos = Vector3(center.x - 30.0f, center.y - 30.0f, 0.0f);
-				bodyendpos = Vector3(bodystartpos.x + 60.0f, bodystartpos.y + 60.0f, 0.0f);
+				BodyStartPos = { center.x - 30.0f, center.y - 30.0f, 0.0f };
+				BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y + 60.0f, 0.0f };
 			}
 		}
-		else if (body_type == down)
+		else if (Body_Type == up)
 		{
-			bodystartpos = Vector3(center.x - 30.0f, center.y + 30.0f, 0.0f);
-			bodyendpos = Vector3(bodystartpos.x + 60.0f, bodystartpos.y - 60.0f, 0.0f);
+			BodyStartPos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
+			BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y - 60.0f, 0.0f };
+		}
+		else if (Body_Type == right)
+		{
+			if (FoldCount == 1)
+			{
+				BodyStartPos = { center.x + (30 + 60 * (BodyDistance - 1)), center.y - 30.0f, 0.0f };
+				BodyEndPos = { BodyStartPos.x - 60.0f, BodyStartPos.y + 60.0f, 0.0f };
+			}
+			else if (FoldCount == 2)
+			{
+				BodyStartPos = { center.x - 30.0f, center.y - 30.0f, 0.0f };
+				BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y + 60.0f, 0.0f };
+			}
+		}
+		else if (Body_Type == down)
+		{
+			BodyStartPos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
+			BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y - 60.0f, 0.0f };
 		}
 	}
 
 	//体のスライド
 	//顔を挟むとなり移動
-	if (Isslide == true && ease.ismove == true && slide_dis == 2)
+	if (IsSlide == true && Ease.isMove == true && SlideDis == 2)
 	{
-		ease.addtime += ease.maxtime / 60.0f;
-		ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
+		Ease.addTime += Ease.maxTime / 25.0f;
+		Ease.timerate = min(Ease.addTime / Ease.maxTime, 1.0f);
 
-		if (body_type == left)
+		if (Body_Type == left)
 		{
-			bodystartpos = Vector3(ease.easeout(center.x - 90, center.x + 30, ease.timerate), center.y - 30, 0.0f);
-			bodyendpos = Vector3(bodystartpos.x + 60, center.y + 30, 0.0f);
+			BodyStartPos = { Ease.easeout(center.x - 90, center.x + 30, Ease.timerate), center.y - 30.0f, 0.0f };
+			BodyEndPos = { BodyStartPos.x + 60.0f, center.y + 30.0f, 0.0f };
 		}
-		else if (body_type == right)
+		else if (Body_Type == right)
 		{
-			bodystartpos = Vector3(ease.easeout(center.x + 30, center.x - 90, ease.timerate), center.y - 30, 0.0f);
-			bodyendpos = Vector3(bodystartpos.x + 60, center.y + 30, 0.0f);
+			BodyStartPos = { Ease.easeout(center.x + 30, center.x - 90, Ease.timerate), center.y - 30.0f, 0.0f };
+			BodyEndPos = { BodyStartPos.x + 60.0f, center.y + 30.0f, 0.0f };
 		}
-		else if (body_type == up)
+		else if (Body_Type == up)
 		{
-			bodystartpos = Vector3(center.x - 30, ease.easeout(center.y - 90, center.y + 30, ease.timerate), 0.0f);
-			bodyendpos = Vector3(center.x + 30, bodystartpos.y + 60, 0.0f);
+			BodyStartPos = { center.x - 30.0f, Ease.easeout(center.y - 90, center.y + 30, Ease.timerate), 0.0f };
+			BodyEndPos = { center.x + 30.0f, BodyStartPos.y + 60.0f, 0.0f };
 		}
-		else if (body_type == down)
+		else if (Body_Type == down)
 		{
-			bodystartpos = Vector3(center.x - 30, ease.easeout(center.y + 30, center.y - 90, ease.timerate), 0.0f);
-			bodyendpos = Vector3(center.x + 30, bodystartpos.y + 60, 0.0f);
+			BodyStartPos = { center.x - 30.0f, Ease.easeout(center.y + 30, center.y - 90, Ease.timerate), 0.0f };
+			BodyEndPos = { center.x + 30.0f, BodyStartPos.y + 60.0f, 0.0f };
 		}
 
-		if (ease.timerate >= 1.0f)
+		if (Ease.timerate >= 1.0f)
 		{
-			ease.ismove = false;
-			Isaction = false;
-			Isslide = false;
+			Ease.isMove = false;
+			IsAction = false;
+			IsSlide = false;
 
-			if (body_type == left)
+			if (Body_Type == left)
 			{
-				body_type = right;
+				Body_Type = right;
 			}
-			else if (body_type == right)
+			else if (Body_Type == right)
 			{
-				body_type = left;
+				Body_Type = left;
 			}
-			else if (body_type == up)
+			else if (Body_Type == up)
 			{
-				body_type = down;
+				Body_Type = down;
 			}
-			else if (body_type == down)
+			else if (Body_Type == down)
 			{
-				body_type = up;
+				Body_Type = up;
 			}
 		}
 	}
 
 	//顔を挟まないとなり移動(左右のみ)
-	if (Isslide == true && ease.ismove == true && slide_dis == 1)
+	if (IsSlide == true && Ease.isMove == true && SlideDis == 1)
 	{
-		ease.addtime += ease.maxtime / 60.0f;
-		ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
+		Ease.addTime += Ease.maxTime / 25.0f;
+		Ease.timerate = min(Ease.addTime / Ease.maxTime, 1.0f);
 
-		if (body_type == left)
+		if (Body_Type == left)
 		{
-			if (slidepat == -1)
+			if (SlidePat == -1)
 			{
-				bodyendpos = Vector3(ease.easeout(center.x - 30, center.x - 90, ease.timerate), center.y - 30, 0.0f);
+				BodyEndPos = { Ease.easeout(center.x - 30, center.x - 90, Ease.timerate), center.y - 30.0f, 0.0f };
 			}
 			else
 			{
-				bodyendpos = Vector3(ease.easeout(center.x - 90, center.x - 30, ease.timerate), center.y - 30, 0.0f);
+				BodyEndPos = { Ease.easeout(center.x - 90, center.x - 30, Ease.timerate), center.y - 30.0f, 0.0f };
 			}
-			bodystartpos = Vector3(bodyendpos.x + (120 * Isfold - 60), center.y + 30, 0.0f);
+			BodyStartPos = { BodyEndPos.x + static_cast<float>(120 * IsFold - 60), center.y + 30.0f, 0.0f };
 		}
-		else if (body_type == right)
+		else if (Body_Type == right)
 		{
-			if (slidepat == -1)
+			if (SlidePat == -1)
 			{
-				bodystartpos = Vector3(ease.easeout(center.x + 90, center.x + 30, ease.timerate), center.y - 30, 0.0f);
+				BodyStartPos = { Ease.easeout(center.x + 90, center.x + 30, Ease.timerate), center.y - 30.0f, 0.0f };
 			}
 			else
 			{
-				bodystartpos = Vector3(ease.easeout(center.x + 30, center.x + 90, ease.timerate), center.y - 30, 0.0f);
+				BodyStartPos = { Ease.easeout(center.x + 30, center.x + 90, Ease.timerate), center.y - 30.0f, 0.0f };
 			}
-			bodyendpos = Vector3(bodystartpos.x + (-120 * Isfold + 60), center.y + 30, 0.0f);
+			BodyEndPos = { BodyStartPos.x + static_cast<float>(-120 * IsFold + 60), center.y + 30.0f, 0.0f };
 		}
 
-		if (ease.timerate >= 1.0f)
+		if (Ease.timerate >= 1.0f)
 		{
-			ease.ismove = false;
-			Isaction = false;
-			Isslide = false;
+			Ease.isMove = false;
+			IsAction = false;
+			IsSlide = false;
 		}
 	}
 }
 
 void PlayerBody::Draw(int offsetX, int offsetY)
 {
-	if (Isactivate == true)
+	if (IsActivate == true)
 	{
-		DrawShape::DrawPlane(
-			Vector3(bodystartpos.x + offsetX, bodystartpos.y + offsetY, 0.0f),
-			Vector3(bodyendpos.x + offsetX, bodyendpos.y + offsetY, 0.0f),
-			bodycolor);
+		/*DrawBox(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
+			static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, BodyColor, true);*/
+		DrawExtendGraph(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
+			static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, BodyColor, true);
 	}
 }
 
 void PlayerBody::setactivate(Vector3 center)
 {
-	if (Isactivate == true)
+	if (IsActivate == true)
 	{
-		Isfold = false;
-		Isopen = true;
-		Isslide = false;
-		bodydistance = 1;
-		overlap = 0;
-		foldcount = 0;
+		IsFold = false;
+		IsOpen = true;
+		IsSlide = false;
+		BodyDistance = 1;
+		Overlap = 0;
+		FoldCount = 0;
 
-		if (body_type == left)
+		if (Body_Type == left)
 		{
-			bodystartpos = Vector3(center.x - 90, center.y - 30, 0.0f);
+			BodyStartPos = { center.x - 90.0f, center.y - 30.0f, 0.0f };
 		}
-		else if (body_type == right)
+		else if (Body_Type == right)
 		{
-			bodystartpos = Vector3(center.x + 30, center.y - 30, 0.0f);
+			BodyStartPos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
 		}
-		else if (body_type == up)
+		else if (Body_Type == up)
 		{
-			bodystartpos = Vector3(center.x - 30, center.y - 90, 0.0f);
+			BodyStartPos = { center.x - 30.0f, center.y - 90.0f, 0.0f };
 		}
-		else if (body_type == down)
+		else if (Body_Type == down)
 		{
-			bodystartpos = Vector3(center.x - 30, center.y + 30, 0.0f);
+			BodyStartPos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
 		}
 
-		bodyendpos = Vector3(bodystartpos.x + 60, bodystartpos.y + 60, 0.0f);
+		BodyEndPos = { BodyStartPos.x + 60.0f, BodyStartPos.y + 60.0f, 0.0f };
 	}
 }
 
 void PlayerBody::setslide(int slidepat, int move_dis)
 {
-	Isaction = true;
-	Isslide = true;
-	ease.ismove = true;
+	IsAction = true;
+	IsSlide = true;
+	Ease.isMove = true;
 
-	ease.addtime = 0.1f;
-	ease.maxtime = 1.5f;
-	ease.timerate = 0.0f;
+	Ease.addTime = 0.1f;
+	Ease.maxTime = 1.2f;
+	Ease.timerate = 0.0f;
 
-	this->slidepat = slidepat;
+	this->SlidePat = slidepat;
 
-	slide_dis = move_dis;
+	SlideDis = move_dis;
 }
 
 void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall, bool& isjump)
@@ -404,9 +405,28 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 	int center_x_mapchip = static_cast<int>(center.x - stage.offset.x) / Stage::blockSize;
 	int center_y_mapchip = static_cast<int>(center.y - stage.offset.y) / Stage::blockSize;
 
+	//上下左右(プレイヤーの顔)
+	int left_mapchip = ((int)((center.x - 30) - stage.offset.x) / 60) % 5;
+	int up_mapchip = ((int)((center.y - 30) - stage.offset.y) / 60) % 5;
+	int right_mapchip = ((int)((center.x + 30) - stage.offset.x) / 60) % 5;
+	int down_mapchip = ((int)((center.y + 30) - stage.offset.y) / 60) % 5;
+
 	//今いるタイル内でのプレイヤーのマップチップ座標
 	int center_x_mapchip_tile = (int)center_x_mapchip % 5;
 	int center_y_mapchip_tile = (int)center_y_mapchip % 5;
+
+	//BodyのStartPos・EndPosのマップチップ座標
+	int BodyStartX_mapchip = (int)(BodyStartPos.x - stage.offset.x) / 60;
+	int BodyStartY_mapchip = (int)(BodyStartPos.y - stage.offset.y) / 60;
+	int BodyEndX_mapchip = (int)(BodyEndPos.x - stage.offset.x) / 60;
+	int BodyEndY_mapchip = (int)(BodyEndPos.y - stage.offset.y) / 60;
+
+	//タイル内のマップチップ座標
+	int BodyStartX_mapchip_tile;
+	int BodyStartY_mapchip_tile;
+	int BodyEndX_mapchip_tile;
+	int BodyEndY_mapchip_tile;
+
 
 	//ステージの数
 	size_t i = 0;
@@ -414,16 +434,13 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 	size_t j = 0;
 
 	//マップチップの座標
-	size_t mapchipPos = 0;
+	int mapchipPos = 0;
 
-	//プレイヤーがいるタイルのみ判定
-	bool istile = false;
-
-	if (center.x - 30 <= stage.offset.x || body_type == left && Isfold == true)
+	if (center.x - 30 <= stage.offset.x || Body_Type == left && IsFold == true)
 	{
 		Extrude(center, stage.offset, 30, left, isfall, isjump);
 	}
-	if (center.y - 30 <= stage.offset.y || body_type == up && Isfold == true)
+	if (center.y - 30 <= stage.offset.y || Body_Type == up && IsFold == true)
 	{
 		Extrude(center, stage.offset, 30, up, isfall, isjump);
 	}
@@ -432,66 +449,137 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 	{
 		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
 		{
-			if (stage.GetPlayerTile(center, i, j))
+			if (stage.GetPositionTile({ BodyStartPos.x,BodyStartPos.y,0.0f }, i, j))
 			{
-				if (Isfold == false)
+				BodyStartX_mapchip_tile = BodyStartX_mapchip % stage.GetStageTileWidth(i, j);
+				BodyStartY_mapchip_tile = BodyStartY_mapchip % stage.GetStageTileHeight(i, j);
+
+				mapchipPos = (BodyStartY_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyStartX_mapchip_tile);
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
-					switch (body_type)
+					Extrude(center, { center.x,60 + (BodyStartY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - BodyStartPos.y, up, isfall, isjump);
+				}
+			}
+
+			if (stage.GetPositionTile({ BodyStartPos.x,BodyEndPos.y,0.0f }, i, j))
+			{
+				BodyStartX_mapchip_tile = BodyStartX_mapchip % stage.GetStageTileWidth(i, j);
+				BodyEndY_mapchip_tile = BodyEndY_mapchip % stage.GetStageTileHeight(i, j);
+
+				mapchipPos = (BodyEndY_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + (BodyStartX_mapchip_tile);
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+				{
+
+				}
+			}
+
+			if (stage.GetPositionTile({ BodyEndPos.x,BodyStartPos.y,0.0f }, i, j))
+			{
+				BodyEndX_mapchip_tile = BodyEndX_mapchip % stage.GetStageTileWidth(i, j);
+				BodyStartY_mapchip_tile = BodyStartY_mapchip % stage.GetStageTileHeight(i, j);
+
+				mapchipPos = (BodyStartY_mapchip_tile) * stage.GetStageTileWidth(i, j) + (BodyEndX_mapchip_tile);
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+				{
+					Extrude(center, { center.x,60 + (BodyStartY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - BodyStartPos.y, up, isfall, isjump);
+				}
+			}
+
+			if (stage.GetPositionTile({ BodyEndPos.x,BodyEndPos.y,0.0f }, i, j))
+			{
+				BodyEndX_mapchip_tile = BodyEndX_mapchip % stage.GetStageTileWidth(i, j);
+				BodyEndY_mapchip_tile = BodyEndY_mapchip % stage.GetStageTileHeight(i, j);
+
+				mapchipPos = (BodyEndY_mapchip - 1) * stage.GetStageTileWidth(i, j) + (BodyEndX_mapchip);
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+				{
+
+				}
+			}
+		}
+	}
+
+	for (i = 0; i < stage.GetStageDataSize(); i++)
+	{
+		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
+		{
+			if (stage.GetPositionTile(center, i, j))
+			{
+				mapchipPos = up_mapchip * stage.GetStageTileWidth(i, j) + (left_mapchip);
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::GOAL)
+				{
+					IsGoal = true;
+				}
+				mapchipPos = up_mapchip * stage.GetStageTileWidth(i, j) + (right_mapchip);
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::GOAL)
+				{
+					IsGoal = true;
+				}
+				mapchipPos = down_mapchip * stage.GetStageTileWidth(i, j) + (left_mapchip);
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::GOAL)
+				{
+					IsGoal = true;
+				}
+				mapchipPos = down_mapchip * stage.GetStageTileWidth(i, j) + (right_mapchip);
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::GOAL)
+				{
+					IsGoal = true;
+				}
+
+				if (IsFold == false)
+				{
+					switch (Body_Type)
 					{
 					case left:
 						//左側
-						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance - 1);
+						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance - 1);
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center,
-								Vector3(60.0f + (center_x_mapchip - bodydistance - 1) * 60.0f, center_y_mapchip * 60.0f, 0.0f),
-								30.0f + bodydistance * 60.0f, left, isfall, isjump);
+							Extrude(center, { 60 + (center_x_mapchip - BodyDistance - 1) * 60.0f, center_y_mapchip * 60.0f, 0.0f }, 30.0f + BodyDistance * 60.0f, left, isfall, isjump);
 						}
 						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance - 1);
+						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance - 1);
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { 60 + (center_x_mapchip - bodydistance - 1) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
+							Extrude(center, { 60 + (center_x_mapchip - BodyDistance - 1) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 						}
 						//下
-						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance - 1);
+						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance - 1);
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { 60 + (center_x_mapchip - bodydistance - 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
+							Extrude(center, { 60 + (center_x_mapchip - BodyDistance - 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 						}
 
-						if (bodydistance == 2)
+						if (BodyDistance == 2)
 						{
 							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
 							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
-								Extrude(center, { (center_x_mapchip + 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30, right, isfall, isjump);
+								Extrude(center, { (center_x_mapchip + 1) * 60.0f,center_y_mapchip * 60.0f,0.0f }, 30.0f, right, isfall, isjump);
 							}
 						}
 						break;
 					case right:
 						//右側
-						mapchipPos = (center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance + 1)) - 2;
+						mapchipPos = (center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance + 1));
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center,
-								Vector3((center_x_mapchip + bodydistance + 1) * 60.0f, center_y_mapchip * 60.0f, 0.0f),
-								30.0f + bodydistance * 60.0f, right, isfall, isjump);
+							Extrude(center, { (center_x_mapchip + BodyDistance + 1) * 60.0f, center_y_mapchip * 60.0f, 0.0f }, 30.0f + BodyDistance * 60.0f, right, isfall, isjump);
 						}
 						//上
-						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance + 1);
+						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance + 1);
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { (center_x_mapchip + bodydistance + 1) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
+							Extrude(center, { (center_x_mapchip + BodyDistance + 1) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 						}
 						//下
-						mapchipPos = ((center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance + 1)) - 2;
+						mapchipPos = ((center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance));
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { (center_x_mapchip + bodydistance + 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
+							Extrude(center, { (center_x_mapchip + BodyDistance + 1) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 						}
 
-						if (bodydistance == 2)
+						if (BodyDistance == 2)
 						{
 							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
 							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
@@ -505,7 +593,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						mapchipPos = (center_y_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { center_x_mapchip * 60.0f,60 + (center_y_mapchip - 2) * 60.0f,0.0f }, 90, up, isfall, isjump);
+							//Extrude(center, { center_x_mapchip * 60.0f,60 + (center_y_mapchip - 2) * 60.0f,0.0f }, 90, up, isfall, isjump);
 						}
 						//左
 						mapchipPos = (center_y_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
@@ -517,7 +605,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						mapchipPos = (center_y_mapchip_tile - 2) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { (center_x_mapchip + 1) * 60.0f,60 + (center_y_mapchip - 1) * 60.0f,0.0f }, 30, right, isfall, isjump);
+							//Extrude(center, { (center_x_mapchip + 1) * 60.0f,60 + (center_y_mapchip - 1) * 60.0f,0.0f }, 30, right, isfall, isjump);
 						}
 						//下
 						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
@@ -556,30 +644,28 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 				}
 				else
 				{
-					switch (body_type)
+					switch (Body_Type)
 					{
 					case left:
 						//左側
-						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance);
+						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance);
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center,
-								Vector3((center_x_mapchip - bodydistance) * 60.0f, center_y_mapchip * 60.0f, 0.0f),
-								30.0f + (bodydistance - 1) * 60.0f, left, isfall, isjump);
+							Extrude(center, { (center_x_mapchip - BodyDistance) * 60.0f, center_y_mapchip * 60.0f, 0.0f }, 30.0f + (BodyDistance - 1) * 60.0f, left, isfall, isjump);
 						}
-						if (foldcount < 2)
+						if (FoldCount < 2)
 						{
 							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance);
+							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance);
 							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
-								Extrude(center, { (center_x_mapchip - bodydistance) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
+								Extrude(center, { (center_x_mapchip - BodyDistance) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 							}
 							//下
-							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - bodydistance);
+							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - BodyDistance);
 							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
-								Extrude(center, { (center_x_mapchip - bodydistance) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
+								Extrude(center, { (center_x_mapchip - BodyDistance) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 							}
 						}
 						else
@@ -597,7 +683,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 							}
 						}
-						if (bodydistance == 2)
+						if (BodyDistance == 2)
 						{
 							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + 1);
 							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
@@ -608,26 +694,24 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						break;
 					case right:
 						//右側
-						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance);
+						mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance);
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center,
-								Vector3((center_x_mapchip + bodydistance) * 60.0f, center_y_mapchip * 60.0f, 0.0f),
-								30.0f + (bodydistance - 1), right, isfall, isjump);
+							Extrude(center, { (center_x_mapchip + BodyDistance) * 60.0f, center_y_mapchip * 60.0f, 0.0f }, 30.0f + (BodyDistance - 1), right, isfall, isjump);
 						}
-						if (foldcount < 2)
+						if (FoldCount < 2)
 						{
 							//上
-							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance);
+							mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance);
 							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
-								Extrude(center, { (center_x_mapchip + bodydistance) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
+								Extrude(center, { (center_x_mapchip + BodyDistance) * 60.0f,(center_y_mapchip - 1) * 60.0f,0.0f }, 30, up, isfall, isjump);
 							}
 							//下
-							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + bodydistance);
+							mapchipPos = (center_y_mapchip_tile)*stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile + BodyDistance);
 							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
-								Extrude(center, { (center_x_mapchip + bodydistance) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
+								Extrude(center, { (center_x_mapchip + BodyDistance) * 60.0f,(center_y_mapchip) * 60.0f,0.0f }, 30, down, isfall, isjump);
 							}
 						}
 						else
@@ -642,10 +726,10 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 							mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile);
 							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 							{
-								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
+								Extrude(center, { (center_x_mapchip) * 60.0f,(center_y_mapchip) * 60.0f,0.0f }, 30, down, isfall, isjump);
 							}
 						}
-						if (bodydistance == 2)
+						if (BodyDistance == 2)
 						{
 							mapchipPos = center_y_mapchip_tile * stage.GetStageTileWidth(i, j) + (center_x_mapchip_tile - 1);
 							if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
@@ -673,7 +757,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 						mapchipPos = (center_y_mapchip_tile + 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
 						if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 						{
-							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 90, down, isfall, isjump);
+							Extrude(center, { center_x_mapchip * 60.0f,(center_y_mapchip + 1) * 60.0f,0.0f }, 30, down, isfall, isjump);
 						}
 						//上
 						mapchipPos = (center_y_mapchip_tile - 1) * stage.GetStageTileWidth(i, j) + center_x_mapchip_tile;
@@ -687,7 +771,6 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 			}
 		}
 	}
-
 }
 
 void PlayerBody::Extrude(Vector3& center, Vector3 extrudepos, float extrudedis, bodytype extrudetype, bool& isfall, bool& isjump)

@@ -93,7 +93,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		if (InputManger::SubUpTrigger() || InputManger::SubDownTrigger() || InputManger::SubLeftTrigger() || InputManger::SubRightTrigger())
 		{
-			stage->FoldAndOpen(player->center_position, playerTile);
+			stage->FoldAndOpen(player->CenterPosition, playerTile);
 		}
 
 		stage->Updata();
@@ -103,9 +103,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		stage->Draw(drawOffsetX, drawOffsetY);
 		player->Draw(drawOffsetX, drawOffsetY);
 
-		DrawFormatString(0, 100, WHITE, "%d\n%d", ((int)player->center_position.x / 60), ((int)player->center_position.y / 60));
-		DrawFormatString(0, 150, WHITE, "%f\n%f", player->center_position.x, player->center_position.y);
-		DrawFormatString(0, 190, WHITE, "%ff", player->fallspeed);
+		DrawFormatString(0, 100, WHITE, "%d\n%d", ((int)player->CenterPosition.x / 60), ((int)player->CenterPosition.y / 60));
+		DrawFormatString(0, 150, WHITE, "%f\n%f", player->CenterPosition.x, player->CenterPosition.y);
+		DrawFormatString(0, 190, WHITE, "%ff", player->FallSpeed);
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

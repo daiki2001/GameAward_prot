@@ -146,10 +146,12 @@
     <ClInclude Include="Colors.h" />
     <ClInclude Include="DrawShape.h" />
     <ClInclude Include="Easing.h" />
+    <ClInclude Include="Emitter.h" />
     <ClInclude Include="General.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="InputManger.h" />
     <ClInclude Include="LoadFile.h" />
+    <ClInclude Include="Particle.h" />
     <ClInclude Include="Matrix4.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerBody.h" />
@@ -161,6 +163,11 @@
     <None Include="Resources\stage1.csv" />
     <None Include="Resources\stage2.csv" />
     <None Include="Resources\stage3.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Resources\Body.png" />
+    <Image Include="Resources\face.png" />
+    <Image Include="Resources\face_fold.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

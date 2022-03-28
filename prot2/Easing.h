@@ -10,9 +10,9 @@ public: //ƒƒ“ƒoŠÖ”
 	~Easing();
 
 public: //ƒƒ“ƒo•Ï”
-	float maxtime;
+	float maxTime;
 	float timerate;
-	float addtime;
+	float addTime;
 
-	bool ismove;
+	bool isMove;
 };

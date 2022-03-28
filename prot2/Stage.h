@@ -104,20 +104,26 @@ public: //メンバ関数
 	inline StageData* GetStageData(const short& stageNumber);
 	// 全ステージのデータを取得
 	inline StageData* GetAllStageData();
-	//StageDataのサイズを取得
+	// Stagedataのサイズを取得
 	size_t GetStageDataSize();
-	//StageTileDataのサイズを取得
+	// Stagetiledataのサイズを取得
 	size_t GetStageTileDataSize(int i);
-
+	// ステージの横幅を取得
 	char GetStageWidth(int i);
+	// ステージの縦幅を取得
 	char GetStageHeight(int i);
-
-	char GetStageTileWidth(int i, int j);
+	// 任意のStageTileの高さを取得
 	char GetStageTileHeight(int i, int j);
-
+	// 任意のStageTileの幅を取得
+	char GetStageTileWidth(int i, int j);
+	// 任意の場所のマップチップ情報を取得
 	char GetStageMapchip(int i, int j, int mapchipPos);
-
-	bool GetPlayerTile(Vector3 center, int i, int j);
+	// 任意の座標からどのStageTileにいるかを取得
+	bool GetPositionTile(Vector3 center, int i, int j);
+	// ステージタイルのX軸のオフセットを返す
+	int GetStageTileOffsetX(int i, int j);
+	// ステージタイルのY軸のオフセットを返す
+	int GetStageTileOffsetY(int i, int j);
 
 private:
 	// ステージを折る
@@ -136,5 +142,5 @@ private: //メンバ変数
 	std::vector<StageData> stageData;
 	std::vector<StageData> initStageData;
 
-	bool isEase = false;
+	bool isEase;
 };

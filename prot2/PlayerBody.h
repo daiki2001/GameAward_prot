@@ -22,7 +22,7 @@ public: //メンバ関数
 	// 初期化
 	void Init(Vector3 position, bodytype number);
 	// 更新
-	void Update(Vector3 center);
+	void Update(Vector3& center);
 	/// <summary>
 	// 描画
 	void Draw(int offsetX, int offsetY);
@@ -57,46 +57,52 @@ public: //メンバ関数
 
 public: //メンバ変数
 	//有効化フラグ
-	bool Isactivate;
+	bool IsActivate;
 
 	//顔から見た体の位置
-	int body_type;
+	int Body_Type;
 
 	//体の座標(初期状態：左上)
-	Vector3 bodystartpos;
+	Vector3 BodyStartPos;
 
 	//体の座標(初期状態：右下)
-	Vector3 bodyendpos;
+	Vector3 BodyEndPos;
 
 	//スライドの開始座標
-	Vector3 slidestartpos;
+	Vector3 SlideStartPos;
 
 	//折る・開くフラグ
-	bool Isfold;
-	bool Isopen;
+	bool IsFold;
+	bool IsOpen;
 
 	//この体が折られた回数
-	int foldcount;
+	int FoldCount;
 
 	//スライドフラグ・スライドする方向
-	bool Isslide;
-	int slidepat;
+	bool IsSlide;
+	int SlidePat;
 
 	//折る・開く・スライドをしている途中かどうか
-	bool Isaction;
+	bool IsAction;
 
 	//スライドする距離
-	int slide_dis;
+	int SlideDis;
 
 	//上に重なっている噛みの数
-	int overlap;
+	int Overlap;
 
 	//本体からどれだけ離れているか(左右専用)
-	int bodydistance;
+	int BodyDistance;
 
 	//イージング
-	Easing ease;
+	Easing Ease;
 
 	//体の色
-	int bodycolor = WHITE;
+	int BodyColor = WHITE;
+
+	//ゴールしたかどうか
+	bool IsGoal = false;
+
+	//画像ハンドル
+	int Bodyhandle = LoadGraph("Resources/Body.png");
 };
