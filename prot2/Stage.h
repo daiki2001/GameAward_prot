@@ -31,15 +31,19 @@ public: //サブクラス
 		char stageNumber = 0;
 		char offsetX = 0;
 		char offsetY = 0;
-		std::vector<Vector3> leftUpPos = {};
-		std::vector<Vector3> rightDownPos = {};
+		std::vector<Vector3> drawLeftUp = {};
+		std::vector<Vector3> drawRightDown = {};
 		size_t size = 1;
 		unsigned char width = 1;
 		unsigned char height = 1;
 		unsigned char direction = 0;
-		bool isEase = false;
+		bool isFold = false;
+
+		Easing stageEase = {};
 		std::vector<Vector3> startPos = {};
 		std::vector<Vector3> endPos = {};
+		std::vector<Vector3> easePos = {};
+
 		bool isTop = true;
 	};
 	struct StageData
@@ -120,6 +124,11 @@ private:
 	int Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData);
 	// ステージを開く
 	int Open(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& moveStageTile, const size_t& moveStageData);
+
+	// イージングの初期化
+	void EaseingInit(const size_t& onPlayerStage, const size_t& moveStageData, const int& direction);
+	// イージングの更新
+	void EaseingUpdate();
 	// 一番上のステージタイルを探す
 	int SearchTopStageTile();
 
@@ -127,5 +136,5 @@ private: //メンバ変数
 	std::vector<StageData> stageData;
 	std::vector<StageData> initStageData;
 
-	Easing stageEase;
+	bool isEase = false;
 };

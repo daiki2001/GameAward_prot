@@ -65,7 +65,7 @@ void DrawShape::DrawPlane(const Vector3& pos1, const Vector3& pos2, const unsign
 		rectVertex[i].dif = GetColorU8(r, g, b, 0xFF);
 	}
 
-	DrawPolygonIndexed3D(rectVertex, 4, rectIndex, 2, DX_NONE_GRAPH, false);
+	DxLib::DrawPolygonIndexed3D(rectVertex, 4, rectIndex, 2, DX_NONE_GRAPH, false);
 }
 
 void DrawShape::DrawPlane(const Vector3& pos1, const Vector3& pos2, const COLOR_U8& color)
@@ -85,5 +85,5 @@ void DrawShape::DrawPlane(const Vector3& pos1, const Vector3& pos2, const COLOR_
 		rectVertex[i].dif = color;
 	}
 
-	DrawPolygonIndexed3D(rectVertex, 4, rectIndex, 2, DX_NONE_GRAPH, true);
+	DxLib::DrawPolygonIndexed3D(rectVertex, 4, rectIndex, 2, DX_NONE_GRAPH, true);
 }

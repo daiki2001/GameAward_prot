@@ -65,9 +65,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
-		stage->Updata();
-		player->Update(*stage);
-
 		if (Input::isKey(KEY_INPUT_1))
 		{
 			stage->LoadStage("./Resources/stage1.csv", playerTile);
@@ -93,10 +90,14 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Init();
 			player->bodysetup(playerTile);
 		}
+
 		if (InputManger::SubUpTrigger() || InputManger::SubDownTrigger() || InputManger::SubLeftTrigger() || InputManger::SubRightTrigger())
 		{
 			stage->FoldAndOpen(player->center_position, playerTile);
 		}
+
+		stage->Updata();
+		player->Update(*stage);
 
 		// 描画処理
 		stage->Draw(drawOffsetX, drawOffsetY);
