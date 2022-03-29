@@ -875,6 +875,7 @@ void Stage::Reset()
 
 			stageData[i].stageTileData[j].stageEase.isMove = false;
 			stageData[i].stageTileData[j].stageEase.timerate = 0.0f;
+			stageData[i].stageTileData[j].isFold = false;
 		}
 	}
 }

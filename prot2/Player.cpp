@@ -609,9 +609,6 @@ void Player::Draw(int offsetX, int offsetY)
 
 	}
 
-	DrawLine(0, static_cast<int>(FloorHeight) + offsetY, 1280, static_cast<int>(FloorHeight) + offsetY, WHITE, true);
-	DrawLine(0, 360, 1280, 360, RED, true);
-
 #pragma region UI
 	DrawFormatString(0, 0, WHITE, "AD:¶‰EˆÚ“®");
 	DrawFormatString(0, 20, WHITE, "W:ƒWƒƒƒ“ƒv");
