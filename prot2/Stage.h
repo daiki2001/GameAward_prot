@@ -124,6 +124,8 @@ public: //メンバ関数
 	int GetStageTileOffsetX(int i, int j);
 	// ステージタイルのY軸のオフセットを返す
 	int GetStageTileOffsetY(int i, int j);
+	//任意の方向に特定のマップチップがあるかどうか
+	bool IsNeighberMapchip(int i, int j, int MapchipPos, MapchipData mapchipData);
 
 private:
 	// ステージを折る
