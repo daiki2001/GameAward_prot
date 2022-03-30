@@ -521,41 +521,36 @@ void PlayerBody::setslide(int slidepat, int move_dis)
 
 void PlayerBody::IsHitBody(Stage& stage, Vector3& center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide)
 {
-	//上下左右(プレイヤーの顔)
-	int left_mapchip = ((int)((center.x - 30) - stage.offset.x) / 60) % 5;
-	int up_mapchip = ((int)((center.y - 30) - stage.offset.y) / 60) % 5;
-	int right_mapchip = ((int)((center.x + 30) - stage.offset.x) / 60) % 5;
-	int down_mapchip = ((int)((center.y + 30) - stage.offset.y) / 60) % 5;
-
 	//体の四辺
 	float BodyLeft;
 	float BodyRight;
 	float BodyUp;
 	float BodyDown;
 
+	//StartPosとEndPosの位置関係によって上下左右の設定を変える
 	if (BodyStartPos.x < BodyEndPos.x)
 	{
-		BodyLeft = BodyStartPos.x;
-		BodyRight = BodyEndPos.x;
+		BodyLeft = BodyStartPos.x + 1.0f;
+		BodyRight = BodyEndPos.x - 1.0f;
 	}
 	else
 	{
-		BodyLeft = BodyEndPos.x;
-		BodyRight = BodyStartPos.x;
+		BodyLeft = BodyEndPos.x + 1.0f;
+		BodyRight = BodyStartPos.x - 1.0f;
 	}
 
 	if (BodyStartPos.y < BodyEndPos.y)
 	{
-		BodyUp = BodyStartPos.y;
-		BodyDown = BodyEndPos.y;
+		BodyUp = BodyStartPos.y + 1.0f;
+		BodyDown = BodyEndPos.y - 1.0f;
 	}
 	else
 	{
-		BodyUp = BodyEndPos.y;
-		BodyDown = BodyStartPos.y;
+		BodyUp = BodyEndPos.y + 1.0f;
+		BodyDown = BodyStartPos.y - 1.0f;
 	}
 
-	//Bodyの四隅をブロックサイズで割った数
+	//四辺をブロックサイズで割った数
 	int BodyLeft_mapchip = (int)(BodyLeft - stage.offset.x) / 60;
 	int BodyUp_mapchip = (int)(BodyUp - stage.offset.y) / 60;
 	int BodyRight_mapchip = (int)(BodyRight - stage.offset.x) / 60;
@@ -695,36 +690,6 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, float& FallSpeed, bool
 				else
 				{
 					//isfall = true;
-				}
-			}
-		}
-	}
-
-	for (i = 0; i < stage.GetStageDataSize(); i++)
-	{
-		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
-		{
-			if (stage.GetPositionTile(center, i, j))
-			{
-				mapchipPos = up_mapchip * stage.GetStageTileWidth(i, j) + (left_mapchip);
-				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::GOAL)
-				{
-					IsGoal = true;
-				}
-				mapchipPos = up_mapchip * stage.GetStageTileWidth(i, j) + (right_mapchip);
-				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::GOAL)
-				{
-					IsGoal = true;
-				}
-				mapchipPos = down_mapchip * stage.GetStageTileWidth(i, j) + (left_mapchip);
-				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::GOAL)
-				{
-					IsGoal = true;
-				}
-				mapchipPos = down_mapchip * stage.GetStageTileWidth(i, j) + (right_mapchip);
-				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::GOAL)
-				{
-					IsGoal = true;
 				}
 			}
 		}

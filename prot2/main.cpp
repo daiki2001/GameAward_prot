@@ -66,7 +66,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			stage->LoadStage("./Resources/stage1.csv", playerTile);
 			player->Init();
-			player->bodysetup(false, left, true, down, true, right);
+			player->bodysetup(false, left, true, up, true, right);
 		}
 		if (Input::isKey(KEY_INPUT_2))
 		{

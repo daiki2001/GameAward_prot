@@ -4,10 +4,19 @@
 
 class Foot
 {
-	Vector3 Position;
+public:
+	Vector3 FootCenterPosition;
 	Easing ease;
 
-	bool IsAction = false;
+	bool FootIsAction = false;
+
+	//画像ハンドル
+	int Foothandle;
+
+	void Init();
+	void Set();
+	void Update(Vector3& FaceCenterPos);
+	void Draw();
 };
 
 class Player final
@@ -54,6 +63,12 @@ public: //メンバ変数
 	//body_twoを優先的に開くか
 	bool IsOpenTwo = true;
 
+	//どの方向を折ったか(4方向)
+	bool IsLeftFold;
+	bool IsUpFold;
+	bool IsRightFold;
+	bool IsDownFold;
+
 	//ジャンプ
 	bool IsJump = false;
 	float JumpSpeed = 3.0f;
@@ -67,10 +82,11 @@ public: //メンバ変数
 	bool Player_IsAction = false;
 	//画像ハンドル(顔)
 	int FaceHandle[2];
-	//画像ハンドル
-	int Foothandle;
 
 	bool IsGoal = false;
 
 	bool IsColide = false;
+
+	//足
+	Foot PlayerFoot;
 };

@@ -52,7 +52,8 @@ void Player::Init()
 
 	FaceHandle[0] = LoadGraph("Resources/face.png");
 	FaceHandle[1] = LoadGraph("Resources/face_fold.png");
-	Foothandle = LoadGraph("Resources/Foot.png");
+
+	PlayerFoot.Init();
 }
 
 void Player::Update(Stage& stage)
@@ -519,6 +520,13 @@ void Player::Update(Stage& stage)
 		}
 	}
 
+	//足のイージング
+	if (Input::isKeyTrigger(KEY_INPUT_F) && PlayerFoot.FootIsAction == false)
+	{
+		PlayerFoot.Set();
+	}
+	PlayerFoot.Update(CenterPosition);
+
 	if (Body_One.IsActivate == true)
 	{
 		Body_One.IsHitBody(stage, CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
@@ -539,7 +547,7 @@ void Player::Update(Stage& stage)
 	{
 		Player_IsAction = true;
 	}
-	else if (IsColide == true && FallSpeed < 0 || (IsColide == true && (InputManger::Right() || InputManger::Left())))
+	else if (IsColide == true && (InputManger::Right() || InputManger::Left()))
 	{
 		Player_IsAction = true;
 	}
@@ -563,6 +571,7 @@ void Player::Draw(int offsetX, int offsetY)
 	if (Body_One.IsSlide == false && Body_Two.IsSlide == false && Body_Three.IsSlide == false)
 	{
 		//DrawBox(CenterPosition.x - 30 + offsetX, CenterPosition.y - 30 + offsetY, CenterPosition.x + 30 + offsetX, CenterPosition.y + 30 + offsetY, GetColor(255, 0, 0), true);
+		PlayerFoot.Draw();
 		DrawExtendGraph(CenterPosition.x - 30, CenterPosition.y - 30, CenterPosition.x + 30, CenterPosition.y + 30, FaceHandle[Player_IsAction], true);
 	}
 
@@ -632,7 +641,7 @@ void Player::Draw(int offsetX, int offsetY)
 	DrawFormatString(0, 40, WHITE, "←↑→:折る・開く");
 	DrawFormatString(0, 60, WHITE, "SPACE:開く");
 	DrawFormatString(0, 120, WHITE, "%f", CenterPosition.y);
-	DrawFormatString(0, 140, WHITE, "%f", Body_Two.BodyEndPos.y);
+	DrawFormatString(0, 140, WHITE, "%f", Body_Three.BodyEndPos.y);
 	DrawFormatString(0, 160, WHITE, "%f", (Body_Two.BodyStartPos.y / 60) * 60.0f);
 	DrawFormatString(0, 180, WHITE, "fall:%d", IsFall);
 	DrawFormatString(0, 200, WHITE, "jump:%d", IsJump);
@@ -809,6 +818,32 @@ void Player::IsHitPlayerBody(Stage& stage)
 					IsFall = true;
 				}
 			}
+
+
+			//ゴール判定
+			if (stage.GetPositionTile(CenterPosition, i, j))
+			{
+				MapchipPos = up_mapchip * stage.GetStageTileWidth(i, j) + (left_mapchip);
+				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::GOAL)
+				{
+					IsGoal = true;
+				}
+				MapchipPos = up_mapchip * stage.GetStageTileWidth(i, j) + (right_mapchip);
+				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::GOAL)
+				{
+					IsGoal = true;
+				}
+				MapchipPos = down_mapchip * stage.GetStageTileWidth(i, j) + (left_mapchip);
+				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::GOAL)
+				{
+					IsGoal = true;
+				}
+				MapchipPos = down_mapchip * stage.GetStageTileWidth(i, j) + (right_mapchip);
+				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::GOAL)
+				{
+					IsGoal = true;
+				}
+			}
 		}
 	}
 
@@ -865,4 +900,41 @@ void Player::ExtrudePlayer(Vector3 ExtrudePos, float ExtrudeDis, bodytype Extrud
 	default:
 		break;
 	}
+}
+
+void Foot::Init()
+{
+	Foothandle = LoadGraph("Resources/Foot.png");
+}
+
+void Foot::Set()
+{
+	ease.addtime = 0.1f;
+	ease.maxtime = 1.2f;
+	ease.timerate = 0.0f;
+	FootIsAction = true;
+}
+
+void Foot::Update(Vector3& FaceCenterPos)
+{
+	if (FootIsAction == true)
+	{
+		ease.addtime += ease.maxtime / 20.0f;
+		ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
+
+		FootCenterPosition = { FaceCenterPos.x,ease.easeout(FaceCenterPos.y,FaceCenterPos.y - 10,ease.timerate),0.0f };
+		if (ease.timerate >= 1.0f)
+		{
+			FootIsAction = false;
+		}
+	}
+	else
+	{
+		FootCenterPosition = FaceCenterPos;
+	}
+}
+
+void Foot::Draw()
+{
+	DrawExtendGraph(FootCenterPosition.x - 30, FootCenterPosition.y - 30, FootCenterPosition.x + 30, FootCenterPosition.y + 30, Foothandle, true);
 }
