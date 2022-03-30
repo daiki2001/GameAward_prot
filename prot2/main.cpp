@@ -49,7 +49,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	unsigned char playerTile[4] = { 0 };
 
 	Stage* stage = Stage::Get();
-	stage->LoadStage("./Resources/stage1.csv", playerTile);
+	stage->LoadStage("./Resources/stage2.csv", playerTile);
 	player->Init();
 	player->bodysetup(playerTile);
 
@@ -102,10 +102,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 描画処理
 		stage->Draw(drawOffsetX, drawOffsetY);
 		player->Draw(drawOffsetX, drawOffsetY);
-
-		DrawFormatString(0, 100, WHITE, "%d\n%d", ((int)player->CenterPosition.x / 60), ((int)player->CenterPosition.y / 60));
-		DrawFormatString(0, 150, WHITE, "%f\n%f", player->CenterPosition.x, player->CenterPosition.y);
-		DrawFormatString(0, 190, WHITE, "%ff", player->FallSpeed);
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

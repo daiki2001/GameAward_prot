@@ -16,6 +16,9 @@
     <Filter Include="リソース ファイル\ステージ">
       <UniqueIdentifier>{ee78ace4-0470-423e-a192-81f5ffa2ee9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="プレイヤー">
+      <UniqueIdentifier>{92c688da-bbab-48a4-b496-36fae22c7f8a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -30,16 +33,10 @@
     <ClCompile Include="Stage.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Vector3.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="InputManger.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerBody.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Easing.cpp">
@@ -57,6 +54,15 @@
     <ClCompile Include="BaseBlock.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>プレイヤー</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBody.cpp">
+      <Filter>プレイヤー</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerFoot.cpp">
+      <Filter>プレイヤー</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Input.h">
@@ -71,9 +77,6 @@
     <ClInclude Include="Colors.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Vector3.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -81,9 +84,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="InputManger.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerBody.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Easing.h">
@@ -106,6 +106,15 @@
     </ClInclude>
     <ClInclude Include="BaseBlock.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>プレイヤー</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBody.h">
+      <Filter>プレイヤー</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerFoot.h">
+      <Filter>プレイヤー</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

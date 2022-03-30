@@ -44,7 +44,7 @@ public: //メンバ関数
 	/// <param name="stage">ステージデータ</param>
 	/// <param name="center">プレイヤーの中心</param>
 	/// <returns></returns>
-	void IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall, bool& isjump, bool& iscolide);
+	void IsHitBody(Stage& stage, Vector3& center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide);
 
 	/// <summary>
 	/// 押し出し処理

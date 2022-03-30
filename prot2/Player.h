@@ -1,16 +1,7 @@
 #pragma once
 #include "PlayerBody.h"
+#include "PlayerFoot.h"
 #include "Vector3.h"
-
-class Foot
-{
-	Vector3 Position;
-	Easing ease;
-
-	bool IsAction = false;
-
-	int FootHandle;
-};
 
 class Player final
 {
@@ -57,11 +48,20 @@ public: //メンバ変数
 	//body_twoを優先的に開くか
 	bool IsOpenTwo;
 
+	//どの方向を折ったか(4方向)
+	bool IsLeftFold;
+	bool IsUpFold;
+	bool IsRightFold;
+	bool IsDownFold;
+
 	//ジャンプ
 	bool IsJump;
 	float JumpSpeed;
 	float FallSpeed;
 	bool IsFall;
+
+	//落下中・ジャンプ中にジャンプ入力が入っているかどうか
+	bool IsInputjump = false;
 
 	//どれか一つでも体動かしていたらtrue
 	bool Player_IsAction;
@@ -71,4 +71,7 @@ public: //メンバ変数
 	bool IsGoal;
 
 	bool IsColide;
+
+	//足
+	PlayerFoot playerFoot;
 };
