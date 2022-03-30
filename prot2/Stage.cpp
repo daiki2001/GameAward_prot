@@ -711,7 +711,7 @@ bool Stage::GetPositionTile(Vector3 center, int i, int j)
 	float right = left + blockSize * (float)stageData[i].stageTileData[j].width;
 	float down = up + blockSize * (float)stageData[i].stageTileData[j].height;
 
-	if (center.x >= left && center.x <= right && center.y >= up && center.y <= down)
+	if (center.x >= left && center.x < right && center.y >= up && center.y < down)
 	{
 		return true;
 	}

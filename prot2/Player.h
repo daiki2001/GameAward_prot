@@ -8,8 +8,6 @@ class Foot
 	Easing ease;
 
 	bool IsAction = false;
-
-	int FootHandle;
 };
 
 class Player final
@@ -62,10 +60,15 @@ public: //メンバ変数
 	float FallSpeed = 3.0f;
 	bool IsFall = false;
 
+	//落下中・ジャンプ中にジャンプ入力が入っているかどうか
+	bool IsInputjump = false;
+
 	//どれか一つでも体動かしていたらtrue
 	bool Player_IsAction = false;
 	//画像ハンドル(顔)
 	int FaceHandle[2];
+	//画像ハンドル
+	int Foothandle;
 
 	bool IsGoal = false;
 

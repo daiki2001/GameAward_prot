@@ -204,7 +204,7 @@ void PlayerBody::Update(Vector3& center)
 			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30 ,0.0f };
 		}
 	}
-	//折るとき
+	//折っている途中
 	if (IsFold == true && IsOpen == false && IsAction == true && IsSlide == false)
 	{
 		Ease.addtime += Ease.maxtime / 25.0f;
@@ -519,7 +519,7 @@ void PlayerBody::setslide(int slidepat, int move_dis)
 	SlideDis = move_dis;
 }
 
-void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, PlayerBody& body_two, bool& isfall, bool& isjump, bool& iscolide)
+void PlayerBody::IsHitBody(Stage& stage, Vector3& center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide)
 {
 	//上下左右(プレイヤーの顔)
 	int left_mapchip = ((int)((center.x - 30) - stage.offset.x) / 60) % 5;
@@ -527,17 +527,45 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 	int right_mapchip = ((int)((center.x + 30) - stage.offset.x) / 60) % 5;
 	int down_mapchip = ((int)((center.y + 30) - stage.offset.y) / 60) % 5;
 
-	//BodyのStartPos・EndPosのマップチップ座標
-	int BodyStartX_mapchip = (int)((BodyCenterPos.x - 30) - stage.offset.x) / 60;
-	int BodyStartY_mapchip = (int)((BodyCenterPos.y - 30) - stage.offset.y) / 60;
-	int BodyEndX_mapchip = (int)((BodyCenterPos.x + 30) - stage.offset.x) / 60;
-	int BodyEndY_mapchip = (int)((BodyCenterPos.y + 30) - stage.offset.y) / 60;
+	//体の四辺
+	float BodyLeft;
+	float BodyRight;
+	float BodyUp;
+	float BodyDown;
+
+	if (BodyStartPos.x < BodyEndPos.x)
+	{
+		BodyLeft = BodyStartPos.x;
+		BodyRight = BodyEndPos.x;
+	}
+	else
+	{
+		BodyLeft = BodyEndPos.x;
+		BodyRight = BodyStartPos.x;
+	}
+
+	if (BodyStartPos.y < BodyEndPos.y)
+	{
+		BodyUp = BodyStartPos.y;
+		BodyDown = BodyEndPos.y;
+	}
+	else
+	{
+		BodyUp = BodyEndPos.y;
+		BodyDown = BodyStartPos.y;
+	}
+
+	//Bodyの四隅をブロックサイズで割った数
+	int BodyLeft_mapchip = (int)(BodyLeft - stage.offset.x) / 60;
+	int BodyUp_mapchip = (int)(BodyUp - stage.offset.y) / 60;
+	int BodyRight_mapchip = (int)(BodyRight - stage.offset.x) / 60;
+	int BodyDown_mapchip = (int)(BodyDown - stage.offset.y) / 60;
 
 	//タイル内のマップチップ座標
-	int BodyStartX_mapchip_tile;
-	int BodyStartY_mapchip_tile;
-	int BodyEndX_mapchip_tile;
-	int BodyEndY_mapchip_tile;
+	int BodyLeft_mapchip_tile;
+	int BodyUp_mapchip_tile;
+	int BodyRight_mapchip_tile;
+	int BodyDown_mapchip_tile;
 
 	//押し出す方向を決めるための距離
 	float BuriedX = 0;
@@ -567,98 +595,106 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3& center, PlayerBody& body_one, 
 		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
 		{
 			//左上
-			if (stage.GetPositionTile({ BodyCenterPos.x - 30,BodyCenterPos.y - 30,0.0f }, i, j))
+			if (stage.GetPositionTile({ BodyLeft,BodyUp,0.0f }, i, j))
 			{
-				BodyStartX_mapchip_tile = BodyStartX_mapchip % stage.GetStageTileWidth(i, j);
-				BodyStartY_mapchip_tile = BodyStartY_mapchip % stage.GetStageTileHeight(i, j);
+				BodyLeft_mapchip_tile = BodyLeft_mapchip % stage.GetStageTileWidth(i, j);
+				BodyUp_mapchip_tile = BodyUp_mapchip % stage.GetStageTileHeight(i, j);
 
 				//今いる座標のマップチップを確認
-				mapchipPos = BodyStartY_mapchip_tile * stage.GetStageTileWidth(i, j) + BodyStartX_mapchip_tile;
+				mapchipPos = BodyUp_mapchip_tile * stage.GetStageTileWidth(i, j) + BodyLeft_mapchip_tile;
 				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = (BodyStartX_mapchip * 60) - (BodyCenterPos.x - 30);
-					BuriedY = (BodyStartY_mapchip * 60) - (BodyCenterPos.y - 30);
+					BuriedX = (BodyLeft_mapchip * 60) - BodyLeft;
+					BuriedY = (BodyUp_mapchip * 60) - BodyUp;
 
-					if (BuriedX > BuriedY)
+					if (BuriedX >= BuriedY)
 					{
-						Extrude(center, { center.x,60 + (BodyStartY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - (BodyCenterPos.y - 30), up, isfall, isjump, iscolide);
+						Extrude(center, { center.x,60 + (BodyUp_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - BodyUp, up, isfall, isjump, iscolide);
+						FallSpeed = 0.0f;
 					}
 					else
 					{
-						Extrude(center, { 60 + (BodyStartX_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, center.x - (BodyCenterPos.x - 30), left, isfall, isjump, iscolide);
+						Extrude(center, { 60 + (BodyLeft_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, center.x - BodyLeft, left, isfall, isjump, iscolide);
 					}
 				}
 			}
 			//左下
-			if (stage.GetPositionTile({ BodyCenterPos.x - 30,BodyCenterPos.y + 30,0.0f }, i, j))
+			if (stage.GetPositionTile({ BodyLeft,BodyDown,0.0f }, i, j))
 			{
-				BodyStartX_mapchip_tile = BodyStartX_mapchip % stage.GetStageTileWidth(i, j);
-				BodyEndY_mapchip_tile = BodyEndY_mapchip % stage.GetStageTileHeight(i, j);
+				BodyLeft_mapchip_tile = BodyLeft_mapchip % stage.GetStageTileWidth(i, j);
+				BodyDown_mapchip_tile = BodyDown_mapchip % stage.GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyEndY_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyStartX_mapchip_tile);
+				mapchipPos = (BodyDown_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyLeft_mapchip_tile);
 				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = (BodyStartX_mapchip * 60) - (BodyCenterPos.x - 30);
-					BuriedY = ((BodyCenterPos.y + 30) - 60) - (BodyEndY_mapchip * 60);
+					BuriedX = (BodyLeft_mapchip * 60) - BodyLeft;
+					BuriedY = (BodyDown - 60) - (BodyDown_mapchip * 60);
 
-					if (BuriedX > BuriedY)
+					if (BuriedX >= BuriedY)
 					{
-						Extrude(center, { center.x,(BodyEndY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (BodyCenterPos.y + 30) - center.y, down, isfall, isjump, iscolide);
+						Extrude(center, { center.x,(BodyDown_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, BodyDown - center.y, down, isfall, isjump, iscolide);
 						isfall = false;
-						isjump = false;
 					}
 					else
 					{
-						Extrude(center, { 60 + (BodyStartX_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, center.x - (BodyCenterPos.x - 30), left, isfall, isjump, iscolide);
+						Extrude(center, { 60 + (BodyLeft_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, center.x - BodyLeft, left, isfall, isjump, iscolide);
 						isfall = true;
 					}
 				}
+				else
+				{
+					//isfall = true;
+				}
 			}
 			//右上
-			if (stage.GetPositionTile({ BodyCenterPos.x + 30,BodyCenterPos.y - 30,0.0f }, i, j))
+			if (stage.GetPositionTile({ BodyRight,BodyUp,0.0f }, i, j))
 			{
-				BodyEndX_mapchip_tile = BodyEndX_mapchip % stage.GetStageTileWidth(i, j);
-				BodyStartY_mapchip_tile = BodyStartY_mapchip % stage.GetStageTileHeight(i, j);
+				BodyRight_mapchip_tile = BodyRight_mapchip % stage.GetStageTileWidth(i, j);
+				BodyUp_mapchip_tile = BodyUp_mapchip % stage.GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyStartY_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyEndX_mapchip_tile);
+				mapchipPos = (BodyUp_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyRight_mapchip_tile);
 				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = ((BodyCenterPos.x + 30) - 60) - (BodyEndX_mapchip * 60);
-					BuriedY = (BodyStartY_mapchip * 60) - (BodyCenterPos.y - 30);
+					BuriedX = (BodyRight - 60) - (BodyRight_mapchip * 60);
+					BuriedY = (BodyUp_mapchip * 60) - BodyUp;
 
-					if (BuriedX > BuriedY)
+					if (BuriedX >= BuriedY)
 					{
-						Extrude(center, { center.x,60 + (BodyStartY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - (BodyCenterPos.y - 30), up, isfall, isjump, iscolide);
+						Extrude(center, { center.x,60 + (BodyUp_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, center.y - BodyUp, up, isfall, isjump, iscolide);
+						FallSpeed = 0.0f;
 					}
 					else
 					{
-						Extrude(center, { (BodyEndX_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, (BodyCenterPos.x + 30) - center.x, right, isfall, isjump, iscolide);
+						Extrude(center, { (BodyRight_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, BodyRight - center.x, right, isfall, isjump, iscolide);
 					}
 				}
 			}
 			//右下
-			if (stage.GetPositionTile({ BodyCenterPos.x + 30,BodyCenterPos.y + 30,0.0f }, i, j))
+			if (stage.GetPositionTile({ BodyRight,BodyDown,0.0f }, i, j))
 			{
-				BodyEndX_mapchip_tile = BodyEndX_mapchip % stage.GetStageTileWidth(i, j);
-				BodyEndY_mapchip_tile = BodyEndY_mapchip % stage.GetStageTileHeight(i, j);
+				BodyRight_mapchip_tile = BodyRight_mapchip % stage.GetStageTileWidth(i, j);
+				BodyDown_mapchip_tile = BodyDown_mapchip % stage.GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyEndY_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyEndX_mapchip_tile);
+				mapchipPos = (BodyDown_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyRight_mapchip_tile);
 				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = ((BodyCenterPos.x + 30) - 60) - (BodyEndX_mapchip * 60);
-					BuriedY = ((BodyCenterPos.y + 30) - 60) - (BodyEndY_mapchip * 60);
+					BuriedX = (BodyRight - 60) - (BodyRight_mapchip * 60);
+					BuriedY = (BodyDown - 60) - (BodyDown_mapchip * 60);
 
-					if (BuriedX > BuriedY)
+					if (BuriedX >= BuriedY)
 					{
-						Extrude(center, { center.x,(BodyEndY_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (BodyCenterPos.y + 30) - center.y, down, isfall, isjump, iscolide);
+						Extrude(center, { center.x,(BodyDown_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, BodyDown - center.y, down, isfall, isjump, iscolide);
 						isfall = false;
-						isjump = false;
 					}
 					else
 					{
-						Extrude(center, { (BodyEndX_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, (BodyCenterPos.x + 30) - center.x, right, isfall, isjump, iscolide);
+						Extrude(center, { (BodyRight_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center.y,0.0f }, BodyRight - center.x, right, isfall, isjump, iscolide);
 						isfall = true;
 					}
+				}
+				else
+				{
+					//isfall = true;
 				}
 			}
 		}
