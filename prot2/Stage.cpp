@@ -691,11 +691,13 @@ size_t Stage::GetStageTileDataSize(int i)
 
 char Stage::GetStageTileHeight(int i, int j)
 {
+	//ステージタイルの高さを返す
 	return stageData[i].stageTileData[j].height;
 }
 
 char Stage::GetStageTileWidth(int i, int j)
 {
+	//ステージタイルの幅を返す
 	return stageData[i].stageTileData[j].width;
 }
 

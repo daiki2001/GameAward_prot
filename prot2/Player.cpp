@@ -35,7 +35,7 @@ void Player::Init()
 
 	//for (i = 0; i < sizeof(tile) / sizeof(tile[0]); i++) tile[i] = 0;
 
-	FallSpeed = 0.0f;
+	FallSpeed = 5.0f;
 	IsFall = true;
 	IsJump = false;
 	Player_IsAction = false;
@@ -61,11 +61,11 @@ void Player::Update(Stage& stage)
 	//左右移動
 	if (InputManger::Right() && !InputManger::Act1())
 	{
-		CenterPosition.x += 2.0f;
+		CenterPosition.x += SideMoveSpeed;
 	}
 	if (InputManger::Left() && !InputManger::Act1())
 	{
-		CenterPosition.x -= 2.0f;
+		CenterPosition.x -= SideMoveSpeed;
 	}
 
 	//ジャンプ入力できるかどうか
@@ -79,16 +79,16 @@ void Player::Update(Stage& stage)
 	}
 
 	//ジャンプ
-	if (InputManger::UpTrigger() && !InputManger::Act1() && IsInputjump == true)
+	if (InputManger::Up() && !InputManger::Act1() /*&& IsInputjump == true*/)
 	{
-		//CenterPosition.y -= 2.0f;
-		IsJump = true;
+		CenterPosition.y -= FallSpeed;
+		//IsJump = true;
 		//IsFall = true;
-		FallSpeed = -9.0f;
+		//FallSpeed = -9.0f;
 	}
 	if (InputManger::Down() && !InputManger::Act1())
 	{
-		//CenterPosition.y += 2.0f;
+		CenterPosition.y += FallSpeed;
 	}
 
 	if (IsJump == true)
@@ -108,7 +108,7 @@ void Player::Update(Stage& stage)
 	//落下判定
 	if (IsFall == true)
 	{
-		CenterPosition.y += FallSpeed;
+		//CenterPosition.y += FallSpeed;
 
 		if (FallSpeed < 5.0)
 		{
@@ -525,44 +525,42 @@ void Player::Update(Stage& stage)
 	{
 		PlayerFoot.Set();
 	}
+
+	if (Body_One.Body_Type == down || Body_Two.Body_Type == down || Body_Three.Body_Type == down)
+	{
+		IsDownBody = true;
+	}
+	else
+	{
+		IsDownBody = false;
+	}
 	PlayerFoot.Update(CenterPosition);
 
 	if (Body_One.IsActivate == true)
 	{
-		Body_One.IsHitBody(stage, CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
+		Body_One.IsHitBody(stage, &CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
 		Body_One.Update(CenterPosition);
 	}
 	if (Body_Two.IsActivate == true)
 	{
-		Body_Two.IsHitBody(stage, CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
+		Body_Two.IsHitBody(stage, &CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
 		Body_Two.Update(CenterPosition);
 	}
 	if (Body_Three.IsActivate == true)
 	{
-		Body_Three.IsHitBody(stage, CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
+		Body_Three.IsHitBody(stage, &CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
 		Body_Three.Update(CenterPosition);
 	}
 
-	if (Body_One.IsAction == true || Body_Two.IsAction == true || Body_Three.IsAction == true)
-	{
-		Player_IsAction = true;
-	}
-	else if (IsColide == true && (InputManger::Right() || InputManger::Left()))
+	if (Body_One.IsAction == true || Body_Two.IsAction == true || Body_Three.IsAction == true ||
+		(IsColide == true && (InputManger::Right() || InputManger::Left())) ||
+		PlayerFoot.FootIsAction == true)
 	{
 		Player_IsAction = true;
 	}
 	else
 	{
 		Player_IsAction = false;
-	}
-
-	if (Body_One.IsGoal == true || Body_Two.IsGoal == true || Body_Three.IsGoal == true)
-	{
-		IsGoal = true;
-	}
-	else
-	{
-		IsGoal = false;
 	}
 }
 
@@ -641,8 +639,8 @@ void Player::Draw(int offsetX, int offsetY)
 	DrawFormatString(0, 40, WHITE, "←↑→:折る・開く");
 	DrawFormatString(0, 60, WHITE, "SPACE:開く");
 	DrawFormatString(0, 120, WHITE, "%f", CenterPosition.y);
-	DrawFormatString(0, 140, WHITE, "%f", Body_Three.BodyEndPos.y);
-	DrawFormatString(0, 160, WHITE, "%f", (Body_Two.BodyStartPos.y / 60) * 60.0f);
+	DrawFormatString(0, 140, WHITE, "%f", Body_Three.BodyStartPos.x);
+	DrawFormatString(0, 160, WHITE, "%f", Body_Two.BodyEndPos.y);
 	DrawFormatString(0, 180, WHITE, "fall:%d", IsFall);
 	DrawFormatString(0, 200, WHITE, "jump:%d", IsJump);
 	DrawFormatString(0, 220, WHITE, "%f", FallSpeed);
@@ -703,8 +701,11 @@ void Player::IsHitPlayerBody(Stage& stage)
 	int up_mapchip_tile;
 	int right_mapchip_tile;
 	int down_mapchip_tile;
-
+	//マップチップの場所(共通)
 	int MapchipPos = 0;
+
+	//マップチップの場所(ゴール用)
+	int MapchipPos_Goal[3];
 
 	//押し出す方向を決めるための距離
 	float BuriedX = 0;
@@ -724,7 +725,7 @@ void Player::IsHitPlayerBody(Stage& stage)
 				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (left_mapchip * 60) - (CenterPosition.x - 30);
-					BuriedY = (up_mapchip_tile * 60) - (CenterPosition.y - 30);
+					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
 
 					if (BuriedX >= BuriedY)
 					{
@@ -761,7 +762,7 @@ void Player::IsHitPlayerBody(Stage& stage)
 						IsFall = true;
 					}
 				}
-				else
+				else if (IsDownBody == false)
 				{
 					IsFall = true;
 				}
@@ -776,7 +777,7 @@ void Player::IsHitPlayerBody(Stage& stage)
 				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = ((CenterPosition.x + 30) - 60) - (right_mapchip * 60);
-					BuriedY = (up_mapchip_tile * 60) - (CenterPosition.y - 30);
+					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
 
 					if (BuriedX >= BuriedY)
 					{
@@ -813,35 +814,48 @@ void Player::IsHitPlayerBody(Stage& stage)
 						IsFall = true;
 					}
 				}
-				else
+				else if (IsDownBody == false)
 				{
 					IsFall = true;
 				}
 			}
 
-
 			//ゴール判定
 			if (stage.GetPositionTile(CenterPosition, i, j))
 			{
-				MapchipPos = up_mapchip * stage.GetStageTileWidth(i, j) + (left_mapchip);
+				left_mapchip_tile = left_mapchip % stage.GetStageTileWidth(i, j);
+				up_mapchip_tile = up_mapchip % stage.GetStageTileHeight(i, j);
+				right_mapchip_tile = right_mapchip % stage.GetStageTileWidth(i, j);
+				down_mapchip_tile = down_mapchip % stage.GetStageTileHeight(i, j);
+
+				//左上
+				MapchipPos = up_mapchip_tile * stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
+				MapchipPos_Goal[0] = up_mapchip_tile * stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
+				MapchipPos_Goal[1] = down_mapchip_tile * stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
+				MapchipPos_Goal[2] = down_mapchip_tile * stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
+
 				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}
-				MapchipPos = up_mapchip * stage.GetStageTileWidth(i, j) + (right_mapchip);
-				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::GOAL)
+				//右上
+				else if (stage.GetStageMapChip(i, j, MapchipPos_Goal[0]) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}
-				MapchipPos = down_mapchip * stage.GetStageTileWidth(i, j) + (left_mapchip);
-				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::GOAL)
+				//左下
+				else if (stage.GetStageMapChip(i, j, MapchipPos_Goal[1]) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}
-				MapchipPos = down_mapchip * stage.GetStageTileWidth(i, j) + (right_mapchip);
-				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::GOAL)
+				//右下
+				else if (stage.GetStageMapChip(i, j, MapchipPos_Goal[2]) == MapchipData::GOAL)
 				{
 					IsGoal = true;
+				}
+				else
+				{
+					IsGoal = false;
 				}
 			}
 		}
@@ -900,41 +914,4 @@ void Player::ExtrudePlayer(Vector3 ExtrudePos, float ExtrudeDis, bodytype Extrud
 	default:
 		break;
 	}
-}
-
-void Foot::Init()
-{
-	Foothandle = LoadGraph("Resources/Foot.png");
-}
-
-void Foot::Set()
-{
-	ease.addtime = 0.1f;
-	ease.maxtime = 1.2f;
-	ease.timerate = 0.0f;
-	FootIsAction = true;
-}
-
-void Foot::Update(Vector3& FaceCenterPos)
-{
-	if (FootIsAction == true)
-	{
-		ease.addtime += ease.maxtime / 20.0f;
-		ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
-
-		FootCenterPosition = { FaceCenterPos.x,ease.easeout(FaceCenterPos.y,FaceCenterPos.y - 10,ease.timerate),0.0f };
-		if (ease.timerate >= 1.0f)
-		{
-			FootIsAction = false;
-		}
-	}
-	else
-	{
-		FootCenterPosition = FaceCenterPos;
-	}
-}
-
-void Foot::Draw()
-{
-	DrawExtendGraph(FootCenterPosition.x - 30, FootCenterPosition.y - 30, FootCenterPosition.x + 30, FootCenterPosition.y + 30, Foothandle, true);
 }

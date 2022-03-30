@@ -1,23 +1,7 @@
 #pragma once
 #include "PlayerBody.h"
 #include "Vector3.h"
-
-class Foot
-{
-public:
-	Vector3 FootCenterPosition;
-	Easing ease;
-
-	bool FootIsAction = false;
-
-	//画像ハンドル
-	int Foothandle;
-
-	void Init();
-	void Set();
-	void Update(Vector3& FaceCenterPos);
-	void Draw();
-};
+#include"PlayerFoot.h"
 
 class Player final
 {
@@ -69,6 +53,9 @@ public: //メンバ変数
 	bool IsRightFold;
 	bool IsDownFold;
 
+	//移動速度
+	float SideMoveSpeed = 5.0f;
+
 	//ジャンプ
 	bool IsJump = false;
 	float JumpSpeed = 3.0f;
@@ -82,10 +69,13 @@ public: //メンバ変数
 	bool Player_IsAction = false;
 	//画像ハンドル(顔)
 	int FaceHandle[2];
-
+	//ゴールに触れているかどうか
 	bool IsGoal = false;
-
+	//ブロックに当たっているかどうか
 	bool IsColide = false;
+
+	//下に体があるかどうか
+	bool IsDownBody = false;
 
 	//足
 	Foot PlayerFoot;
