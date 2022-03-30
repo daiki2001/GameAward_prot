@@ -54,7 +54,7 @@ public: //メンバ変数
 	bool IsDownFold;
 
 	//移動速度
-	float SideMoveSpeed = 5.0f;
+	float SideMoveSpeed = 3.0f;
 
 	//ジャンプ
 	bool IsJump = false;

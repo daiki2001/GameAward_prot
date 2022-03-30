@@ -573,11 +573,10 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 	//マップチップの座標
 	int mapchipPos = 0;
 
-	//上下左右それぞれの当たり判定
-	bool IsHitLeft = false;
-	bool IsHitUp = false;
-	bool IsHitRight = false;
-	bool IsHitDown = false;
+	IsHitLeft = false;
+	IsHitUp = false;
+	IsHitRight = false;
+	IsHitDown = false;
 
 	if (center->x - 30 <= stage.offset.x || Body_Type == left && IsFold == true)
 	{
@@ -611,7 +610,8 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitUp == false)
 						{
-							Extrude(center, { center->x,60 + (BodyUp_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (center->y - BodyUp), up, isfall, isjump, iscolide);
+							//Extrude(center, { center->x,60 + (BodyUp_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (center->y - BodyUp), up, isfall, isjump, iscolide);
+							center->y = (BodyUp_mapchip + 1) * 60 + (center->y - BodyUp);
 							IsHitUp = true;
 						}
 						FallSpeed = 0.0f;
@@ -620,7 +620,8 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitLeft == false)
 						{
-							Extrude(center, { 60 + (BodyLeft_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center->y,0.0f }, (center->x - BodyLeft), left, isfall, isjump, iscolide);
+							//Extrude(center, { (BodyLeft_mapchip + 1) * 60.0f,center->y,0.0f }, (center->x - BodyLeft), left, isfall, isjump, iscolide);
+							center->x = (BodyLeft_mapchip + 1) * 60 + (center->x - BodyLeft);
 							IsHitLeft = true;
 						}
 					}
@@ -651,7 +652,8 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitLeft == false)
 						{
-							Extrude(center, { 60 + (BodyLeft_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center->y,0.0f }, (center->x - BodyLeft), left, isfall, isjump, iscolide);
+							//Extrude(center, { 60 + (BodyLeft_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center->y,0.0f }, (center->x - BodyLeft), left, isfall, isjump, iscolide);
+							center->x = (BodyLeft_mapchip + 1) * 60 + (center->x - BodyLeft);
 							IsHitLeft = true;
 						}
 						isfall = true;
@@ -678,7 +680,8 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitUp == false)
 						{
-							Extrude(center, { center->x,60 + (BodyUp_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (center->y - BodyUp), up, isfall, isjump, iscolide);
+							//Extrude(center, { center->x,60 + (BodyUp_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (center->y - BodyUp), up, isfall, isjump, iscolide);
+							center->y = (BodyUp_mapchip + 1) * 60 + (center->y - BodyUp);
 							IsHitUp = true;
 						}
 						FallSpeed = 0.0f;
@@ -741,10 +744,6 @@ void PlayerBody::Extrude(Vector3* center, Vector3 extrudepos, float extrudedis, 
 		if (center->x - extrudepos.x < extrudedis)
 		{
 			center->x = extrudepos.x + extrudedis;
-			if (InputManger::Left())
-			{
-				center->x = extrudepos.x + extrudedis;
-			}
 			iscolide = true;
 		}
 		else

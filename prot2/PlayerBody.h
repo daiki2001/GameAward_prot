@@ -87,6 +87,12 @@ public: //メンバ変数
 	//折る・開く・スライドをしている途中かどうか
 	bool IsAction;
 
+	//上下左右それぞれの当たり判定
+	bool IsHitLeft = false;
+	bool IsHitUp = false;
+	bool IsHitRight = false;
+	bool IsHitDown = false;
+
 	//スライドする距離
 	int SlideDis;
 
@@ -103,7 +109,7 @@ public: //メンバ変数
 	int BodyColor = WHITE;
 
 	//体の大きさ
-	float BodySize = 60.0f;
+	const float BodySize = 60.0f;
 
 	//画像ハンドル
 	int Bodyhandle = LoadGraph("Resources/Body.png");

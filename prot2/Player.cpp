@@ -35,7 +35,7 @@ void Player::Init()
 
 	//for (i = 0; i < sizeof(tile) / sizeof(tile[0]); i++) tile[i] = 0;
 
-	FallSpeed = 5.0f;
+	FallSpeed = 3.0f;
 	IsFall = true;
 	IsJump = false;
 	Player_IsAction = false;
@@ -79,16 +79,16 @@ void Player::Update(Stage& stage)
 	}
 
 	//ジャンプ
-	if (InputManger::Up() && !InputManger::Act1() /*&& IsInputjump == true*/)
+	if (InputManger::Up() && !InputManger::Act1() && IsInputjump == true)
 	{
-		CenterPosition.y -= FallSpeed;
-		//IsJump = true;
-		//IsFall = true;
-		//FallSpeed = -9.0f;
+		//CenterPosition.y -= FallSpeed;
+		IsJump = true;
+		IsFall = true;
+		FallSpeed = -9.0f;
 	}
 	if (InputManger::Down() && !InputManger::Act1())
 	{
-		CenterPosition.y += FallSpeed;
+		//CenterPosition.y += FallSpeed;
 	}
 
 	if (IsJump == true)
@@ -108,7 +108,7 @@ void Player::Update(Stage& stage)
 	//落下判定
 	if (IsFall == true)
 	{
-		//CenterPosition.y += FallSpeed;
+		CenterPosition.y += FallSpeed;
 
 		if (FallSpeed < 5.0)
 		{
@@ -638,9 +638,9 @@ void Player::Draw(int offsetX, int offsetY)
 	DrawFormatString(0, 20, WHITE, "W:ジャンプ");
 	DrawFormatString(0, 40, WHITE, "←↑→:折る・開く");
 	DrawFormatString(0, 60, WHITE, "SPACE:開く");
-	DrawFormatString(0, 120, WHITE, "%f", CenterPosition.y);
+	DrawFormatString(0, 120, WHITE, "%f", CenterPosition.x);
 	DrawFormatString(0, 140, WHITE, "%f", Body_Three.BodyStartPos.x);
-	DrawFormatString(0, 160, WHITE, "%f", Body_Two.BodyEndPos.y);
+	DrawFormatString(0, 160, WHITE, "%f", Body_Two.BodyEndPos.x - 30);
 	DrawFormatString(0, 180, WHITE, "fall:%d", IsFall);
 	DrawFormatString(0, 200, WHITE, "jump:%d", IsJump);
 	DrawFormatString(0, 220, WHITE, "%f", FallSpeed);
