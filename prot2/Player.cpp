@@ -79,7 +79,7 @@ void Player::Update(Stage& stage)
 	}
 
 	//ジャンプ
-	if (InputManger::Up() && !InputManger::Act1() && IsInputjump == true)
+	if (InputManger::UpTrigger() && !InputManger::Act1() && IsInputjump == true)
 	{
 		//CenterPosition.y -= FallSpeed;
 		IsJump = true;
@@ -693,8 +693,8 @@ void Player::IsHitPlayerBody(Stage& stage)
 	//上下左右(プレイヤーの顔)
 	int left_mapchip = (int)((CenterPosition.x - 30) - stage.offset.x) / 60;
 	int up_mapchip = (int)((CenterPosition.y - 30) - stage.offset.y) / 60;
-	int right_mapchip = (int)((CenterPosition.x + 30) - stage.offset.x) / 60;
-	int down_mapchip = (int)((CenterPosition.y + 30) - stage.offset.y) / 60;
+	int right_mapchip = (int)((CenterPosition.x + 29) - stage.offset.x) / 60;
+	int down_mapchip = (int)((CenterPosition.y + 29) - stage.offset.y) / 60;
 
 	//タイル内のマップチップ座標
 	int left_mapchip_tile;
@@ -730,7 +730,6 @@ void Player::IsHitPlayerBody(Stage& stage)
 					if (BuriedX >= BuriedY)
 					{
 						ExtrudePlayer({ CenterPosition.x,60 + (up_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, 30, up);
-						FallSpeed = 0.0f;
 					}
 					else
 					{
@@ -753,18 +752,17 @@ void Player::IsHitPlayerBody(Stage& stage)
 					if (BuriedX >= BuriedY)
 					{
 						ExtrudePlayer({ CenterPosition.x,(down_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, 30, down);
-						IsFall = false;
-						//FallSpeed = 0.0f;
+						IsFallLeft = false;
 					}
 					else
 					{
 						ExtrudePlayer({ 60 + (left_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,CenterPosition.y,0.0f }, 30, left);
-						IsFall = true;
+						IsFallLeft = true;
 					}
 				}
 				else if (IsDownBody == false)
 				{
-					IsFall = true;
+					IsFallLeft = true;
 				}
 			}
 			//右上
@@ -782,7 +780,6 @@ void Player::IsHitPlayerBody(Stage& stage)
 					if (BuriedX >= BuriedY)
 					{
 						ExtrudePlayer({ CenterPosition.x,(up_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, 30, up);
-						FallSpeed = 0.0f;
 					}
 					else
 					{
@@ -805,18 +802,17 @@ void Player::IsHitPlayerBody(Stage& stage)
 					if (BuriedX >= BuriedY)
 					{
 						ExtrudePlayer({ CenterPosition.x,(down_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, 30, down);
-						IsFall = false;
-						//FallSpeed = 0.0f;
+						IsFallRight = false;
 					}
 					else
 					{
 						ExtrudePlayer({ (right_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,CenterPosition.y,0.0f }, 30, right);
-						IsFall = true;
+						IsFallRight = true;
 					}
 				}
 				else if (IsDownBody == false)
 				{
-					IsFall = true;
+					IsFallRight = true;
 				}
 			}
 
@@ -859,6 +855,11 @@ void Player::IsHitPlayerBody(Stage& stage)
 				}
 			}
 		}
+	}
+
+	if (IsFallLeft == false || IsFallRight == false)
+	{
+		IsFall = false;
 	}
 
 }

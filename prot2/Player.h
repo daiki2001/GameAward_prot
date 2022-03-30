@@ -62,6 +62,10 @@ public: //メンバ変数
 	float FallSpeed = 3.0f;
 	bool IsFall = false;
 
+	//右下・左下の着地判定
+	bool IsFallLeft = false;
+	bool IsFallRight = false;
+
 	//落下中・ジャンプ中にジャンプ入力が入っているかどうか
 	bool IsInputjump = false;
 
