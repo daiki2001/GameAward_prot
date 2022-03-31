@@ -93,6 +93,9 @@ public: //メンバ変数
 	bool IsHitRight = false;
 	bool IsHitDown = false;
 
+	//body別落下判定
+	bool BodyIsFall = false;
+
 	//スライドする距離
 	int SlideDis;
 

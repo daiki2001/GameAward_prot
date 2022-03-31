@@ -60,7 +60,12 @@ public: //メンバ変数
 	bool IsJump = false;
 	float JumpSpeed = 3.0f;
 	float FallSpeed = 3.0f;
-	bool IsFall = false;
+
+	//落下判定(顔のみ
+	bool IsFaceFall;
+
+	//体と顔すべてを考慮した落下判定
+	bool IsAllFall = false;
 
 	//落下中・ジャンプ中にジャンプ入力が入っているかどうか
 	bool IsInputjump = false;

@@ -133,9 +133,9 @@ void PlayerBody::Update(Vector3& center)
 		}
 		if (Body_Type == down)
 		{
-			BodyStartPos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
+			BodyStartPos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
 			BodyEndPos.y = Ease.easeout(BodyStartPos.y - BodySize, BodyStartPos.y + BodySize, Ease.timerate);
-			BodyEndPos.x = BodyStartPos.x - BodySize;
+			BodyEndPos.x = BodyStartPos.x + BodySize;
 			if (Ease.timerate < 0.5)
 			{
 				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
@@ -643,7 +643,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitDown == false)
 						{
-							center->y = (BodyDown_mapchip * 60) - (BodyDown - center->y);
+							center->y = ((BodyDown_mapchip * 60) - (BodyDown - center->y))-2;
 							IsHitDown = true;
 							FallCount++;
 						}
@@ -705,7 +705,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitDown == false)
 						{
-							center->y = (BodyDown_mapchip * 60) - (BodyDown - center->y);
+							center->y = ((BodyDown_mapchip * 60) - (BodyDown - center->y))-2;
 							IsHitDown = true;
 							FallCount++;
 						}
@@ -725,10 +725,13 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 
 	if (FallCount > 0)
 	{
-		isfall = false;
+		BodyIsFall = false;
+		FallSpeed = 0.0f;
+		//isfall = false;
 	}
 	else
 	{
+		BodyIsFall = true;
 		//isfall = true;
 	}
 }

@@ -36,7 +36,7 @@ void Player::Init()
 	//for (i = 0; i < sizeof(tile) / sizeof(tile[0]); i++) tile[i] = 0;
 
 	FallSpeed = 3.0f;
-	IsFall = true;
+	IsAllFall = true;
 	IsJump = false;
 	Player_IsAction = false;
 	IsColide = false;
@@ -69,9 +69,10 @@ void Player::Update(Stage& stage)
 	}
 
 	//ジャンプ入力できるかどうか
-	if (IsJump == false && IsFall == false)
+	if (IsJump == false && IsAllFall == false)
 	{
 		IsInputjump = true;
+		FallSpeed = 0.0f;
 	}
 	else
 	{
@@ -81,9 +82,7 @@ void Player::Update(Stage& stage)
 	//ジャンプ
 	if (InputManger::UpTrigger() && !InputManger::Act1() && IsInputjump == true)
 	{
-		//CenterPosition.y -= FallSpeed;
 		IsJump = true;
-		//IsFall = true;
 		FallSpeed = -9.0f;
 	}
 	if (InputManger::Down() && !InputManger::Act1())
@@ -101,12 +100,12 @@ void Player::Update(Stage& stage)
 		if (FallSpeed > 0)
 		{
 			IsJump = false;
-			IsFall = true;
+			IsAllFall = true;
 		}
 	}
 
 	//落下判定
-	if (IsFall == true && Player_IsAction == false)
+	if (IsAllFall == true && Player_IsAction == false)
 	{
 		if (FallSpeed < 5.0)
 		{
@@ -114,17 +113,12 @@ void Player::Update(Stage& stage)
 		}
 	}
 
-	if (Player_IsAction == false)
+	if (IsAllFall == true && Player_IsAction == false)
 	{
 		CenterPosition.y += FallSpeed;
 	}
-
-	if (IsFall == false && IsJump == false)
-	{
-		FallSpeed = 0.0f;
-	}
-
 	IsHitPlayerBody(stage);
+
 
 	if (InputManger::SubLeftTrigger() && Player_IsAction == false)
 	{
@@ -467,12 +461,6 @@ void Player::Update(Stage& stage)
 		}
 	}
 
-	//体のリセット
-	if (Input::isKeyTrigger(KEY_INPUT_R))
-	{
-		bodysetup(false, left, true, up, true, right);
-	}
-
 	//体のスライド
 	//左にスライド
 	if (Input::isKeyTrigger(KEY_INPUT_Z) && Body_One.BodyDistance < 2 && Body_One.IsAction == false && Body_Three.FoldCount < 2)
@@ -585,17 +573,17 @@ void Player::Update(Stage& stage)
 
 	if (Body_One.IsActivate == true)
 	{
-		Body_One.IsHitBody(stage, &CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
+		Body_One.IsHitBody(stage, &CenterPosition, FallSpeed, IsAllFall, IsJump, IsColide);
 		Body_One.Update(CenterPosition);
 	}
 	if (Body_Two.IsActivate == true)
 	{
-		Body_Two.IsHitBody(stage, &CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
+		Body_Two.IsHitBody(stage, &CenterPosition, FallSpeed, IsAllFall, IsJump, IsColide);
 		Body_Two.Update(CenterPosition);
 	}
 	if (Body_Three.IsActivate == true)
 	{
-		Body_Three.IsHitBody(stage, &CenterPosition, FallSpeed, IsFall, IsJump, IsColide);
+		Body_Three.IsHitBody(stage, &CenterPosition, FallSpeed, IsAllFall, IsJump, IsColide);
 		Body_Three.Update(CenterPosition);
 	}
 }
@@ -675,9 +663,14 @@ void Player::Draw(int offsetX, int offsetY)
 	DrawFormatString(0, 120, WHITE, "%f", CenterPosition.x);
 	DrawFormatString(0, 140, WHITE, "%f", Body_Two.BodyStartPos.x);
 	DrawFormatString(0, 160, WHITE, "%f", Body_Two.BodyEndPos.x);
-	DrawFormatString(0, 180, WHITE, "fall:%d", IsFall);
-	DrawFormatString(0, 200, WHITE, "jump:%d", IsJump);
-	DrawFormatString(0, 220, WHITE, "%f", FallSpeed);
+	DrawFormatString(0, 180, WHITE, "fall:%d", IsFaceFall);
+	DrawFormatString(0, 200, WHITE, "1_fall:%d", Body_One.BodyIsFall);
+	DrawFormatString(0, 220, WHITE, "2_fall:%d", Body_Two.BodyIsFall);
+	DrawFormatString(0, 240, WHITE, "3_fall:%d", Body_Three.BodyIsFall);
+	DrawFormatString(0, 260, WHITE, "jump:%d", IsJump);
+	DrawFormatString(0, 280, WHITE, "%f", FallSpeed);
+	DrawFormatString(0, 300, WHITE, "%d", IsAllFall);
+	DrawFormatString(0, 320, WHITE, "%d", Player_IsAction);
 	if (IsGoal == true)
 	{
 		DrawFormatString(300, 100, YELLOW, "GOAL");
@@ -894,11 +887,12 @@ void Player::IsHitPlayerBody(Stage& stage)
 
 	if (FallCount > 0)
 	{
-		IsFall = false;
+		FallSpeed = 0.0f;
+		IsFaceFall = false;
 	}
 	else
 	{
-		IsFall = true;
+		IsFaceFall = true;
 	}
 
 }
