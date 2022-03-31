@@ -765,18 +765,18 @@ void Player::IsHitPlayerBody(Stage& stage)
 					BuriedX = (left_mapchip * 60) - (CenterPosition.x - 30);
 					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
 
-					if (BuriedX >= BuriedY)
+					if (BuriedX > BuriedY)
 					{
 						CenterPosition.y = (up_mapchip + 1) * 60 + 30;
 					}
-					else
+					else if (BuriedX < BuriedY)
 					{
 						CenterPosition.x = (left_mapchip + 1) * 60 + 30;
 					}
 				}
 			}
 			//¶‰º
-			if (stage.GetPositionTile({ CenterPosition.x - 30,CenterPosition.y + 30,0.0f }, i, j))
+			if (stage.GetPositionTile({ CenterPosition.x - 30,CenterPosition.y + 29,0.0f }, i, j))
 			{
 				left_mapchip_tile = left_mapchip % stage.GetStageTileWidth(i, j);
 				down_mapchip_tile = down_mapchip % stage.GetStageTileHeight(i, j);
@@ -785,21 +785,21 @@ void Player::IsHitPlayerBody(Stage& stage)
 				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (left_mapchip * 60) - (CenterPosition.x - 30);
-					BuriedY = ((CenterPosition.y + 30) - 60) - (down_mapchip * 60);
+					BuriedY = ((CenterPosition.y + 29) - 60) - (down_mapchip * 60);
 
-					if (BuriedX >= BuriedY)
+					if (BuriedX > BuriedY)
 					{
 						CenterPosition.y = (down_mapchip * 60) - 30;
 						FallCount++;
 					}
-					else
+					else if (BuriedX < BuriedY)
 					{
 						CenterPosition.x = (left_mapchip + 1) * 60 + 30;
 					}
 				}
 			}
 			//‰Eã
-			if (stage.GetPositionTile({ CenterPosition.x + 30,CenterPosition.y - 30,0.0f }, i, j))
+			if (stage.GetPositionTile({ CenterPosition.x + 29,CenterPosition.y - 30,0.0f }, i, j))
 			{
 				right_mapchip_tile = right_mapchip % stage.GetStageTileWidth(i, j);
 				up_mapchip_tile = up_mapchip % stage.GetStageTileHeight(i, j);
@@ -807,21 +807,21 @@ void Player::IsHitPlayerBody(Stage& stage)
 				MapchipPos = (up_mapchip_tile)*stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
 				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = ((CenterPosition.x + 30) - 60) - (right_mapchip * 60);
+					BuriedX = ((CenterPosition.x + 29) - 60) - (right_mapchip * 60);
 					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
 
-					if (BuriedX >= BuriedY)
+					if (BuriedX > BuriedY)
 					{
 						CenterPosition.y = (up_mapchip + 1) * 60 + 30;
 					}
-					else
+					else if (BuriedX < BuriedY)
 					{
 						CenterPosition.x = (right_mapchip * 60) - 30;
 					}
 				}
 			}
 			//‰E‰º
-			if (stage.GetPositionTile({ CenterPosition.x + 30,CenterPosition.y + 30,0.0f }, i, j))
+			if (stage.GetPositionTile({ CenterPosition.x + 29,CenterPosition.y + 29,0.0f }, i, j))
 			{
 				right_mapchip_tile = right_mapchip % stage.GetStageTileWidth(i, j);
 				down_mapchip_tile = down_mapchip % stage.GetStageTileHeight(i, j);
@@ -829,15 +829,15 @@ void Player::IsHitPlayerBody(Stage& stage)
 				MapchipPos = (down_mapchip_tile)*stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
 				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = ((CenterPosition.x + 30) - 60) - (right_mapchip * 60);
-					BuriedY = ((CenterPosition.y + 30) - 60) - (down_mapchip * 60);
+					BuriedX = ((CenterPosition.x + 29) - 60) - (right_mapchip * 60);
+					BuriedY = ((CenterPosition.y + 29) - 60) - (down_mapchip * 60);
 
-					if (BuriedX >= BuriedY)
+					if (BuriedX > BuriedY)
 					{
 						CenterPosition.y = (down_mapchip * 60) - 30;
 						FallCount++;
 					}
-					else
+					else if (BuriedX < BuriedY)
 					{
 						CenterPosition.x = (right_mapchip * 60) - 30;
 					}

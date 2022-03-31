@@ -52,7 +52,7 @@ void PlayerBody::Update(Vector3& center)
 	//ŠJ‚¢‚Ä‚¢‚é“r’†
 	if (IsFold == false && IsOpen == true && IsAction == true && IsSlide == false)
 	{
-		Ease.addtime += Ease.maxtime / 25.0f;
+		Ease.addtime += Ease.maxtime / 20.0f;
 		Ease.timerate = min(Ease.addtime / Ease.maxtime, 1.0f);
 
 		if (Body_Type == left)
@@ -136,6 +136,7 @@ void PlayerBody::Update(Vector3& center)
 			BodyStartPos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
 			BodyEndPos.y = Ease.easeout(BodyStartPos.y - BodySize, BodyStartPos.y + BodySize, Ease.timerate);
 			BodyEndPos.x = BodyStartPos.x + BodySize;
+			BodyCenterPos.x = BodyStartPos.x + BodySize / 2;
 			if (Ease.timerate < 0.5)
 			{
 				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
@@ -206,7 +207,7 @@ void PlayerBody::Update(Vector3& center)
 	//Ü‚Á‚Ä‚¢‚é“r’†
 	if (IsFold == true && IsOpen == false && IsAction == true && IsSlide == false)
 	{
-		Ease.addtime += Ease.maxtime / 25.0f;
+		Ease.addtime += Ease.maxtime / 20.0f;
 		Ease.timerate = min(Ease.addtime / Ease.maxtime, 1.0f);
 
 		if (Body_Type == left)
@@ -582,12 +583,12 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 
 	if (BodyLeft < stage.offset.x)
 	{
-		center->x = stage.offset.x + 30 + (BodyDistance * BodySize);
+		center->x = stage.offset.x + (center->x - BodyLeft);
 		iscolide = true;
 	}
 	if (BodyUp < stage.offset.y)
 	{
-		center->y = stage.offset.y + 30 + (BodyDistance * BodySize);
+		center->y = stage.offset.y + (center->y - BodyUp);
 		iscolide = true;
 	}
 
@@ -619,7 +620,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					}
 					else if (BuriedX < BuriedY)
 					{
-						if (IsHitLeft == false)
+						if (IsHitLeft == false && Body_Type == left || Body_Type == up)
 						{
 							center->x = (BodyLeft_mapchip + 1) * 60 + (center->x - BodyLeft);
 							IsHitLeft = true;
@@ -681,7 +682,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					}
 					else if (BuriedX < BuriedY)
 					{
-						if (IsHitRight == false)
+						if (IsHitRight == false && Body_Type == right || Body_Type == up)
 						{
 							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x);
 							IsHitRight = true;
