@@ -93,10 +93,6 @@ public: //メンバ変数
 	bool IsHitRight = false;
 	bool IsHitDown = false;
 
-	//右下・左下の着地判定
-	bool IsFallLeft = false;
-	bool IsFallRight = false;
-
 	//スライドする距離
 	int SlideDis;
 

@@ -578,14 +578,16 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 	IsHitRight = false;
 	IsHitDown = false;
 
-	if (center->x - 30 <= stage.offset.x || Body_Type == left && IsFold == true)
+	int FallCount = 0;
+
+	if (BodyLeft < stage.offset.x)
 	{
-		Extrude(center, stage.offset, 30, left, isfall, isjump, iscolide);
+		center->x = stage.offset.x + 30 + (BodyDistance * BodySize);
 		iscolide = true;
 	}
-	if (center->y - 30 <= stage.offset.y || Body_Type == up && IsFold == true)
+	if (BodyUp < stage.offset.y)
 	{
-		Extrude(center, stage.offset, 30, up, isfall, isjump, iscolide);
+		center->y = stage.offset.y + 30 + (BodyDistance * BodySize);
 		iscolide = true;
 	}
 
@@ -641,10 +643,10 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitDown == false)
 						{
-							Extrude(center, { center->x,(BodyDown_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (BodyDown - center->y), down, isfall, isjump, iscolide);
+							center->y = (BodyDown_mapchip * 60) - (BodyDown - center->y);
 							IsHitDown = true;
+							FallCount++;
 						}
-						IsFallLeft = false;
 					}
 					else if (BuriedX < BuriedY)
 					{
@@ -653,12 +655,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 							center->x = (BodyLeft_mapchip + 1) * 60 + (center->x - BodyLeft);
 							IsHitLeft = true;
 						}
-						IsFallLeft = true;
 					}
-				}
-				else
-				{
-					IsFallLeft = true;
 				}
 			}
 			//‰Eã
@@ -686,7 +683,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitRight == false)
 						{
-							Extrude(center, { (BodyRight_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center->y,0.0f }, (BodyRight - center->x), right, isfall, isjump, iscolide);
+							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x);
 							IsHitRight = true;
 						}
 					}
@@ -708,32 +705,31 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitDown == false)
 						{
-							Extrude(center, { center->x,(BodyDown_mapchip_tile + stage.GetStageTileOffsetY(i,j)) * 60.0f,0.0f }, (BodyDown - center->y), down, isfall, isjump, iscolide);
+							center->y = (BodyDown_mapchip * 60) - (BodyDown - center->y);
 							IsHitDown = true;
+							FallCount++;
 						}
-						IsFallRight = false;
 					}
 					else if (BuriedX < BuriedY)
 					{
 						if (IsHitRight == false)
 						{
-							Extrude(center, { (BodyRight_mapchip_tile + stage.GetStageTileOffsetX(i,j)) * 60.0f,center->y,0.0f }, (BodyRight - center->x), right, isfall, isjump, iscolide);
+							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x);
 							IsHitRight = true;
 						}
-						IsFallRight = true;
 					}
-				}
-				else
-				{
-					IsFallRight = true;
 				}
 			}
 		}
 	}
 
-	if (IsFallLeft == false || IsFallRight == false)
+	if (FallCount > 0)
 	{
 		isfall = false;
+	}
+	else
+	{
+		//isfall = true;
 	}
 }
 

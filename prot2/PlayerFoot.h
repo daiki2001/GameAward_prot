@@ -9,6 +9,7 @@ public:
 	Easing ease;
 
 	bool FootIsAction = false;
+	bool IsFootUp = false;
 
 	//‰æ‘œƒnƒ“ƒhƒ‹
 	int Foothandle;

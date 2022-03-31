@@ -47,7 +47,7 @@ public: //メンバ変数
 	//body_twoを優先的に開くか
 	bool IsOpenTwo = true;
 
-	//どの方向を折ったか(4方向)
+	//どの方向を折るか(4方向)
 	bool IsLeftFold;
 	bool IsUpFold;
 	bool IsRightFold;
@@ -62,19 +62,18 @@ public: //メンバ変数
 	float FallSpeed = 3.0f;
 	bool IsFall = false;
 
-	//右下・左下の着地判定
-	bool IsFallLeft = false;
-	bool IsFallRight = false;
-
 	//落下中・ジャンプ中にジャンプ入力が入っているかどうか
 	bool IsInputjump = false;
 
-	//どれか一つでも体動かしていたらtrue
+	//どれか一つでも体を動かしていたらtrue
 	bool Player_IsAction = false;
+
 	//画像ハンドル(顔)
 	int FaceHandle[2];
+
 	//ゴールに触れているかどうか
 	bool IsGoal = false;
+
 	//ブロックに当たっているかどうか
 	bool IsColide = false;
 

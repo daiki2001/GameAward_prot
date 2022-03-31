@@ -11,6 +11,7 @@ void Foot::Set()
 	ease.maxtime = 1.2f;
 	ease.timerate = 0.0f;
 	FootIsAction = true;
+	IsFootUp = true;
 }
 
 void Foot::Update(Vector3& FaceCenterPos)
@@ -26,7 +27,8 @@ void Foot::Update(Vector3& FaceCenterPos)
 			FootIsAction = false;
 		}
 	}
-	else
+
+	if (IsFootUp == false)
 	{
 		FootCenterPosition = FaceCenterPos;
 	}
