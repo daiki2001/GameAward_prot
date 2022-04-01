@@ -1,10 +1,10 @@
 #include "Easing.h"
 
 Easing::Easing() :
-	maxtime(2.0f),
-	timerate(0.0f),
-	addtime(0.1f),
-	ismove(false)
+	maxTime(2.0f),
+	timeRate(0.0f),
+	addTime(0.1f),
+	isMove(false)
 {
 }
 

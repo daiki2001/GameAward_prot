@@ -31,10 +31,17 @@ public: //サブクラス
 		char stageNumber = 0;
 		char offsetX = 0;
 		char offsetY = 0;
+		std::vector<Vector3> drawLeftUp = {};
+		std::vector<Vector3> drawRightDown = {};
 		size_t size = 1;
 		unsigned char width = 1;
 		unsigned char height = 1;
 		unsigned char direction = 0;
+		bool isFold = false;
+		Easing stageEase = {};
+		std::vector<Vector3> startPos = {};
+		std::vector<Vector3> endPos = {};
+		std::vector<Vector3> easePos = {};
 		bool isTop = true;
 	};
 	struct StageData
@@ -51,6 +58,7 @@ public: //サブクラス
 
 public: //定数
 	static const int blockSize;
+	static const int halfBlockSize;
 
 	Vector3 offset = { 0,0,0 };
 
@@ -67,7 +75,7 @@ public: //メンバ関数
 	// 更新
 	void Updata();
 	// 描画
-	void Draw();
+	void Draw(int offsetX, int offsetY);
 
 	/// <summary>
 	/// ステージファイルの読み込み
@@ -100,6 +108,10 @@ public: //メンバ関数
 	size_t GetStageDataSize();
 	//Stagetiledataのsizeを取得
 	size_t GetStageTileDataSize(int i);
+	// ステージの横幅を取得
+	char GetStageWidth(int i);
+	// ステージの縦幅を取得
+	char GetStageHeight(int i);
 	//任意のStageTileの高さを取得
 	char GetStageTileHeight(int i, int j);
 	//任意のStageTileの幅を取得
@@ -119,6 +131,10 @@ private:
 	int Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData);
 	// ステージを開く
 	int Open(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& moveStageTile, const size_t& moveStageData);
+	// イージングの初期化
+	void EaseingInit(const size_t& onPlayerStage, const size_t& moveStageData, const int& direction);
+	// イージングの更新
+	void EaseingUpdate();
 	// 一番上のステージタイルを探す
 	int SearchTopStageTile();
 

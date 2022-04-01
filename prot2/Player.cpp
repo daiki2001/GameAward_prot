@@ -69,7 +69,7 @@ void Player::Update(Stage& stage)
 	}
 
 	//ジャンプ入力できるかどうか
-	if (IsJump == false && IsAllFall == false)
+	if (IsJump == false && IsFall() == false)
 	{
 		IsInputjump = true;
 		FallSpeed = 0.0f;
@@ -83,7 +83,7 @@ void Player::Update(Stage& stage)
 	if (InputManger::UpTrigger() && !InputManger::Act1() && IsInputjump == true)
 	{
 		IsJump = true;
-		FallSpeed = -9.0f;
+		FallSpeed = -12.5f;
 	}
 	if (InputManger::Down() && !InputManger::Act1())
 	{
@@ -149,16 +149,16 @@ void Player::Update(Stage& stage)
 	{
 		if (IsLeftFold == true)
 		{
-			if (Body_One.Ease.ismove == false && Body_One.Body_Type == left && Body_One.IsActivate == true)
+			if (Body_One.Ease.isMove == false && Body_One.Body_Type == left && Body_One.IsActivate == true)
 			{
-				Body_One.Ease.addtime = 0.1f;
-				Body_One.Ease.maxtime = 1.2f;
-				Body_One.Ease.timerate = 0.0f;
+				Body_One.Ease.addTime = 0.1f;
+				Body_One.Ease.maxTime = 1.2f;
+				Body_One.Ease.timeRate = 0.0f;
 
 				//折る
 				if (Body_One.IsFold == false && Body_One.IsOpen == true && Body_One.IsAction == false)
 				{
-					Body_One.Ease.ismove = true;
+					Body_One.Ease.isMove = true;
 					Body_One.IsFold = true;
 					Body_One.IsOpen = false;
 					Body_One.IsAction = true;
@@ -175,18 +175,18 @@ void Player::Update(Stage& stage)
 
 				if (Body_One.IsFold == true && Body_One.IsOpen == false && Body_One.FoldCount == 1 && Body_One.IsAction == false && Body_Three.Body_Type == left)
 				{
-					Body_Three.Ease.addtime = 0.1f;
-					Body_Three.Ease.maxtime = 1.2f;
-					Body_Three.Ease.timerate = 0.0f;
+					Body_Three.Ease.addTime = 0.1f;
+					Body_Three.Ease.maxTime = 1.2f;
+					Body_Three.Ease.timeRate = 0.0f;
 
-					Body_Three.Ease.ismove = true;
+					Body_Three.Ease.isMove = true;
 					Body_Three.IsFold = true;
 					Body_Three.IsOpen = false;
 					Body_Three.IsAction = true;
 					Body_Three.Overlap = 0;
 
 					Body_One.IsAction = true;
-					Body_One.Ease.ismove = true;
+					Body_One.Ease.isMove = true;
 					Body_One.Overlap = 1;
 
 					if (Body_Two.IsFold == true)
@@ -204,16 +204,16 @@ void Player::Update(Stage& stage)
 		}
 		if (IsUpFold == true)
 		{
-			if (Body_Two.Ease.ismove == false && Body_Two.Body_Type == up && Body_Two.IsActivate == true)
+			if (Body_Two.Ease.isMove == false && Body_Two.Body_Type == up && Body_Two.IsActivate == true)
 			{
-				Body_Two.Ease.addtime = 0.1f;
-				Body_Two.Ease.maxtime = 1.2f;
-				Body_Two.Ease.timerate = 0.0f;
+				Body_Two.Ease.addTime = 0.1f;
+				Body_Two.Ease.maxTime = 1.2f;
+				Body_Two.Ease.timeRate = 0.0f;
 
 				//折る
 				if (Body_Two.IsFold == false && Body_Two.IsOpen == true && Body_Two.IsAction == false)
 				{
-					Body_Two.Ease.ismove = true;
+					Body_Two.Ease.isMove = true;
 					Body_Two.IsFold = true;
 					Body_Two.IsOpen = false;
 					Body_Two.IsAction = true;
@@ -243,16 +243,16 @@ void Player::Update(Stage& stage)
 		}
 		if (IsRightFold == true)
 		{
-			if (Body_Three.Ease.ismove == false && Body_Three.Body_Type == right && Body_Three.IsActivate == true)
+			if (Body_Three.Ease.isMove == false && Body_Three.Body_Type == right && Body_Three.IsActivate == true)
 			{
-				Body_Three.Ease.addtime = 0.1f;
-				Body_Three.Ease.maxtime = 1.2f;
-				Body_Three.Ease.timerate = 0.0f;
+				Body_Three.Ease.addTime = 0.1f;
+				Body_Three.Ease.maxTime = 1.2f;
+				Body_Three.Ease.timeRate = 0.0f;
 
 				//折る
 				if (Body_Three.IsFold == false && Body_Three.IsOpen == true && Body_Three.IsAction == false)
 				{
-					Body_Three.Ease.ismove = true;
+					Body_Three.Ease.isMove = true;
 					Body_Three.IsFold = true;
 					Body_Three.IsOpen = false;
 					Body_Three.IsAction = true;
@@ -269,18 +269,18 @@ void Player::Update(Stage& stage)
 
 				if (Body_Three.IsFold == true && Body_Three.IsOpen == false && Body_Three.FoldCount == 1 && Body_Three.IsAction == false && Body_One.Body_Type == right)
 				{
-					Body_One.Ease.addtime = 0.1f;
-					Body_One.Ease.maxtime = 1.2f;
-					Body_One.Ease.timerate = 0.0f;
+					Body_One.Ease.addTime = 0.1f;
+					Body_One.Ease.maxTime = 1.2f;
+					Body_One.Ease.timeRate = 0.0f;
 
-					Body_One.Ease.ismove = true;
+					Body_One.Ease.isMove = true;
 					Body_One.IsFold = true;
 					Body_One.IsOpen = false;
 					Body_One.IsAction = true;
 					Body_One.Overlap = 0;
 
 					Body_Three.IsAction = true;
-					Body_Three.Ease.ismove = true;
+					Body_Three.Ease.isMove = true;
 					Body_Three.Overlap = 1;
 
 					if (Body_Two.IsFold == true)
@@ -298,16 +298,16 @@ void Player::Update(Stage& stage)
 		}
 		if (IsDownFold == true)
 		{
-			if (Body_Two.Ease.ismove == false && Body_Two.Body_Type == down && Body_Two.IsActivate == true)
+			if (Body_Two.Ease.isMove == false && Body_Two.Body_Type == down && Body_Two.IsActivate == true)
 			{
-				Body_Two.Ease.addtime = 0.1f;
-				Body_Two.Ease.maxtime = 1.2f;
-				Body_Two.Ease.timerate = 0.0f;
+				Body_Two.Ease.addTime = 0.1f;
+				Body_Two.Ease.maxTime = 1.2f;
+				Body_Two.Ease.timeRate = 0.0f;
 
 				//折る
 				if (Body_Two.IsFold == false && Body_Two.IsOpen == true && Body_Two.IsAction == false)
 				{
-					Body_Two.Ease.ismove = true;
+					Body_Two.Ease.isMove = true;
 					Body_Two.IsFold = true;
 					Body_Two.IsOpen = false;
 					Body_Two.IsAction = true;
@@ -348,22 +348,22 @@ void Player::Update(Stage& stage)
 		if (Body_One.IsFold == true && Body_One.IsAction == false && Body_One.Body_Type == left && Body_One.Overlap == 0 ||
 			Body_Three.Body_Type == left && Body_Three.IsFold == true && Body_Three.Overlap == 0)
 		{
-			Body_One.Ease.addtime = 0.1f;
-			Body_One.Ease.maxtime = 1.2f;
-			Body_One.Ease.timerate = 0.0f;
+			Body_One.Ease.addTime = 0.1f;
+			Body_One.Ease.maxTime = 1.2f;
+			Body_One.Ease.timeRate = 0.0f;
 
-			Body_One.Ease.ismove = true;
+			Body_One.Ease.isMove = true;
 			Body_One.IsFold = false;
 			Body_One.IsOpen = true;
 			Body_One.IsAction = true;
 
 			if (Body_One.FoldCount == 2)
 			{
-				Body_Three.Ease.addtime = 0.1f;
-				Body_Three.Ease.maxtime = 1.2f;
-				Body_Three.Ease.timerate = 0.0f;
+				Body_Three.Ease.addTime = 0.1f;
+				Body_Three.Ease.maxTime = 1.2f;
+				Body_Three.Ease.timeRate = 0.0f;
 
-				Body_Three.Ease.ismove = true;
+				Body_Three.Ease.isMove = true;
 				Body_Three.IsFold = false;
 				Body_Three.IsOpen = true;
 				Body_Three.IsAction = true;
@@ -394,11 +394,11 @@ void Player::Update(Stage& stage)
 		//上
 		else if (Body_Two.IsFold == true && Body_Two.IsAction == false && Body_Two.Overlap == 0 && IsOpenTwo == true)
 		{
-			Body_Two.Ease.addtime = 0.1f;
-			Body_Two.Ease.maxtime = 1.2f;
-			Body_Two.Ease.timerate = 0.0f;
+			Body_Two.Ease.addTime = 0.1f;
+			Body_Two.Ease.maxTime = 1.2f;
+			Body_Two.Ease.timeRate = 0.0f;
 
-			Body_Two.Ease.ismove = true;
+			Body_Two.Ease.isMove = true;
 			Body_Two.IsFold = false;
 			Body_Two.IsOpen = true;
 			Body_Two.IsAction = true;
@@ -416,22 +416,22 @@ void Player::Update(Stage& stage)
 		else if (Body_Three.IsFold == true && Body_Three.IsAction == false && Body_Three.Body_Type == right && Body_Three.Overlap == 0 ||
 			Body_One.Body_Type == right && Body_One.IsFold == true)
 		{
-			Body_Three.Ease.addtime = 0.1f;
-			Body_Three.Ease.maxtime = 1.2f;
-			Body_Three.Ease.timerate = 0.0f;
+			Body_Three.Ease.addTime = 0.1f;
+			Body_Three.Ease.maxTime = 1.2f;
+			Body_Three.Ease.timeRate = 0.0f;
 
-			Body_Three.Ease.ismove = true;
+			Body_Three.Ease.isMove = true;
 			Body_Three.IsFold = false;
 			Body_Three.IsOpen = true;
 			Body_Three.IsAction = true;
 
 			if (Body_Three.FoldCount == 2)
 			{
-				Body_One.Ease.addtime = 0.1f;
-				Body_One.Ease.maxtime = 1.2f;
-				Body_One.Ease.timerate = 0.0f;
+				Body_One.Ease.addTime = 0.1f;
+				Body_One.Ease.maxTime = 1.2f;
+				Body_One.Ease.timeRate = 0.0f;
 
-				Body_One.Ease.ismove = true;
+				Body_One.Ease.isMove = true;
 				Body_One.IsFold = false;
 				Body_One.IsOpen = true;
 				Body_One.IsAction = true;
@@ -590,6 +590,11 @@ void Player::Update(Stage& stage)
 
 void Player::Draw(int offsetX, int offsetY)
 {
+	if (IsDownBody == true)
+	{
+		PlayerFoot.FootCenterPosition.y = CenterPosition.y + 60;
+	}
+
 	if (Body_One.IsSlide == false && Body_Two.IsSlide == false && Body_Three.IsSlide == false)
 	{
 		PlayerFoot.Draw();
@@ -639,28 +644,18 @@ void Player::Draw(int offsetX, int offsetY)
 
 	if (Body_One.IsSlide == true || Body_Two.IsSlide == true || Body_Three.IsSlide == true)
 	{
-		if (Body_Three.SlideDis == 2)
-		{
-			//DrawBox(center_position.x - 30 + offsetX, center_position.y - 30 + offsetY, body_one.bodyendpos.x + offsetX, body_one.bodyendpos.y + offsetY, body_three.bodycolor, true);
-		}
-		if (Body_One.SlideDis == 2)
-		{
-			//DrawBox(CenterPosition.x + 30 + offsetX, CenterPosition.y - 30 + offsetY, Body_Three.BodyStartPos.x + offsetX, Body_Three.BodyEndPos.y + offsetY, Body_One.BodyColor, true);
-		}
-
 		DrawExtendGraph(CenterPosition.x - 30, CenterPosition.y - 30, CenterPosition.x + 30, CenterPosition.y + 30, FaceHandle[Player_IsAction], true);
-
 	}
 
 	DrawLine(0, 240, 1280, 240, WHITE, true);
 	DrawLine(300, 0, 300, 720, RED, true);
 
-#pragma region UI
+#pragma region debug
 	DrawFormatString(0, 0, WHITE, "AD:左右移動");
 	DrawFormatString(0, 20, WHITE, "W:ジャンプ");
 	DrawFormatString(0, 40, WHITE, "←↑→:折る・開く");
 	DrawFormatString(0, 60, WHITE, "SPACE:開く");
-	DrawFormatString(0, 120, WHITE, "%f", CenterPosition.x);
+	DrawFormatString(0, 120, WHITE, "%f", CenterPosition.y);
 	DrawFormatString(0, 140, WHITE, "%f", Body_Two.BodyStartPos.x);
 	DrawFormatString(0, 160, WHITE, "%f", Body_Two.BodyEndPos.x);
 	DrawFormatString(0, 180, WHITE, "fall:%d", IsFaceFall);
@@ -669,8 +664,9 @@ void Player::Draw(int offsetX, int offsetY)
 	DrawFormatString(0, 240, WHITE, "3_fall:%d", Body_Three.BodyIsFall);
 	DrawFormatString(0, 260, WHITE, "jump:%d", IsJump);
 	DrawFormatString(0, 280, WHITE, "%f", FallSpeed);
-	DrawFormatString(0, 300, WHITE, "%d", IsAllFall);
+	DrawFormatString(0, 300, WHITE, "IsAllFall:%d", IsFall());
 	DrawFormatString(0, 320, WHITE, "%d", Player_IsAction);
+	DrawFormatString(0, 340, WHITE, "IsInputjump:%d", IsInputjump);
 	if (IsGoal == true)
 	{
 		DrawFormatString(300, 100, YELLOW, "GOAL");
@@ -789,7 +785,7 @@ void Player::IsHitPlayerBody(Stage& stage)
 
 					if (BuriedX > BuriedY)
 					{
-						CenterPosition.y = (down_mapchip * 60) - 30;
+						CenterPosition.y = (down_mapchip * 60) - 29;
 						FallCount++;
 					}
 					else if (BuriedX < BuriedY)
@@ -834,7 +830,7 @@ void Player::IsHitPlayerBody(Stage& stage)
 
 					if (BuriedX > BuriedY)
 					{
-						CenterPosition.y = (down_mapchip * 60) - 30;
+						CenterPosition.y = (down_mapchip * 60) - 29;
 						FallCount++;
 					}
 					else if (BuriedX < BuriedY)
@@ -947,5 +943,37 @@ void Player::ExtrudePlayer(Vector3 ExtrudePos, float ExtrudeDis, bodytype Extrud
 		break;
 	default:
 		break;
+	}
+}
+
+bool Player::IsFall()
+{
+	int FallCount = 0;
+
+	if (Body_One.IsActivate == true && Body_One.BodyIsFall == false)
+	{
+		FallCount++;
+	}
+	if (Body_Two.IsActivate == true && Body_Two.BodyIsFall == false)
+	{
+		FallCount++;
+	}
+	if (Body_Three.IsActivate == true && Body_Three.BodyIsFall == false)
+	{
+		FallCount++;
+	}
+	if (IsFaceFall == false)
+	{
+		FallCount++;
+	}
+
+	if (FallCount > 0)
+	{
+		FallSpeed = 0.0f;
+		return false;
+	}
+	else
+	{
+		return true;
 	}
 }

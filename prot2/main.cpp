@@ -49,7 +49,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Stage* stage = Stage::Get();
 	stage->LoadStage("./Resources/stage2.csv", playerTile);
 	player->Init();
-	player->bodysetup(true, left, true, up, false, right);
+	player->bodysetup(false, left, true, up, false, right);
+
+	const int drawOffsetX = 0, drawOffsetY = 0;
 
 	// ゲームループ
 	while (1)
@@ -61,7 +63,6 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//---------  ここからプログラムを記述  ----------//
 
 		// 更新処理
-		player->Update(*stage);
 		if (Input::isKey(KEY_INPUT_1))
 		{
 			stage->LoadStage("./Resources/stage1.csv", playerTile);
@@ -90,8 +91,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			stage->FoldAndOpen(player->CenterPosition, playerTile);
 		}
 
+		stage->Updata();
+		player->Update(*stage);
+
 		// 描画処理
-		stage->Draw();
+		stage->Draw(drawOffsetX, drawOffsetY);
 		player->Draw(0, 0);
 
 		//---------  ここまでにプログラムを記述  ---------//

@@ -7,9 +7,9 @@ void Foot::Init()
 
 void Foot::Set()
 {
-	ease.addtime = 0.1f;
-	ease.maxtime = 1.2f;
-	ease.timerate = 0.0f;
+	ease.addTime = 0.1f;
+	ease.maxTime = 1.2f;
+	ease.timeRate = 0.0f;
 	FootIsAction = true;
 	IsFootUp = true;
 }
@@ -18,11 +18,11 @@ void Foot::Update(Vector3& FaceCenterPos)
 {
 	if (FootIsAction == true)
 	{
-		ease.addtime += ease.maxtime / 15.0f;
-		ease.timerate = min(ease.addtime / ease.maxtime, 1.0f);
+		ease.addTime += ease.maxTime / 15.0f;
+		ease.timeRate = min(ease.addTime / ease.maxTime, 1.0f);
 
-		FootCenterPosition = { FaceCenterPos.x,ease.easeout(FaceCenterPos.y,FaceCenterPos.y - 10,ease.timerate),0.0f };
-		if (ease.timerate >= 1.0f)
+		FootCenterPosition = { FaceCenterPos.x,ease.easeout(FaceCenterPos.y,FaceCenterPos.y - 10,ease.timeRate),0.0f };
+		if (ease.timeRate >= 1.0f)
 		{
 			FootIsAction = false;
 		}
