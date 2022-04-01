@@ -2,6 +2,7 @@
 #include <DxLib.h>
 #include "Stage.h"
 #include "InputManger.h"
+#include "DrawShape.h"
 #include "Colors.h"
 
 namespace

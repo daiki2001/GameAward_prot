@@ -96,7 +96,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// 描画処理
 		stage->Draw(drawOffsetX, drawOffsetY);
-		player->Draw(0, 0);
+		player->Draw(drawOffsetX, drawOffsetY);
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
