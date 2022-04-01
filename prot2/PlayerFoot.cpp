@@ -34,7 +34,14 @@ void Foot::Update(Vector3& FaceCenterPos)
 	}
 }
 
-void Foot::Draw()
+void Foot::Draw(bool isleft, bool isright)
 {
-	DrawExtendGraph(FootCenterPosition.x - 30, FootCenterPosition.y - 30, FootCenterPosition.x + 30, FootCenterPosition.y + 30, Foothandle, true);
+	if (isleft)
+	{
+		DrawExtendGraph(FootCenterPosition.x - 30, FootCenterPosition.y - 30, FootCenterPosition.x + 30, FootCenterPosition.y + 30, Foothandle, true);
+	}
+	if (isright)
+	{
+		DrawExtendGraph(FootCenterPosition.x + 30, FootCenterPosition.y - 30, FootCenterPosition.x - 30, FootCenterPosition.y + 30, Foothandle, true);
+	}
 }

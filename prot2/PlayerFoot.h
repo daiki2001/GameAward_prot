@@ -17,5 +17,5 @@ public:
 	void Init();
 	void Set();
 	void Update(Vector3& FaceCenterPos);
-	void Draw();
+	void Draw(bool isleft, bool isright);
 };

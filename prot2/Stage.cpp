@@ -777,7 +777,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 				if (stageData[i].stageTileData[moveStageData].isFold)
 				{
-					Open(playerTile, direction, i, moveStageTile, moveStageData);
+					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
