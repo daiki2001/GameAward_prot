@@ -1071,7 +1071,7 @@ int Stage::GetStageTileOffsetY(int i, int j)
 
 int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData)
 {
-	if (playerTile[direction] <= 0)
+	if (playerTile[direction] < 0)
 	{
 		return EF;
 	}

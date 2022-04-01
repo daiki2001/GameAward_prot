@@ -12,10 +12,17 @@ PlayerBody::PlayerBody() :
 	IsSlide(false),
 	SlidePat(0),
 	IsAction(false),
+	IsHitLeft(false),
+	IsHitUp(false),
+	IsHitRight(false),
+	IsHitDown(false),
+	BodyIsFall(false),
 	SlideDis(),
 	Overlap(0),
-	BodyDistance(1)
+	BodyDistance(1),
+	BodySize(60.0f)
 {
+	Bodyhandle = LoadGraph("./Resources/playerSub.png");
 }
 
 PlayerBody::~PlayerBody()
@@ -523,6 +530,8 @@ void PlayerBody::setslide(int slidepat, int move_dis)
 
 void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide)
 {
+	Update(*center);
+
 	//‘Ì‚ÌŽl•Ó
 	float BodyLeft;
 	float BodyRight;
@@ -644,10 +653,9 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 
 					if (BuriedX > BuriedY)
 					{
-						center->y = (BodyDown_mapchip * 60) - (BodyDown - center->y - 2);
+						center->y = (BodyDown_mapchip * 60) - (BodyDown - center->y);
 						IsHitDown = true;
 						FallCount++;
-						FallSpeed = 0.0f;
 					}
 					else if (BuriedX < BuriedY)
 					{
@@ -704,10 +712,9 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 
 					if (BuriedX > BuriedY)
 					{
-						center->y = (BodyDown_mapchip * 60) - (BodyDown - center->y - 2);
+						center->y = (BodyDown_mapchip * 60) - (BodyDown - center->y);
 						IsHitDown = true;
 						FallCount++;
-						FallSpeed = 0.0f;
 					}
 					else if (BuriedX < BuriedY)
 					{
@@ -725,7 +732,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 	if (FallCount > 0)
 	{
 		BodyIsFall = false;
-		FallSpeed = 0.0f;
+		//FallSpeed = 0.0f;
 	}
 	else
 	{

@@ -57,8 +57,8 @@ void Player::Init()
 	Body_Three.Init(CenterPosition, right);
 	Body_Three.BodyColor = MAGENTA;
 
-	FaceHandle[0] = LoadGraph("Resources/face.png");
-	FaceHandle[1] = LoadGraph("Resources/face_fold.png");
+	FaceHandle[0] = LoadGraph("Resources/player.png");
+	FaceHandle[1] = LoadGraph("Resources/playerBody/playerBody02.png");
 
 	playerFoot.Init();
 }
@@ -90,11 +90,7 @@ void Player::Update(Stage& stage)
 	if (InputManger::UpTrigger() && !InputManger::Act1() && IsInputjump == true)
 	{
 		IsJump = true;
-		FallSpeed = -12.5f;
-	}
-	if (InputManger::Down() && !InputManger::Act1())
-	{
-		//CenterPosition.y += FallSpeed;
+		FallSpeed = -9.5f;
 	}
 
 	if (IsJump == true)
@@ -112,7 +108,7 @@ void Player::Update(Stage& stage)
 	}
 
 	//—Ž‰º”»’è
-	if (IsAllFall == true && Player_IsAction == false)
+	if (IsJump == false && IsAllFall == true && Player_IsAction == false)
 	{
 		if (FallSpeed < 5.0)
 		{
@@ -597,7 +593,7 @@ void Player::Update(Stage& stage)
 
 void Player::Draw(int offsetX, int offsetY)
 {
-	if (IsDownBody == true)
+	if (IsDownBody == true && Body_Two.IsFold == false)
 	{
 		playerFoot.FootCenterPosition.y = CenterPosition.y + 60.0f;
 	}
@@ -920,8 +916,8 @@ void Player::IsHitPlayerBody(Stage& stage)
 
 	if (FallCount > 0)
 	{
-		FallSpeed = 0.0f;
 		IsFaceFall = false;
+		//FallSpeed = 0.0f;
 	}
 	else
 	{
@@ -1006,7 +1002,6 @@ bool Player::IsFall()
 
 	if (FallCount > 0)
 	{
-		FallSpeed = 0.0f;
 		return false;
 	}
 	else

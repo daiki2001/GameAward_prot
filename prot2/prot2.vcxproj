@@ -170,6 +170,7 @@
     <Image Include="Resources\Body.png" />
     <Image Include="Resources\face.png" />
     <Image Include="Resources\face_fold.png" />
+    <Image Include="Resources\Foot.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
