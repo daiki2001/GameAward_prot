@@ -31,6 +31,7 @@ namespace
 }
 
 const int Stage::blockSize = 60;
+const int Stage::halfBlockSize = Stage::blockSize / 2;
 int Stage::foldGraph = -1;
 int Stage::startPlayerPosX = 0;
 int Stage::startPlayerPosY = 0;
@@ -418,9 +419,9 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 
 	for (i = 0; i < sizeof(initFoldCount) / sizeof(initFoldCount[0]); i++)
 	{
-		//foldCount[i] = initFoldCount[i];
-		foldCount[i] = 1;
-		initFoldCount[i] = 1;
+		foldCount[i] = initFoldCount[i];
+		//foldCount[i] = 1;
+		//initFoldCount[i] = 1;
 	}
 
 	static char stageCount = 0;
@@ -508,6 +509,14 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].height;
 			stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].mapchip =
 				(char*)malloc(sizeof(char) * stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].size);
+			for (size_t k = 0; k < stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].size; k++)
+			{
+				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].drawLeftUp.push_back({});
+				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].drawRightDown.push_back({});
+				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].startPos.push_back({});
+				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].endPos.push_back({});
+				stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].easePos.push_back({});
+			}
 
 			if (stageData[i].stageTileData[stageData[i].stageTileData.size() - 1].mapchip == nullptr)
 			{
@@ -1024,7 +1033,7 @@ bool Stage::GetPositionTile(Vector3 center, int i, int j)
 
 int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData)
 {
-	if (playerTile[direction] <= 0)
+	if (playerTile[direction] < 0)
 	{
 		return EF;
 	}

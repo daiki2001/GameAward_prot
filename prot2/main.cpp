@@ -40,6 +40,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// (ダブルバッファ)描画先グラフィック領域は裏面を指定
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	SetUseLighting(false);
+
 	// 画像などのリソースデータの変数宣言と読み込み
 
 	// ゲームループで使う変数の宣言
@@ -49,7 +51,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Stage* stage = Stage::Get();
 	stage->LoadStage("./Resources/stage2.csv", playerTile);
 	player->Init();
-	player->bodysetup(false, left, true, up, false, right);
+	player->bodysetup(false, left, true, up, true, right);
 
 	const int drawOffsetX = 0, drawOffsetY = 0;
 
@@ -67,24 +69,26 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		{
 			stage->LoadStage("./Resources/stage1.csv", playerTile);
 			player->Init();
-			player->bodysetup(false, left, true, up, true, right);
+			player->bodysetup(false, left, true, up, false, right);
 		}
 		if (Input::isKey(KEY_INPUT_2))
 		{
 			stage->LoadStage("./Resources/stage2.csv", playerTile);
 			player->Init();
-			player->bodysetup(false, left, true, down, true, right);
+			player->bodysetup(false, left, true, up, false, right);
 		}
 		if (Input::isKey(KEY_INPUT_3))
 		{
 			stage->LoadStage("./Resources/stage3.csv", playerTile);
 			player->Init();
-			player->bodysetup(false, left, true, down, true, right);
+			player->bodysetup(false, left, true, up, false, right);
 		}
 		if (InputManger::Reset())
 		{
 			stage->Reset();
 			stage->GetInitFoldCount(playerTile);
+			player->Init();
+			player->bodysetup(false, left, true, up, false, right);
 		}
 		if (InputManger::SubUpTrigger() || InputManger::SubDownTrigger() || InputManger::SubLeftTrigger() || InputManger::SubRightTrigger())
 		{

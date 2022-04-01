@@ -115,5 +115,5 @@ public: //ƒƒ“ƒo•Ï”
 	const float BodySize = 60.0f;
 
 	//‰æ‘œƒnƒ“ƒhƒ‹
-	int Bodyhandle = LoadGraph("Resources/Body.png");
+	int Bodyhandle = LoadGraph("Resources/playerSub.png");
 };

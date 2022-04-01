@@ -84,11 +84,7 @@ void Player::Update(Stage& stage)
 	if (InputManger::UpTrigger() && !InputManger::Act1() && IsInputjump == true)
 	{
 		IsJump = true;
-		FallSpeed = -12.5f;
-	}
-	if (InputManger::Down() && !InputManger::Act1())
-	{
-		//CenterPosition.y += FallSpeed;
+		FallSpeed = -9.5f;
 	}
 
 	if (IsJump == true)
@@ -106,7 +102,7 @@ void Player::Update(Stage& stage)
 	}
 
 	//—Ž‰º”»’è
-	if (IsAllFall == true && Player_IsAction == false)
+	if (IsJump == false && IsAllFall == true && Player_IsAction == false)
 	{
 		if (FallSpeed < 5.0)
 		{
@@ -591,7 +587,7 @@ void Player::Update(Stage& stage)
 
 void Player::Draw(int offsetX, int offsetY)
 {
-	if (IsDownBody == true)
+	if (IsDownBody == true && Body_Two.IsFold == false)
 	{
 		PlayerFoot.FootCenterPosition.y = CenterPosition.y + 60;
 	}
@@ -705,6 +701,34 @@ void Player::bodysetup(bool one, int one_type, bool two, int two_type, bool thre
 	Body_Three.setactivate(CenterPosition);
 
 	CenterPosition.y += 1;
+}
+
+void Player::bodysetup(const unsigned char foldCount[4])
+{
+	static int bodyTile[3] = { 0 };
+	static size_t j = 0;
+
+	j = 0;
+
+	for (size_t i = 0; i < 3; i++)
+	{
+		bodyTile[i] = -1;
+
+		for (; j < 4; j++)
+		{
+			if (foldCount[j] != 0)
+			{
+				bodyTile[i] = j;
+				j++;
+				break;
+			}
+		}
+	}
+
+	bodysetup(
+		bodyTile[0] != -1, bodyTile[0],
+		bodyTile[1] != -1, bodyTile[1],
+		bodyTile[2] != -1, bodyTile[2]);
 }
 
 void Player::IsHitPlayerBody(Stage& stage)
@@ -884,8 +908,8 @@ void Player::IsHitPlayerBody(Stage& stage)
 
 	if (FallCount > 0)
 	{
-		FallSpeed = 0.0f;
 		IsFaceFall = false;
+		//FallSpeed = 0.0f;
 	}
 	else
 	{
@@ -970,7 +994,6 @@ bool Player::IsFall()
 
 	if (FallCount > 0)
 	{
-		FallSpeed = 0.0f;
 		return false;
 	}
 	else
