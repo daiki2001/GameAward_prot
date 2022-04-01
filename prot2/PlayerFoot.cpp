@@ -34,7 +34,7 @@ void PlayerFoot::Update(Vector3& FaceCenterPos)
 		ease.addTime += ease.maxTime / 20.0f;
 		ease.timerate = min(ease.addTime / ease.maxTime, 1.0f);
 
-		FootCenterPosition = { FaceCenterPos.x,ease.easeout(FaceCenterPos.y,FaceCenterPos.y - 10,ease.timerate),0.0f };
+		FootCenterPosition = { FaceCenterPos.x,ease.easeOut(FaceCenterPos.y,FaceCenterPos.y - 10,ease.timerate),0.0f };
 		if (ease.timerate >= 1.0f)
 		{
 			FootIsAction = false;

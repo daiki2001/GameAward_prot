@@ -63,7 +63,7 @@ void PlayerBody::Update(Vector3& center)
 			if (FoldCount == 1)
 			{
 				BodyEndPos = { center.x - static_cast<float>(30 + 60 * (BodyDistance - 1)), center.y + 30.0f, 0.0f };
-				BodyStartPos.x = Ease.easeout(BodyEndPos.x + 60, BodyEndPos.x - 60, Ease.timerate);
+				BodyStartPos.x = Ease.easeOut(BodyEndPos.x + 60, BodyEndPos.x - 60, Ease.timerate);
 				BodyStartPos.y = BodyEndPos.y - 60;
 				if (Ease.timerate < 0.5)
 				{
@@ -77,7 +77,7 @@ void PlayerBody::Update(Vector3& center)
 			else if (FoldCount == 2)
 			{
 				BodyStartPos = { center.x - 30.0f, center.y - 30.0f, 0.0f };
-				BodyEndPos.x = Ease.easeout(BodyStartPos.x + 60, BodyStartPos.x - 60, Ease.timerate);
+				BodyEndPos.x = Ease.easeOut(BodyStartPos.x + 60, BodyStartPos.x - 60, Ease.timerate);
 				BodyEndPos.y = BodyStartPos.y + 60;
 				if (Ease.timerate < 0.5)
 				{
@@ -92,7 +92,7 @@ void PlayerBody::Update(Vector3& center)
 		if (Body_Type == up)
 		{
 			BodyEndPos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
-			BodyStartPos.y = Ease.easeout(BodyEndPos.y + 60, BodyEndPos.y - 60, Ease.timerate);
+			BodyStartPos.y = Ease.easeOut(BodyEndPos.y + 60, BodyEndPos.y - 60, Ease.timerate);
 			BodyStartPos.x = BodyEndPos.x - 60;
 			if (Ease.timerate < 0.5)
 			{
@@ -108,7 +108,7 @@ void PlayerBody::Update(Vector3& center)
 			if (FoldCount == 1)
 			{
 				BodyStartPos = { center.x + static_cast<float>(30 + 60 * (BodyDistance - 1)), center.y - 30.0f, 0.0f };
-				BodyEndPos.x = Ease.easeout(BodyStartPos.x - 60, BodyStartPos.x + 60, Ease.timerate);
+				BodyEndPos.x = Ease.easeOut(BodyStartPos.x - 60, BodyStartPos.x + 60, Ease.timerate);
 				BodyEndPos.y = BodyStartPos.y + 60;
 				if (Ease.timerate < 0.5)
 				{
@@ -122,7 +122,7 @@ void PlayerBody::Update(Vector3& center)
 			else if (FoldCount == 2)
 			{
 				BodyEndPos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
-				BodyStartPos.x = Ease.easeout(BodyEndPos.x - 60, BodyEndPos.x + 60, Ease.timerate);
+				BodyStartPos.x = Ease.easeOut(BodyEndPos.x - 60, BodyEndPos.x + 60, Ease.timerate);
 				BodyStartPos.y = BodyEndPos.y - 60;
 				if (Ease.timerate < 0.5)
 				{
@@ -137,7 +137,7 @@ void PlayerBody::Update(Vector3& center)
 		if (Body_Type == down)
 		{
 			BodyStartPos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
-			BodyEndPos.y = Ease.easeout(BodyStartPos.y - 60, BodyStartPos.y + 60, Ease.timerate);
+			BodyEndPos.y = Ease.easeOut(BodyStartPos.y - 60, BodyStartPos.y + 60, Ease.timerate);
 			BodyEndPos.x = BodyStartPos.x - 60;
 			if (Ease.timerate < 0.5)
 			{
@@ -217,7 +217,7 @@ void PlayerBody::Update(Vector3& center)
 			if (FoldCount == 0)
 			{
 				BodyEndPos = { center.x - static_cast<float>(30 + 60 * (BodyDistance - 1)), center.y + 30.0f, 0.0f };
-				BodyStartPos.x = Ease.easeout(BodyEndPos.x - 60, BodyEndPos.x + 60, Ease.timerate);
+				BodyStartPos.x = Ease.easeOut(BodyEndPos.x - 60, BodyEndPos.x + 60, Ease.timerate);
 				BodyStartPos.y = BodyEndPos.y - 60;
 				if (Ease.timerate < 0.5)
 				{
@@ -231,7 +231,7 @@ void PlayerBody::Update(Vector3& center)
 			else if (FoldCount == 1)
 			{
 				BodyStartPos = { center.x - 30.0f, center.y - 30.0f, 0.0f };
-				BodyEndPos.x = Ease.easeout(BodyStartPos.x - 60, BodyStartPos.x + 60, Ease.timerate);
+				BodyEndPos.x = Ease.easeOut(BodyStartPos.x - 60, BodyStartPos.x + 60, Ease.timerate);
 				BodyEndPos.y = BodyStartPos.y + 60;
 				if (Ease.timerate < 0.5)
 				{
@@ -246,7 +246,7 @@ void PlayerBody::Update(Vector3& center)
 		if (Body_Type == up)
 		{
 			BodyEndPos = { center.x + 30.0f, center.y - 30.0f, 0.0f };
-			BodyStartPos.y = Ease.easeout(BodyEndPos.y - 60, BodyEndPos.y + 60, Ease.timerate);
+			BodyStartPos.y = Ease.easeOut(BodyEndPos.y - 60, BodyEndPos.y + 60, Ease.timerate);
 			BodyStartPos.x = BodyEndPos.x - 60;
 			if (Ease.timerate < 0.5)
 			{
@@ -262,7 +262,7 @@ void PlayerBody::Update(Vector3& center)
 			if (FoldCount == 0)
 			{
 				BodyStartPos = { center.x + static_cast<float>(30 + 60 * (BodyDistance - 1)), center.y - 30.0f, 0.0f };
-				BodyEndPos.x = Ease.easeout(BodyStartPos.x + 60, BodyStartPos.x - 60, Ease.timerate);
+				BodyEndPos.x = Ease.easeOut(BodyStartPos.x + 60, BodyStartPos.x - 60, Ease.timerate);
 				BodyEndPos.y = BodyStartPos.y + 60;
 				if (Ease.timerate < 0.5)
 				{
@@ -276,7 +276,7 @@ void PlayerBody::Update(Vector3& center)
 			else if (FoldCount == 1)
 			{
 				BodyEndPos = { center.x + 30.0f, center.y + 30.0f, 0.0f };
-				BodyStartPos.x = Ease.easeout(BodyEndPos.x + 60, BodyEndPos.x - 60, Ease.timerate);
+				BodyStartPos.x = Ease.easeOut(BodyEndPos.x + 60, BodyEndPos.x - 60, Ease.timerate);
 				BodyStartPos.y = BodyEndPos.y - 60;
 				if (Ease.timerate < 0.5)
 				{
@@ -291,7 +291,7 @@ void PlayerBody::Update(Vector3& center)
 		if (Body_Type == down)
 		{
 			BodyStartPos = { center.x - 30.0f, center.y + 30.0f, 0.0f };
-			BodyEndPos.y = Ease.easeout(BodyStartPos.y + 60, BodyStartPos.y - 60, Ease.timerate);
+			BodyEndPos.y = Ease.easeOut(BodyStartPos.y + 60, BodyStartPos.y - 60, Ease.timerate);
 			BodyEndPos.x = BodyStartPos.x + 60;
 			if (Ease.timerate < 0.5)
 			{
@@ -366,25 +366,25 @@ void PlayerBody::Update(Vector3& center)
 
 		if (Body_Type == left)
 		{
-			BodyStartPos = { Ease.easeout(center.x - 90, center.x + 30, Ease.timerate), center.y - 30.0f, 0.0f };
+			BodyStartPos = { Ease.easeOut(center.x - 90, center.x + 30, Ease.timerate), center.y - 30.0f, 0.0f };
 			BodyEndPos = { BodyStartPos.x + 60.0f, center.y + 30.0f, 0.0f };
 			BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30.0f, 0.0f };
 		}
 		else if (Body_Type == right)
 		{
-			BodyStartPos = { Ease.easeout(center.x + 30, center.x - 90, Ease.timerate), center.y - 30.0f, 0.0f };
+			BodyStartPos = { Ease.easeOut(center.x + 30, center.x - 90, Ease.timerate), center.y - 30.0f, 0.0f };
 			BodyEndPos = { BodyStartPos.x + 60.0f, center.y + 30.0f, 0.0f };
 			BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30.0f, 0.0f };
 		}
 		else if (Body_Type == up)
 		{
-			BodyStartPos = { center.x - 30.0f, Ease.easeout(center.y - 90, center.y + 30, Ease.timerate), 0.0f };
+			BodyStartPos = { center.x - 30.0f, Ease.easeOut(center.y - 90, center.y + 30, Ease.timerate), 0.0f };
 			BodyEndPos = { center.x + 30.0f, BodyStartPos.y + 60.0f, 0.0f };
 			BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30.0f, 0.0f };
 		}
 		else if (Body_Type == down)
 		{
-			BodyStartPos = { center.x - 30.0f, Ease.easeout(center.y + 30, center.y - 90, Ease.timerate), 0.0f };
+			BodyStartPos = { center.x - 30.0f, Ease.easeOut(center.y + 30, center.y - 90, Ease.timerate), 0.0f };
 			BodyEndPos = { center.x + 30.0f, BodyStartPos.y + 60.0f, 0.0f };
 			BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30.0f, 0.0f };
 		}
@@ -424,12 +424,12 @@ void PlayerBody::Update(Vector3& center)
 		{
 			if (SlidePat == -1)
 			{
-				BodyEndPos = { Ease.easeout(center.x - 30, center.x - 90, Ease.timerate), center.y - 30.0f, 0.0f };
+				BodyEndPos = { Ease.easeOut(center.x - 30, center.x - 90, Ease.timerate), center.y - 30.0f, 0.0f };
 				BodyCenterPos = { BodyEndPos.x - 30.0f, BodyEndPos.y + 30, 0.0f };
 			}
 			else
 			{
-				BodyEndPos = { Ease.easeout(center.x - 90, center.x - 30, Ease.timerate), center.y - 30.0f, 0.0f };
+				BodyEndPos = { Ease.easeOut(center.x - 90, center.x - 30, Ease.timerate), center.y - 30.0f, 0.0f };
 				BodyCenterPos = { BodyEndPos.x - 30.0f, BodyEndPos.y + 30, 0.0f };
 			}
 			BodyStartPos = { BodyEndPos.x + static_cast<float>(120 * IsFold - 60), center.y + 30.0f, 0.0f };
@@ -438,12 +438,12 @@ void PlayerBody::Update(Vector3& center)
 		{
 			if (SlidePat == -1)
 			{
-				BodyStartPos = { Ease.easeout(center.x + 90, center.x + 30, Ease.timerate), center.y - 30.0f, 0.0f };
+				BodyStartPos = { Ease.easeOut(center.x + 90, center.x + 30, Ease.timerate), center.y - 30.0f, 0.0f };
 				BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30, 0.0f };
 			}
 			else
 			{
-				BodyStartPos = { Ease.easeout(center.x + 30, center.x + 90, Ease.timerate), center.y - 30.0f, 0.0f };
+				BodyStartPos = { Ease.easeOut(center.x + 30, center.x + 90, Ease.timerate), center.y - 30.0f, 0.0f };
 				BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30, 0.0f };
 			}
 			BodyEndPos = { BodyStartPos.x + static_cast<float>(-120 * IsFold + 60), center.y + 30.0f, 0.0f };

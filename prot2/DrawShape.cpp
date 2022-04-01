@@ -50,8 +50,8 @@ void DrawShape::DrawPlane(const Vector3& pos1, const Vector3& pos2, const unsign
 
 	left = pos1.x;
 	right = pos2.x;
-	up = 720.0f - pos2.y;
-	down = 720.0f - pos1.y;
+	up = -pos2.y;
+	down = -pos1.y;
 
 	rectVertex[0].pos = Vector3(left, down, 0.0f);
 	rectVertex[1].pos = Vector3(right, down, 0.0f);
@@ -72,8 +72,8 @@ void DrawShape::DrawPlane(const Vector3& pos1, const Vector3& pos2, const COLOR_
 {
 	left = pos1.x;
 	right = pos2.x;
-	up = 720.0f - pos2.y;
-	down = 720.0f - pos1.y;
+	up = -pos2.y;
+	down = -pos1.y;
 
 	rectVertex[0].pos = Vector3(left, down, 0.0f);
 	rectVertex[1].pos = Vector3(right, down, 0.0f);
