@@ -1,4 +1,4 @@
-#include "PlayerBody.h"
+ï»¿#include "PlayerBody.h"
 #include <DxLib.h>
 #include "DrawShape.h"
 #include "InputManger.h"
@@ -58,7 +58,7 @@ void PlayerBody::Init(Vector3 position, bodytype number)
 
 void PlayerBody::Update(Vector3& center)
 {
-	//ŠJ‚¢‚Ä‚¢‚é“r’†
+	//é–‹ã„ã¦ã„ã‚‹é€”ä¸­
 	if (IsFold == false && IsOpen == true && IsAction == true && IsSlide == false)
 	{
 		Ease.addTime += Ease.maxTime / 20.0f;
@@ -163,7 +163,7 @@ void PlayerBody::Update(Vector3& center)
 			FoldCount--;
 		}
 	}
-	//ŠJ‚¢‚½Œã
+	//é–‹ã„ãŸå¾Œ
 	if (IsFold == false && IsOpen == true && IsAction == false)
 	{
 		if (Body_Type == left)
@@ -213,7 +213,7 @@ void PlayerBody::Update(Vector3& center)
 			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30 ,0.0f };
 		}
 	}
-	//Ü‚Á‚Ä‚¢‚é“r’†
+	//æŠ˜ã£ã¦ã„ã‚‹é€”ä¸­
 	if (IsFold == true && IsOpen == false && IsAction == true && IsSlide == false)
 	{
 		Ease.addTime += Ease.maxTime / 20.0f;
@@ -317,7 +317,7 @@ void PlayerBody::Update(Vector3& center)
 			FoldCount++;
 		}
 	}
-	//Ü‚Á‚½Œã
+	//æŠ˜ã£ãŸå¾Œ
 	if (IsFold == true && IsOpen == false && IsAction == false)
 	{
 		if (Body_Type == left)
@@ -364,8 +364,8 @@ void PlayerBody::Update(Vector3& center)
 		}
 	}
 
-	//‘Ì‚ÌƒXƒ‰ƒCƒh
-	//Šç‚ğ‹²‚Ş‚Æ‚È‚èˆÚ“®
+	//ä½“ã®ã‚¹ãƒ©ã‚¤ãƒ‰
+	//é¡”ã‚’æŒŸã‚€ã¨ãªã‚Šç§»å‹•
 	if (IsSlide == true && Ease.isMove == true && SlideDis == 2)
 	{
 		Ease.addTime += Ease.maxTime / 25.0f;
@@ -421,7 +421,7 @@ void PlayerBody::Update(Vector3& center)
 		}
 	}
 
-	//Šç‚ğ‹²‚Ü‚È‚¢‚Æ‚È‚èˆÚ“®(¶‰E‚Ì‚İ)
+	//é¡”ã‚’æŒŸã¾ãªã„ã¨ãªã‚Šç§»å‹•(å·¦å³ã®ã¿)
 	if (IsSlide == true && Ease.isMove == true && SlideDis == 1)
 	{
 		Ease.addTime += Ease.maxTime / 25.0f;
@@ -532,13 +532,13 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 {
 	Update(*center);
 
-	//‘Ì‚Ìl•Ó
+	//ä½“ã®å››è¾º
 	float BodyLeft;
 	float BodyRight;
 	float BodyUp;
 	float BodyDown;
 
-	//StartPos‚ÆEndPos‚ÌˆÊ’uŠÖŒW‚É‚æ‚Á‚Äã‰º¶‰E‚Ìİ’è‚ğ•Ï‚¦‚é
+	//StartPosã¨EndPosã®ä½ç½®é–¢ä¿‚ã«ã‚ˆã£ã¦ä¸Šä¸‹å·¦å³ã®è¨­å®šã‚’å¤‰ãˆã‚‹
 	if (BodyStartPos.x < BodyEndPos.x)
 	{
 		BodyLeft = BodyStartPos.x;
@@ -561,28 +561,28 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 		BodyDown = BodyEndPos.y + (BodySize - 1.0f);
 	}
 
-	//l•Ó‚ğƒuƒƒbƒNƒTƒCƒY‚ÅŠ„‚Á‚½”
+	//å››è¾ºã‚’ãƒ–ãƒ­ãƒƒã‚¯ã‚µã‚¤ã‚ºã§å‰²ã£ãŸæ•°
 	int BodyLeft_mapchip = (int)(BodyLeft - stage.offset.x) / 60;
 	int BodyUp_mapchip = (int)(BodyUp - stage.offset.y) / 60;
 	int BodyRight_mapchip = (int)(BodyRight - stage.offset.x) / 60;
 	int BodyDown_mapchip = (int)(BodyDown - stage.offset.y) / 60;
 
-	//ƒ^ƒCƒ‹“à‚Ìƒ}ƒbƒvƒ`ƒbƒvÀ•W
+	//ã‚¿ã‚¤ãƒ«å†…ã®ãƒãƒƒãƒ—ãƒãƒƒãƒ—åº§æ¨™
 	int BodyLeft_mapchip_tile;
 	int BodyUp_mapchip_tile;
 	int BodyRight_mapchip_tile;
 	int BodyDown_mapchip_tile;
 
-	//‰Ÿ‚µo‚·•ûŒü‚ğŒˆ‚ß‚é‚½‚ß‚Ì‹——£
+	//æŠ¼ã—å‡ºã™æ–¹å‘ã‚’æ±ºã‚ã‚‹ãŸã‚ã®è·é›¢
 	float BuriedX = 0;
 	float BuriedY = 0;
 
-	//ƒXƒe[ƒW‚Ì”
+	//ã‚¹ãƒ†ãƒ¼ã‚¸ã®æ•°
 	size_t i = 0;
-	//ƒ^ƒCƒ‹‚Ì”
+	//ã‚¿ã‚¤ãƒ«ã®æ•°
 	size_t j = 0;
 
-	//ƒ}ƒbƒvƒ`ƒbƒv‚ÌÀ•W
+	//ãƒãƒƒãƒ—ãƒãƒƒãƒ—ã®åº§æ¨™
 	int mapchipPos = 0;
 
 	IsHitLeft = false;
@@ -607,13 +607,13 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 	{
 		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
 		{
-			//¶ã
+			//å·¦ä¸Š
 			if (stage.GetPositionTile({ BodyLeft,BodyUp,0.0f }, i, j))
 			{
 				BodyLeft_mapchip_tile = BodyLeft_mapchip % stage.GetStageTileWidth(i, j);
 				BodyUp_mapchip_tile = BodyUp_mapchip % stage.GetStageTileHeight(i, j);
 
-				//¡‚¢‚éÀ•W‚Ìƒ}ƒbƒvƒ`ƒbƒv‚ğŠm”F
+				//ä»Šã„ã‚‹åº§æ¨™ã®ãƒãƒƒãƒ—ãƒãƒƒãƒ—ã‚’ç¢ºèª
 				mapchipPos = BodyUp_mapchip_tile * stage.GetStageTileWidth(i, j) + BodyLeft_mapchip_tile;
 				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
@@ -639,7 +639,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					}
 				}
 			}
-			//¶‰º
+			//å·¦ä¸‹
 			if (stage.GetPositionTile({ BodyLeft,BodyDown,0.0f }, i, j))
 			{
 				BodyLeft_mapchip_tile = BodyLeft_mapchip % stage.GetStageTileWidth(i, j);
@@ -667,7 +667,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					}
 				}
 			}
-			//‰Eã
+			//å³ä¸Š
 			if (stage.GetPositionTile({ BodyRight,BodyUp,0.0f }, i, j))
 			{
 				BodyRight_mapchip_tile = BodyRight_mapchip % stage.GetStageTileWidth(i, j);
@@ -698,7 +698,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					}
 				}
 			}
-			//‰E‰º
+			//å³ä¸‹
 			if (stage.GetPositionTile({ BodyRight,BodyDown,0.0f }, i, j))
 			{
 				BodyRight_mapchip_tile = BodyRight_mapchip % stage.GetStageTileWidth(i, j);

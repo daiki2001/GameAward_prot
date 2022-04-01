@@ -34,7 +34,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	SetWindowSizeExtendRate(1.0);
 
 	// 画面の背景色を設定する
-	SetBackgroundColor(0x00, 0x00, 0xFF);
+	SetBackgroundColor(0x00, 0x00, 0x00);
 
 	// DXlibの初期化
 	if (DxLib_Init() == -1) { return -1; }
@@ -42,37 +42,37 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	// (ダブルバッファ)描画先グラフィック領域は裏面を指定
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	SetUseZBuffer3D(TRUE);   //Zバッファを有効にする
-	SetWriteZBuffer3D(TRUE); //Zバッファへの書き込みを有効にする
+	//SetUseZBuffer3D(TRUE);   //Zバッファを有効にする
+	//SetWriteZBuffer3D(TRUE); //Zバッファへの書き込みを有効にする
 
-	const float cameraRange = 625.0f;
+	//const float cameraRange = 625.0f;
 
-	Vector3 cameraPosition(WIN_WIDTH / 2.0f, -WIN_HEIGHT / 2.0f, -cameraRange); //カメラの位置
-	Vector3 cameraTarget(WIN_WIDTH / 2.0f, -WIN_HEIGHT / 2.0f, 0.0f);     //カメラの注視点
-	Vector3 cameraUp(0.0f, 1.0f, 0.0f);             //カメラの上方向ベクトル
+	//Vector3 cameraPosition(WIN_WIDTH / 2.0f, -WIN_HEIGHT / 2.0f, -cameraRange); //カメラの位置
+	//Vector3 cameraTarget(WIN_WIDTH / 2.0f, -WIN_HEIGHT / 2.0f, 0.0f);     //カメラの注視点
+	//Vector3 cameraUp(0.0f, 1.0f, 0.0f);             //カメラの上方向ベクトル
 
-	float cameraRightAngle = 0.0f; //経度
-	float cameraUpAngle = -0.3f;    //緯度
+	//float cameraRightAngle = 0.0f; //経度
+	//float cameraUpAngle = -0.3f;    //緯度
 
-	Quaternion qCameraRightAngle = quaternion(cameraUp, cameraRightAngle);
-	Vector3 cameraSide = cameraUp.Cross(cameraTarget - cameraPosition).Normalize();
-	Quaternion qCameraUpAngle = quaternion(cameraSide, cameraUpAngle);
+	//Quaternion qCameraRightAngle = quaternion(cameraUp, cameraRightAngle);
+	//Vector3 cameraSide = cameraUp.Cross(cameraTarget - cameraPosition).Normalize();
+	//Quaternion qCameraUpAngle = quaternion(cameraSide, cameraUpAngle);
 
-	Quaternion q = qCameraRightAngle * qCameraUpAngle;
-	Quaternion qCameraPosition = quaternion(cameraPosition.x, cameraPosition.y, cameraPosition.z, 0.0f);
-	Quaternion qq = conjugate(q);
+	//Quaternion q = qCameraRightAngle * qCameraUpAngle;
+	//Quaternion qCameraPosition = quaternion(cameraPosition.x, cameraPosition.y, cameraPosition.z, 0.0f);
+	//Quaternion qq = conjugate(q);
 
-	qCameraPosition = q * qCameraPosition * qq;
-	cameraPosition = { qCameraPosition.x, qCameraPosition.y, qCameraPosition.z };
+	//qCameraPosition = q * qCameraPosition * qq;
+	//cameraPosition = { qCameraPosition.x, qCameraPosition.y, qCameraPosition.z };
 
-	// 上方向ベクトルの回転
-	Quaternion qCameraUp = quaternion(cameraUp.x, cameraUp.y, cameraUp.z, 0.0f);
-	qCameraUp = q * qCameraUp * qq;
-	cameraUp = getAxis(qCameraUp); //カメラの上方向ベクトルの軸の取り出し
+	//// 上方向ベクトルの回転
+	//Quaternion qCameraUp = quaternion(cameraUp.x, cameraUp.y, cameraUp.z, 0.0f);
+	//qCameraUp = q * qCameraUp * qq;
+	//cameraUp = getAxis(qCameraUp); //カメラの上方向ベクトルの軸の取り出し
 
-	SetCameraNearFar(1.0f, 1000.0f); //カメラの有効範囲を設定
-	SetCameraScreenCenter(WIN_WIDTH / 2.0f, WIN_HEIGHT / 2.0f); //画面の中心をカメラの中心に合わせる
-	SetCameraPositionAndTargetAndUpVec(cameraPosition, cameraTarget, cameraUp);
+	//SetCameraNearFar(1.0f, 1000.0f); //カメラの有効範囲を設定
+	//SetCameraScreenCenter(WIN_WIDTH / 2.0f, WIN_HEIGHT / 2.0f); //画面の中心をカメラの中心に合わせる
+	//SetCameraPositionAndTargetAndUpVec(cameraPosition, cameraTarget, cameraUp);
 
 	SetUseLighting(false);
 
@@ -87,6 +87,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	player->Init();
 	player->bodysetup(playerTile);
 
+	int Back = LoadGraph("./Resources/back.png");
 	const int drawOffsetX = 320, drawOffsetY = 0;
 
 	// ゲームループ
@@ -133,7 +134,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		player->Update(*stage);
 
 		// 描画処理
-		stage->Draw(drawOffsetX, drawOffsetY/* - WIN_HEIGHT*/);
+		//DrawGraph(0, 0, Back, true);
+		stage->Draw(drawOffsetX, drawOffsetY - WIN_HEIGHT);
 		player->Draw(drawOffsetX, drawOffsetY);
 
 		//---------  ここまでにプログラムを記述  ---------//

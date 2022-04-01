@@ -777,17 +777,6 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 				if (stageData[i].stageTileData[moveStageData].isFold)
 				{
-					Open(playerTile, direction, i, moveStageTile, moveStageData);
-
-					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
-					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
-					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
-					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
-					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
-				}
-
-				if (stageData[i].stageTileData[moveStageData].isFold)
-				{
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
@@ -801,6 +790,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -843,22 +833,12 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
 				}
-
-				if (stageData[i].stageTileData[moveStageData].isFold)
-				{
-					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
-
-					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
-					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
-					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
-					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
-					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
-				}
 				else
 				{
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -1028,7 +1008,6 @@ char Stage::GetStageHeight(int i)
 
 char Stage::GetStageTileWidth(int i, int j)
 {
-	//ステージタイルの幅を返す
 	return stageData[i].stageTileData[j].width;
 }
 
@@ -1071,7 +1050,7 @@ int Stage::GetStageTileOffsetY(int i, int j)
 
 int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData)
 {
-	if (playerTile[direction] < 0)
+	if (playerTile[direction] <= 0)
 	{
 		return EF;
 	}

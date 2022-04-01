@@ -16,7 +16,7 @@ PlayerFoot::~PlayerFoot()
 
 void PlayerFoot::Init()
 {
-	FootHandle = LoadGraph("Resources/Foot.png");
+	FootHandle = LoadGraph("Resources/playerLegs/playerLegs.png");
 }
 
 void PlayerFoot::Set()

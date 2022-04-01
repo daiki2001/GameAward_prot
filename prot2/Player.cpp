@@ -60,7 +60,7 @@ void Player::Init()
 	FaceHandle[0] = LoadGraph("Resources/player.png");
 	FaceHandle[1] = LoadGraph("Resources/playerBody/playerBody02.png");
 
-	playerFoot.Init();
+	leg.Init();
 }
 
 void Player::Update(Stage& stage)
@@ -127,28 +127,28 @@ void Player::Update(Stage& stage)
 	{
 		Player_IsAction = true;
 		IsLeftFold = true;
-		playerFoot.Set();
+		leg.Set();
 	}
 	if (InputManger::SubUpTrigger() && Player_IsAction == false)
 	{
 		Player_IsAction = true;
 		IsUpFold = true;
-		playerFoot.Set();
+		leg.Set();
 	}
 	if (InputManger::SubRightTrigger() && Player_IsAction == false)
 	{
 		Player_IsAction = true;
 		IsRightFold = true;
-		playerFoot.Set();
+		leg.Set();
 	}
 	if (InputManger::SubDownTrigger() && Player_IsAction == false)
 	{
 		Player_IsAction = true;
 		IsDownFold = true;
-		playerFoot.Set();
+		leg.Set();
 	}
 
-	if (playerFoot.FootIsAction == false)
+	if (leg.FootIsAction == false)
 	{
 		if (IsLeftFold == true)
 		{
@@ -338,10 +338,10 @@ void Player::Update(Stage& stage)
 		}
 	}
 
-	if (Body_One.IsAction == false && Body_Two.IsAction == false && Body_Three.IsAction == false && playerFoot.FootIsAction == false)
+	if (Body_One.IsAction == false && Body_Two.IsAction == false && Body_Three.IsAction == false && leg.FootIsAction == false)
 	{
 		Player_IsAction = false;
-		playerFoot.IsFootUp = false;
+		leg.IsFootUp = false;
 	}
 
 	//ŠJ‚­
@@ -572,7 +572,7 @@ void Player::Update(Stage& stage)
 	{
 		IsDownBody = false;
 	}
-	playerFoot.Update(CenterPosition);
+	leg.Update(CenterPosition);
 
 	if (Body_One.IsActivate == true)
 	{
@@ -595,12 +595,12 @@ void Player::Draw(int offsetX, int offsetY)
 {
 	if (IsDownBody == true && Body_Two.IsFold == false)
 	{
-		playerFoot.FootCenterPosition.y = CenterPosition.y + 60.0f;
+		leg.FootCenterPosition.y = CenterPosition.y + 60.0f;
 	}
 
 	if (Body_One.IsSlide == false && Body_Two.IsSlide == false && Body_Three.IsSlide == false)
 	{
-		playerFoot.Draw(offsetX, offsetY);
+		leg.Draw(offsetX, offsetY);
 		DrawExtendGraph(static_cast<int>(CenterPosition.x) - 30 + offsetX, static_cast<int>(CenterPosition.y) - 30 + offsetY,
 			static_cast<int>(CenterPosition.x) + 30 + offsetX, static_cast<int>(CenterPosition.y) + 30 + offsetY, FaceHandle[Player_IsAction], true);
 	}

@@ -113,7 +113,7 @@ public: //ƒƒ“ƒo•Ï”
 	int BodyColor = WHITE;
 
 	//‘Ì‚Ì‘å‚«‚³
-	const float BodySize;
+	const float BodySize = 60.0f;
 
 	//‰æ‘œƒnƒ“ƒhƒ‹
 	int Bodyhandle;

@@ -89,5 +89,5 @@ public: //ƒƒ“ƒo•Ï”
 	bool IsDownBody = false;
 
 	//‘«
-	PlayerFoot playerFoot;
+	PlayerFoot leg;
 };
