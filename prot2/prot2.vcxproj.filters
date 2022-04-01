@@ -119,6 +119,12 @@
     <ClInclude Include="Matrix4.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerFoot.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawShape.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\stage2.csv">

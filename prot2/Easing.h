@@ -15,7 +15,7 @@ public: //ƒƒ“ƒoŠÖ”
 
 public: //ƒƒ“ƒo•Ï”
 	float maxTime;
-	float timerate;
+	float timeRate;
 	float addTime;
 
 	bool isMove;

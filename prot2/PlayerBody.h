@@ -44,7 +44,7 @@ public: //メンバ関数
 	/// <param name="stage">ステージデータ</param>
 	/// <param name="center">プレイヤーの中心</param>
 	/// <returns></returns>
-	void IsHitBody(Stage& stage, Vector3& center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide);
+	void IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide);
 
 	/// <summary>
 	/// 押し出し処理
@@ -53,7 +53,7 @@ public: //メンバ関数
 	/// <param name="extrudepos">押し出す側の座標</param>
 	/// <param name="extrudedis">押し出す距離</param>
 	/// <param name="extrudetype">どの方向"から"押し出すか</param>
-	void Extrude(Vector3& center, Vector3 extrudepos, float extrudedis, bodytype extrudetype, bool& isfall, bool& isjump, bool& iscolide);
+	void Extrude(Vector3* center, Vector3 extrudepos, float extrudedis, bodytype extrudetype, bool& isfall, bool& isjump, bool& iscolide);
 
 public: //メンバ変数
 	//有効化フラグ
@@ -88,6 +88,15 @@ public: //メンバ変数
 	//折る・開く・スライドをしている途中かどうか
 	bool IsAction;
 
+	//上下左右それぞれの当たり判定
+	bool IsHitLeft = false;
+	bool IsHitUp = false;
+	bool IsHitRight = false;
+	bool IsHitDown = false;
+
+	//body別落下判定
+	bool BodyIsFall = false;
+
 	//スライドする距離
 	int SlideDis;
 
@@ -103,8 +112,8 @@ public: //メンバ変数
 	//体の色
 	int BodyColor = WHITE;
 
-	//ゴールしたかどうか
-	bool IsGoal = false;
+	//体の大きさ
+	const float BodySize = 60.0f;
 
 	//画像ハンドル
 	int Bodyhandle = LoadGraph("Resources/Body.png");

@@ -3,7 +3,7 @@
 
 Easing::Easing() :
 	maxTime(2.0f),
-	timerate(0.0f),
+	timeRate(0.0f),
 	addTime(0.1f),
 	isMove(false),
 	splineIndex(0)

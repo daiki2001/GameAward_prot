@@ -1,4 +1,5 @@
 #pragma once
+#include "PlayerBody.h"
 #include "Vector3.h"
 #include "Easing.h"
 
@@ -17,7 +18,8 @@ public: //ƒƒ“ƒo•Ï”
 	Vector3 FootCenterPosition;
 	Easing ease;
 
-	bool FootIsAction;
+	bool FootIsAction = false;
+	bool IsFootUp = false;
 
 	//‰æ‘œƒnƒ“ƒhƒ‹
 	int FootHandle;

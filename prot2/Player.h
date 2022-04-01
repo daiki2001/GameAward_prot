@@ -33,6 +33,8 @@ public: //メンバ関数
 	void IsHitPlayerBody(Stage& stage);
 
 	void ExtrudePlayer(Vector3 ExtrudePos, float ExtrudeDis, bodytype ExtrudeType);
+
+	bool IsFall();
 public: //メンバ変数
 	//床の高さ
 	float FloorHeight;
@@ -48,29 +50,43 @@ public: //メンバ変数
 	//body_twoを優先的に開くか
 	bool IsOpenTwo;
 
-	//どの方向を折ったか(4方向)
+	//どの方向を折るか(4方向)
 	bool IsLeftFold;
 	bool IsUpFold;
 	bool IsRightFold;
 	bool IsDownFold;
 
+	//移動速度
+	float SideMoveSpeed = 3.0f;
+
 	//ジャンプ
-	bool IsJump;
-	float JumpSpeed;
-	float FallSpeed;
-	bool IsFall;
+	bool IsJump = false;
+	float JumpSpeed = 3.0f;
+	float FallSpeed = 3.0f;
+
+	//落下判定(顔のみ
+	bool IsFaceFall;
+
+	//体と顔すべてを考慮した落下判定
+	bool IsAllFall = false;
 
 	//落下中・ジャンプ中にジャンプ入力が入っているかどうか
 	bool IsInputjump = false;
 
-	//どれか一つでも体動かしていたらtrue
-	bool Player_IsAction;
+	//どれか一つでも体を動かしていたらtrue
+	bool Player_IsAction = false;
+
 	//画像ハンドル(顔)
 	int FaceHandle[2];
 
-	bool IsGoal;
+	//ゴールに触れているかどうか
+	bool IsGoal = false;
 
-	bool IsColide;
+	//ブロックに当たっているかどうか
+	bool IsColide = false;
+
+	//下に体があるかどうか
+	bool IsDownBody = false;
 
 	//足
 	PlayerFoot playerFoot;
