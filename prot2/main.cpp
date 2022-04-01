@@ -49,9 +49,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	unsigned char playerTile[4] = { 0 };
 
 	Stage* stage = Stage::Get();
-	stage->LoadStage("./Resources/stage2.csv", playerTile);
+	stage->LoadStage("./Resources/stage1.csv", playerTile);
 	player->Init();
 	player->bodysetup(false, left, true, up, true, right);
+
+	int Back = LoadGraph("Resources/back.png");
 
 	const int drawOffsetX = 0, drawOffsetY = 0;
 
@@ -99,6 +101,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		player->Update(*stage);
 
 		// •`‰æˆ—
+		DrawGraph(0, 0, Back, true);
+		DrawBox(0, 0, 1280, 720, GetColor(0, 0, 0), true);
 		stage->Draw(drawOffsetX, drawOffsetY);
 		player->Draw(drawOffsetX, drawOffsetY);
 

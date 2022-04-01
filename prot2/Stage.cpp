@@ -22,17 +22,14 @@ enum bodytype
 
 namespace
 {
-	static size_t i = 0;
-	static size_t j = 0;
-	static size_t x = 0;
-	static size_t y = 0;
+	static size_t i = 0, j = 0; //for文のループカウンタ
+	static size_t x = 0, y = 0; //マップチップ上の座標
 
-	static size_t mapchipPos = 0;
+	static size_t mapchipPos = 0; //マップチップの要素番号
 }
 
 const int Stage::blockSize = 60;
 const int Stage::halfBlockSize = Stage::blockSize / 2;
-int Stage::foldGraph = -1;
 int Stage::startPlayerPosX = 0;
 int Stage::startPlayerPosY = 0;
 unsigned char Stage::initFoldCount[4] = { 0 };
@@ -45,8 +42,7 @@ Stage* Stage::Get()
 
 Stage::Stage() :
 	stageData{},
-	initStageData{},
-	stageEase{}
+	initStageData{}
 {
 	Init();
 }
@@ -679,6 +675,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 				if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
 				{
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 				}
 
@@ -687,6 +684,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					Open(playerTile, direction, i, moveStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -696,6 +694,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -724,6 +723,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 				if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
 				{
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 				}
 
@@ -732,6 +732,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					Open(playerTile, direction, i, moveStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -741,6 +742,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -769,6 +771,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 				if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
 				{
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 				}
 
@@ -777,6 +780,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					Open(playerTile, direction, i, moveStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -786,6 +790,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -814,6 +819,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 				if (stageData[i].stageTileData[moveStageData].stageEase.isMove)
 				{
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = false;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 				}
 
@@ -822,6 +828,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					Open(playerTile, direction, i, moveStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -831,6 +838,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
+					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
 					stageData[i].stageTileData[moveStageData].stageEase.timeRate = 0.0f;
 					stageData[i].stageTileData[moveStageData].stageEase.addTime = 0.1f;
 					stageData[i].stageTileData[moveStageData].stageEase.maxTime = 1.5f;
@@ -878,6 +886,7 @@ void Stage::Reset()
 			}
 
 			stageData[i].stageTileData[j].stageEase.isMove = false;
+			stageData[i].stageTileData[j].stageEase.splineIndex = 0;
 			stageData[i].stageTileData[j].stageEase.timeRate = 0.0f;
 			stageData[i].stageTileData[j].isFold = false;
 		}
@@ -997,19 +1006,17 @@ char Stage::GetStageHeight(int i)
 	return stageData[i].height;
 }
 
-char Stage::GetStageTileHeight(int i, int j)
-{
-	//ステージタイルの高さを返す
-	return stageData[i].stageTileData[j].height;
-}
-
 char Stage::GetStageTileWidth(int i, int j)
 {
-	//ステージタイルの幅を返す
 	return stageData[i].stageTileData[j].width;
 }
 
-char Stage::GetStageMapChip(int i, int j, int mapchipPos)
+char Stage::GetStageTileHeight(int i, int j)
+{
+	return stageData[i].stageTileData[j].height;
+}
+
+char Stage::GetStageMapchip(int i, int j, int mapchipPos)
 {
 	return stageData[i].stageTileData[j].mapchip[mapchipPos];
 }
@@ -1031,9 +1038,19 @@ bool Stage::GetPositionTile(Vector3 center, int i, int j)
 	}
 }
 
+int Stage::GetStageTileOffsetX(int i, int j)
+{
+	return stageData[i].stageTileData[j].offsetX;
+}
+
+int Stage::GetStageTileOffsetY(int i, int j)
+{
+	return stageData[i].stageTileData[j].offsetY;
+}
+
 int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData)
 {
-	if (playerTile[direction] < 0)
+	if (playerTile[direction] <= 0)
 	{
 		return EF;
 	}
@@ -1183,37 +1200,6 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 	return 0;
 }
 
-int Stage::GetStageTileOffsetX(int i, int j)
-{
-	return stageData[i].stageTileData[j].offsetX;
-}
-
-int Stage::SearchTopStageTile()
-{
-	std::vector<Vector3> topStageTile; //xの値にstageDataの要素番号、yの値にstageData[i].stageDataの要素番号を格納する
-	static bool isTop = false;
-
-	for (i = 0; i < stageData.size(); i++)
-	{
-		for (j = 0; j < stageData[i].stageTileData.size(); j++)
-		{
-			isTop = false;
-
-			for (size_t k = 0; k < topStageTile.size(); k++)
-			{
-
-			}
-		}
-	}
-
-	return 0;
-}
-
-int Stage::GetStageTileOffsetY(int i, int j)
-{
-	return stageData[i].stageTileData[j].offsetY;
-}
-
 void Stage::EaseingInit(const size_t& onPlayerStage, const size_t& moveStageData, const int& direction)
 {
 	static float keepA = 0.0f, keepB = 0.0f;
@@ -1314,64 +1300,96 @@ void Stage::EaseingUpdate()
 				continue;
 			}
 
+			static float ease = 0.0f;
+
 			stageData[i].stageTileData[j].stageEase.addTime += stageData[i].stageTileData[j].stageEase.maxTime / 60.0f;
 			stageData[i].stageTileData[j].stageEase.timeRate =
 				min(stageData[i].stageTileData[j].stageEase.addTime / stageData[i].stageTileData[j].stageEase.maxTime, 1.0f);
+			ease = Easing::easeout(0.0f, 1.0f, stageData[i].stageTileData[j].stageEase.timeRate);
 
 			for (y = 0; y < stageData[i].stageTileData[j].height; y++)
 			{
 				for (x = 0; x < stageData[i].stageTileData[j].width; x++)
 				{
+					static Vector3 axisPos = {};
+
 					mapchipPos = y * stageData[i].stageTileData[j].width + x;
 
-					if ((stageData[i].stageTileData[j].direction - 1) % 4 == bodytype::left ||
-						(stageData[i].stageTileData[j].direction - 1) % 4 == bodytype::right)
+					switch ((stageData[i].stageTileData[j].direction - 1) % 4)
 					{
-						stageData[i].stageTileData[j].easePos[mapchipPos].x =
-							Easing::easeout(
-								stageData[i].stageTileData[j].startPos[mapchipPos].x,
-								stageData[i].stageTileData[j].endPos[mapchipPos].x,
-								stageData[i].stageTileData[j].stageEase.timeRate);
-						stageData[i].stageTileData[j].easePos[mapchipPos].y = stageData[i].stageTileData[j].endPos[mapchipPos].y;
-						if (stageData[i].stageTileData[j].stageEase.timeRate < 0.5f)
-						{
-							stageData[i].stageTileData[j].easePos[mapchipPos].z =
-								Easing::easeout(0.0f, 1.0f, stageData[i].stageTileData[j].stageEase.timeRate);
-						}
-						else
-						{
-							stageData[i].stageTileData[j].easePos[mapchipPos].z =
-								Easing::easeout(1.0f, 0.0f, stageData[i].stageTileData[j].stageEase.timeRate);
-						}
+					case bodytype::up:
+						axisPos = { static_cast<float>(stageData[i].stageTileData[j].startPos[mapchipPos].x),
+							static_cast<float>(stageData[i].stageTileData[j].startPos[0].y + (stageData[i].stageTileData[j].offsetY * blockSize)),
+							static_cast<float>(stageData[i].stageTileData[j].height * blockSize) };
+						break;
+					case bodytype::down:
+						axisPos = { static_cast<float>(stageData[i].stageTileData[j].startPos[mapchipPos].x),
+							static_cast<float>(stageData[i].stageTileData[j].startPos[0].y - blockSize),
+							static_cast<float>(stageData[i].stageTileData[j].height * blockSize) };
+						break;
+					case bodytype::left:
+						axisPos = { static_cast<float>(stageData[i].stageTileData[j].startPos[0].x + (stageData[i].stageTileData[j].offsetX * blockSize)),
+							static_cast<float>(stageData[i].stageTileData[j].startPos[mapchipPos].y),
+							static_cast<float>(stageData[i].stageTileData[j].width * blockSize) };
+						break;
+					case bodytype::right:
+						axisPos = { static_cast<float>(stageData[i].stageTileData[j].startPos[0].x - blockSize),
+							static_cast<float>(stageData[i].stageTileData[j].startPos[mapchipPos].y),
+							static_cast<float>(stageData[i].stageTileData[j].width * blockSize) };
+						break;
+					default:
+						break;
 					}
-					if ((stageData[i].stageTileData[j].direction - 1) % 4 == bodytype::up ||
-						(stageData[i].stageTileData[j].direction - 1) % 4 == bodytype::down)
-					{
-						stageData[i].stageTileData[j].easePos[mapchipPos].x = stageData[i].stageTileData[j].endPos[mapchipPos].x;
-						stageData[i].stageTileData[j].easePos[mapchipPos].y =
-							Easing::easeout(
-								stageData[i].stageTileData[j].startPos[mapchipPos].y,
-								stageData[i].stageTileData[j].endPos[mapchipPos].y,
-								stageData[i].stageTileData[j].stageEase.timeRate);
-						if (stageData[i].stageTileData[j].stageEase.timeRate < 0.5f)
-						{
-							stageData[i].stageTileData[j].easePos[mapchipPos].z =
-								Easing::easeout(0.0f, 1.0f, stageData[i].stageTileData[j].stageEase.timeRate);
-						}
-						else
-						{
-							stageData[i].stageTileData[j].easePos[mapchipPos].z =
-								Easing::easeout(1.0f, 0.0f, stageData[i].stageTileData[j].stageEase.timeRate);
-						}
-					}
+
+					std::vector<Vector3> pos = {
+						stageData[i].stageTileData[j].startPos[mapchipPos],
+						axisPos,
+						stageData[i].stageTileData[j].endPos[mapchipPos]
+					};
+
+					stageData[i].stageTileData[j].easePos[mapchipPos] = Easing::SplineCurve(
+						pos,
+						stageData[i].stageTileData[j].stageEase.splineIndex,
+						stageData[i].stageTileData[j].stageEase.timeRate);
 				}
 			}
 
 			if (stageData[i].stageTileData[j].stageEase.timeRate >= 1.0f)
 			{
-				stageData[i].stageTileData[j].stageEase.isMove = false;
-				break;
+				if (stageData[i].stageTileData[j].stageEase.splineIndex < 3 - 2)
+				{
+					stageData[i].stageTileData[j].stageEase.splineIndex++;
+					stageData[i].stageTileData[j].stageEase.timeRate = 0.0f;
+					stageData[i].stageTileData[j].stageEase.addTime = 0.1f;
+					stageData[i].stageTileData[j].stageEase.maxTime = 1.5f;
+				}
+				else
+				{
+					stageData[i].stageTileData[j].stageEase.isMove = false;
+					break;
+				}
 			}
 		}
 	}
+}
+
+int Stage::SearchTopStageTile()
+{
+	std::vector<Vector3> topStageTile; //xの値にstageDataの要素番号、yの値にstageData[i].stageDataの要素番号を格納する
+	static bool isTop = false;
+
+	for (i = 0; i < stageData.size(); i++)
+	{
+		for (j = 0; j < stageData[i].stageTileData.size(); j++)
+		{
+			isTop = false;
+
+			for (size_t k = 0; k < topStageTile.size(); k++)
+			{
+
+			}
+		}
+	}
+
+	return 0;
 }

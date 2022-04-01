@@ -51,8 +51,8 @@ void Player::Init()
 	Body_Three.Init(CenterPosition, right);
 	Body_Three.BodyColor = MAGENTA;
 
-	FaceHandle[0] = LoadGraph("Resources/face.png");
-	FaceHandle[1] = LoadGraph("Resources/face_fold.png");
+	FaceHandle[0] = LoadGraph("Resources/player.png");
+	FaceHandle[1] = LoadGraph("Resources/playerBody/playerBody02.png");
 
 	PlayerFoot.Init();
 }
@@ -781,7 +781,7 @@ void Player::IsHitPlayerBody(Stage& stage)
 				up_mapchip_tile = up_mapchip % stage.GetStageTileHeight(i, j);
 
 				MapchipPos = (up_mapchip_tile)*stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
-				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
+				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (left_mapchip * 60) - (CenterPosition.x - 30);
 					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
@@ -803,7 +803,7 @@ void Player::IsHitPlayerBody(Stage& stage)
 				down_mapchip_tile = down_mapchip % stage.GetStageTileHeight(i, j);
 
 				MapchipPos = (down_mapchip_tile)*stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
-				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
+				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (left_mapchip * 60) - (CenterPosition.x - 30);
 					BuriedY = ((CenterPosition.y + 29) - 60) - (down_mapchip * 60);
@@ -826,7 +826,7 @@ void Player::IsHitPlayerBody(Stage& stage)
 				up_mapchip_tile = up_mapchip % stage.GetStageTileHeight(i, j);
 
 				MapchipPos = (up_mapchip_tile)*stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
-				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
+				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = ((CenterPosition.x + 29) - 60) - (right_mapchip * 60);
 					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
@@ -848,7 +848,7 @@ void Player::IsHitPlayerBody(Stage& stage)
 				down_mapchip_tile = down_mapchip % stage.GetStageTileHeight(i, j);
 
 				MapchipPos = (down_mapchip_tile)*stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
-				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::BLOCK)
+				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = ((CenterPosition.x + 29) - 60) - (right_mapchip * 60);
 					BuriedY = ((CenterPosition.y + 29) - 60) - (down_mapchip * 60);
@@ -879,22 +879,22 @@ void Player::IsHitPlayerBody(Stage& stage)
 				MapchipPos_Goal[1] = down_mapchip_tile * stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
 				MapchipPos_Goal[2] = down_mapchip_tile * stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
 
-				if (stage.GetStageMapChip(i, j, MapchipPos) == MapchipData::GOAL)
+				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}
 				//âEè„
-				else if (stage.GetStageMapChip(i, j, MapchipPos_Goal[0]) == MapchipData::GOAL)
+				else if (stage.GetStageMapchip(i, j, MapchipPos_Goal[0]) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}
 				//ç∂â∫
-				else if (stage.GetStageMapChip(i, j, MapchipPos_Goal[1]) == MapchipData::GOAL)
+				else if (stage.GetStageMapchip(i, j, MapchipPos_Goal[1]) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}
 				//âEâ∫
-				else if (stage.GetStageMapChip(i, j, MapchipPos_Goal[2]) == MapchipData::GOAL)
+				else if (stage.GetStageMapchip(i, j, MapchipPos_Goal[2]) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}

@@ -8,10 +8,10 @@
 enum MapchipData
 {
 	EMPTY_STAGE = 0,
-	NONE,
-	BLOCK,
-	GOAL,
-	START
+	NONE = 1,
+	BLOCK = 2,
+	GOAL = 3,
+	START = 4
 };
 
 class Stage final
@@ -38,10 +38,12 @@ public: //サブクラス
 		unsigned char height = 1;
 		unsigned char direction = 0;
 		bool isFold = false;
+
 		Easing stageEase = {};
 		std::vector<Vector3> startPos = {};
 		std::vector<Vector3> endPos = {};
 		std::vector<Vector3> easePos = {};
+
 		bool isTop = true;
 	};
 	struct StageData
@@ -62,9 +64,7 @@ public: //定数
 
 	Vector3 offset = { 0,0,0 };
 
-public: //静的メンバ変数
-	static int foldGraph;
-private:
+private: //静的メンバ変数
 	static int startPlayerPosX;
 	static int startPlayerPosY;
 	static unsigned char initFoldCount[4];
@@ -104,24 +104,25 @@ public: //メンバ関数
 	inline StageData* GetStageData(const short& stageNumber);
 	// 全ステージのデータを取得
 	inline StageData* GetAllStageData();
-	//Stagedataのsizeを取得
+	// Stagedataのサイズを取得
 	size_t GetStageDataSize();
-	//Stagetiledataのsizeを取得
+	// Stagetiledataのサイズを取得
 	size_t GetStageTileDataSize(int i);
 	// ステージの横幅を取得
 	char GetStageWidth(int i);
 	// ステージの縦幅を取得
 	char GetStageHeight(int i);
-	//任意のStageTileの高さを取得
+	// 任意のStageTileの高さを取得
 	char GetStageTileHeight(int i, int j);
-	//任意のStageTileの幅を取得
+	// 任意のStageTileの幅を取得
 	char GetStageTileWidth(int i, int j);
-	//任意の場所のマップチップ情報を取得
-	char GetStageMapChip(int i, int j, int mapchipPos);
-	//任意の座標からどのStageTileにいるかを取得
+	// 任意の場所のマップチップ情報を取得
+	char GetStageMapchip(int i, int j, int mapchipPos);
+	// 任意の座標からどのStageTileにいるかを取得
 	bool GetPositionTile(Vector3 center, int i, int j);
-	//ステージタイルのオフセットを返す(それぞれ横・縦)
+	// ステージタイルのX軸のオフセットを返す
 	int GetStageTileOffsetX(int i, int j);
+	// ステージタイルのY軸のオフセットを返す
 	int GetStageTileOffsetY(int i, int j);
 	//任意の方向に特定のマップチップがあるかどうか
 	bool IsNeighberMapchip(int i, int j, int MapchipPos, MapchipData mapchipData);
@@ -131,6 +132,7 @@ private:
 	int Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData);
 	// ステージを開く
 	int Open(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& moveStageTile, const size_t& moveStageData);
+
 	// イージングの初期化
 	void EaseingInit(const size_t& onPlayerStage, const size_t& moveStageData, const int& direction);
 	// イージングの更新
@@ -141,6 +143,4 @@ private:
 private: //メンバ変数
 	std::vector<StageData> stageData;
 	std::vector<StageData> initStageData;
-
-	Easing stageEase;
 };

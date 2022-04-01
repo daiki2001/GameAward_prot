@@ -606,7 +606,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 
 				//今いる座標のマップチップを確認
 				mapchipPos = BodyUp_mapchip_tile * stage.GetStageTileWidth(i, j) + BodyLeft_mapchip_tile;
-				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (BodyLeft_mapchip * 60) - BodyLeft;
 					BuriedY = (BodyUp_mapchip * 60) - BodyUp;
@@ -637,7 +637,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 				BodyDown_mapchip_tile = BodyDown_mapchip % stage.GetStageTileHeight(i, j);
 
 				mapchipPos = (BodyDown_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyLeft_mapchip_tile);
-				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (BodyLeft_mapchip * 60) - BodyLeft;
 					BuriedY = (BodyDown - 60) - (BodyDown_mapchip * 60);
@@ -665,7 +665,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 				BodyUp_mapchip_tile = BodyUp_mapchip % stage.GetStageTileHeight(i, j);
 
 				mapchipPos = (BodyUp_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyRight_mapchip_tile);
-				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (BodyRight - 60) - (BodyRight_mapchip * 60);
 					BuriedY = (BodyUp_mapchip * 60) - BodyUp;
@@ -696,7 +696,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 				BodyDown_mapchip_tile = BodyDown_mapchip % stage.GetStageTileHeight(i, j);
 
 				mapchipPos = (BodyDown_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyRight_mapchip_tile);
-				if (stage.GetStageMapChip(i, j, mapchipPos) == MapchipData::BLOCK)
+				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (BodyRight - 60) - (BodyRight_mapchip * 60);
 					BuriedY = (BodyDown - 60) - (BodyDown_mapchip * 60);

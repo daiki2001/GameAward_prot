@@ -2,7 +2,7 @@
 
 void Foot::Init()
 {
-	Foothandle = LoadGraph("Resources/Foot.png");
+	Foothandle = LoadGraph("Resources/playerLegs/playerLegs.png");
 }
 
 void Foot::Set()
