@@ -5,7 +5,7 @@
 class Foot
 {
 public:
-	Vector3 FootCenterPosition;
+	Vector3 FootLeftUpPosition;
 	Easing ease;
 
 	bool FootIsAction = false;
@@ -16,6 +16,6 @@ public:
 
 	void Init();
 	void Set();
-	void Update(Vector3& FaceCenterPos);
+	void Update(Vector3& FaceCenterPos, bool IsDownBody, int BodyDis);
 	void Draw(bool isleft, bool isright);
 };

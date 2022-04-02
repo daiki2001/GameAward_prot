@@ -112,8 +112,8 @@ public: //ƒƒ“ƒo•Ï”
 	int BodyColor = WHITE;
 
 	//‘Ì‚Ì‘å‚«‚³
-	const float BodySize = 60.0f;
-	const float HalfBodySize = 30.0f;
+	const float BodySize = 50.0f;
+	const float HalfBodySize = 25.0f;
 
 	//‰æ‘œƒnƒ“ƒhƒ‹
 	int Bodyhandle = LoadGraph("Resources/playerSub.png");

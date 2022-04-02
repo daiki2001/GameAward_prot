@@ -14,14 +14,14 @@ void Foot::Set()
 	IsFootUp = true;
 }
 
-void Foot::Update(Vector3& FaceCenterPos)
+void Foot::Update(Vector3& FaceCenterPos, bool IsDownBody, int BodyDis)
 {
 	if (FootIsAction == true)
 	{
 		ease.addTime += ease.maxTime / 15.0f;
 		ease.timeRate = min(ease.addTime / ease.maxTime, 1.0f);
 
-		FootCenterPosition = { FaceCenterPos.x,ease.easeout(FaceCenterPos.y,FaceCenterPos.y - 10,ease.timeRate),0.0f };
+		FootLeftUpPosition = { FaceCenterPos.x - 30,ease.easeout(FaceCenterPos.y + (IsDownBody * 50 * BodyDis) + 25,FaceCenterPos.y + (IsDownBody * 50 * BodyDis) - 15,ease.timeRate),0.0f };
 		if (ease.timeRate >= 1.0f)
 		{
 			FootIsAction = false;
@@ -30,7 +30,7 @@ void Foot::Update(Vector3& FaceCenterPos)
 
 	if (IsFootUp == false)
 	{
-		FootCenterPosition = FaceCenterPos;
+		FootLeftUpPosition = { FaceCenterPos.x - 30,FaceCenterPos.y + (IsDownBody * 50 * BodyDis) + 25,0.0f };
 	}
 }
 
@@ -38,10 +38,10 @@ void Foot::Draw(bool isleft, bool isright)
 {
 	if (isleft)
 	{
-		DrawExtendGraph(FootCenterPosition.x - 30, FootCenterPosition.y - 30, FootCenterPosition.x + 30, FootCenterPosition.y + 30, Foothandle, true);
+		DrawExtendGraph(FootLeftUpPosition.x, FootLeftUpPosition.y, FootLeftUpPosition.x + 60, FootLeftUpPosition.y + 8, Foothandle, true);
 	}
 	if (isright)
 	{
-		DrawExtendGraph(FootCenterPosition.x + 30, FootCenterPosition.y - 30, FootCenterPosition.x - 30, FootCenterPosition.y + 30, Foothandle, true);
+		DrawExtendGraph(FootLeftUpPosition.x + 60, FootLeftUpPosition.y, FootLeftUpPosition.x, FootLeftUpPosition.y + 8, Foothandle, true);
 	}
 }

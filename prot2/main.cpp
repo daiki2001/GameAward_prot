@@ -73,7 +73,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			player->Init();
 			player->bodysetup(false, left, true, up, false, right);
 		}
-		/*if (Input::isKey(KEY_INPUT_2))
+		if (Input::isKey(KEY_INPUT_2))
 		{
 			stage->LoadStage("./Resources/stage2.csv", playerTile);
 			player->Init();
@@ -84,7 +84,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			stage->LoadStage("./Resources/stage3.csv", playerTile);
 			player->Init();
 			player->bodysetup(false, left, true, up, false, right);
-		}*/
+		}
 		if (InputManger::Reset())
 		{
 			stage->Reset();
@@ -102,7 +102,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 
 		// •`‰æˆ—
 		DrawGraph(0, 0, Back, true);
-		DrawBox(0, 0, 1280, 720, GetColor(0, 0, 0), true);
+		//DrawBox(0, 0, 1280, 720, GetColor(0, 0, 0), true);
 		stage->Draw(drawOffsetX, drawOffsetY);
 		player->Draw(drawOffsetX, drawOffsetY);
 

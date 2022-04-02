@@ -50,6 +50,7 @@ public: //ƒƒ“ƒo•Ï”
 	PlayerBody Body_One;
 	PlayerBody Body_Two;
 	PlayerBody Body_Three;
+	PlayerBody Body_Four;
 
 	//body_two‚ğ—Dæ“I‚ÉŠJ‚­‚©
 	bool IsOpenTwo = true;
