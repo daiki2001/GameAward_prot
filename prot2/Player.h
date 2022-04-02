@@ -42,6 +42,10 @@ public: //ƒƒ“ƒo•Ï”
 	//‘Ì‚Ì\¬—v‘f
 	Vector3 CenterPosition;
 
+	//Œü‚¢‚Ä‚¢‚é•ûŒü
+	bool IsLeft;
+	bool IsRight;
+
 	//‘Ì(Ü‚é‚Ù‚¤)
 	PlayerBody Body_One;
 	PlayerBody Body_Two;

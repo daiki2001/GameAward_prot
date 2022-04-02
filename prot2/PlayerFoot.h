@@ -12,7 +12,7 @@ public: //ƒƒ“ƒoŠÖ”
 	void Init();
 	void Set();
 	void Update(Vector3& FaceCenterPos);
-	void Draw(int offsetX, int offsetY);
+	void Draw(int offsetX, int offsetY, bool isleft, bool isright);
 
 public: //ƒƒ“ƒo•Ï”
 	Vector3 FootCenterPosition;

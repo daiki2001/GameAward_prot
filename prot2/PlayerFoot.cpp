@@ -16,7 +16,7 @@ PlayerFoot::~PlayerFoot()
 
 void PlayerFoot::Init()
 {
-	FootHandle = LoadGraph("Resources/playerLegs/playerLegs.png");
+	FootHandle = LoadGraph("./Resources/playerLegs/playerLegs.png");
 }
 
 void PlayerFoot::Set()
@@ -48,8 +48,18 @@ void PlayerFoot::Update(Vector3& FaceCenterPos)
 	}
 }
 
-void PlayerFoot::Draw(int offsetX, int offsetY)
+void PlayerFoot::Draw(int offsetX, int offsetY, bool isleft, bool isright)
 {
-	DrawExtendGraph(static_cast<int>(FootCenterPosition.x) - 30 + offsetX, static_cast<int>(FootCenterPosition.y) - 30 + offsetY,
-		static_cast<int>(FootCenterPosition.x) + 30 + offsetX, static_cast<int>(FootCenterPosition.y) + 30 + offsetY, FootHandle, true);
+	if (isleft)
+	{
+		DrawExtendGraph(
+			static_cast<int>(FootCenterPosition.x) - 30 + offsetX, static_cast<int>(FootCenterPosition.y) - 30,
+			static_cast<int>(FootCenterPosition.x) + 30 + offsetX, static_cast<int>(FootCenterPosition.y) + 30, FootHandle, true);
+	}
+	if (isright)
+	{
+		DrawExtendGraph(
+			static_cast<int>(FootCenterPosition.x) + 30 + offsetX, static_cast<int>(FootCenterPosition.y) - 30,
+			static_cast<int>(FootCenterPosition.x) - 30 + offsetX, static_cast<int>(FootCenterPosition.y) + 30, FootHandle, true);
+	}
 }

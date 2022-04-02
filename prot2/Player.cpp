@@ -61,6 +61,8 @@ void Player::Init()
 	FaceHandle[1] = LoadGraph("Resources/playerBody/playerBody02.png");
 
 	leg.Init();
+	IsLeft = true;
+	IsRight = false;
 }
 
 void Player::Update(Stage& stage)
@@ -69,10 +71,14 @@ void Player::Update(Stage& stage)
 	if (InputManger::Right() && !InputManger::Act1() && Player_IsAction == false)
 	{
 		CenterPosition.x += SideMoveSpeed;
+		IsLeft = false;
+		IsRight = true;
 	}
 	if (InputManger::Left() && !InputManger::Act1() && Player_IsAction == false)
 	{
 		CenterPosition.x -= SideMoveSpeed;
+		IsLeft = true;
+		IsRight = false;
 	}
 
 	//ジャンプ入力できるかどうか
@@ -600,9 +606,19 @@ void Player::Draw(int offsetX, int offsetY)
 
 	if (Body_One.IsSlide == false && Body_Two.IsSlide == false && Body_Three.IsSlide == false)
 	{
-		leg.Draw(offsetX, offsetY);
-		DrawExtendGraph(static_cast<int>(CenterPosition.x) - 30 + offsetX, static_cast<int>(CenterPosition.y) - 30 + offsetY,
-			static_cast<int>(CenterPosition.x) + 30 + offsetX, static_cast<int>(CenterPosition.y) + 30 + offsetY, FaceHandle[Player_IsAction], true);
+		leg.Draw(offsetX, offsetY, IsLeft,IsRight);
+		if (IsLeft)
+		{
+			DrawExtendGraph(
+				static_cast<int>(CenterPosition.x) - 30 + offsetX, static_cast<int>(CenterPosition.y) - 30 + offsetY,
+				static_cast<int>(CenterPosition.x) + 30 + offsetX, static_cast<int>(CenterPosition.y) + 30 + offsetY, FaceHandle[Player_IsAction], true);
+		}
+		if (IsRight)
+		{
+			DrawExtendGraph(
+				static_cast<int>(CenterPosition.x) + 30 + offsetX, static_cast<int>(CenterPosition.y) - 30 + offsetY,
+				static_cast<int>(CenterPosition.x) - 30 + offsetX, static_cast<int>(CenterPosition.y) + 30 + offsetY, FaceHandle[Player_IsAction], true);
+		}
 	}
 
 #pragma region 重なっている枚数ごとに順番に描画
@@ -648,30 +664,27 @@ void Player::Draw(int offsetX, int offsetY)
 
 	if (Body_One.IsSlide == true || Body_Two.IsSlide == true || Body_Three.IsSlide == true)
 	{
-		DrawExtendGraph(static_cast<int>(CenterPosition.x) - 30 + offsetX, static_cast<int>(CenterPosition.y) - 30 + offsetY,
-			static_cast<int>(CenterPosition.x) + 30 + offsetX, static_cast<int>(CenterPosition.y) + 30 + offsetY, FaceHandle[Player_IsAction], true);
+		if (IsLeft)
+		{
+			DrawExtendGraph(
+				static_cast<int>(CenterPosition.x) - 30 + offsetX, static_cast<int>(CenterPosition.y) - 30 + offsetY,
+				static_cast<int>(CenterPosition.x) + 30 + offsetX, static_cast<int>(CenterPosition.y) + 30 + offsetY, FaceHandle[Player_IsAction], true);
+		}
+		if (IsRight)
+		{
+			DrawExtendGraph(
+				static_cast<int>(CenterPosition.x) + 30 + offsetX, static_cast<int>(CenterPosition.y) - 30 + offsetY,
+				static_cast<int>(CenterPosition.x) - 30 + offsetX, static_cast<int>(CenterPosition.y) + 30 + offsetY, FaceHandle[Player_IsAction], true);
+		}
 	}
-
-	DrawLine(0, 240, 1280, 240, WHITE, true);
-	DrawLine(300, 0, 300, 720, RED, true);
 
 #pragma region debug
 	DrawFormatString(0, 0, WHITE, "AD:左右移動");
 	DrawFormatString(0, 20, WHITE, "W:ジャンプ");
 	DrawFormatString(0, 40, WHITE, "←↑→:折る");
 	DrawFormatString(0, 60, WHITE, "SPACE:開く");
-	DrawFormatString(0, 120, WHITE, "%f", CenterPosition.y);
-	DrawFormatString(0, 140, WHITE, "%f", Body_Two.BodyStartPos.x);
-	DrawFormatString(0, 160, WHITE, "%f", Body_Two.BodyEndPos.x);
-	DrawFormatString(0, 180, WHITE, "fall:%d", IsFaceFall);
-	DrawFormatString(0, 200, WHITE, "1_fall:%d", Body_One.BodyIsFall);
-	DrawFormatString(0, 220, WHITE, "2_fall:%d", Body_Two.BodyIsFall);
-	DrawFormatString(0, 240, WHITE, "3_fall:%d", Body_Three.BodyIsFall);
-	DrawFormatString(0, 260, WHITE, "jump:%d", IsJump);
-	DrawFormatString(0, 280, WHITE, "%f", FallSpeed);
-	DrawFormatString(0, 300, WHITE, "IsAllFall:%d", IsFall());
-	DrawFormatString(0, 320, WHITE, "%d", Player_IsAction);
-	DrawFormatString(0, 340, WHITE, "IsInputjump:%d", IsInputjump);
+	DrawFormatString(0, 200, WHITE, "isleft:%d", IsLeft);
+	DrawFormatString(0, 220, WHITE, "isright:%d", IsRight);
 	if (IsGoal == true)
 	{
 		DrawFormatString(300, 100, YELLOW, "GOAL");

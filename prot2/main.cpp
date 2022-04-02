@@ -88,6 +88,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	player->bodysetup(playerTile);
 
 	int Back = LoadGraph("./Resources/back.png");
+
 	const int drawOffsetX = 320, drawOffsetY = 0;
 
 	// ƒQ[ƒ€ƒ‹[ƒv
@@ -134,7 +135,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		player->Update(*stage);
 
 		// •`‰æˆ—
-		//DrawGraph(0, 0, Back, true);
+		DrawGraph(0, 0, Back, true);
+		DrawBox(0, 0, 1280, 720, GetColor(0, 0, 0), true);
 		stage->Draw(drawOffsetX, drawOffsetY - WIN_HEIGHT);
 		player->Draw(drawOffsetX, drawOffsetY);
 
