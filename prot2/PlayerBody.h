@@ -2,7 +2,6 @@
 #include <DxLib.h>
 #include "Vector3.h"
 #include "Easing.h"
-#include "Colors.h"
 #include "Stage.h"
 
 enum bodytype
@@ -15,6 +14,11 @@ enum bodytype
 
 class PlayerBody
 {
+public: //定数
+	//体の大きさ
+	static const float BodySize;
+	static const float HalfBodySize;
+
 public: //メンバ関数
 	PlayerBody();
 	~PlayerBody();
@@ -110,11 +114,7 @@ public: //メンバ変数
 	Easing Ease;
 
 	//体の色
-	int BodyColor = WHITE;
-
-	//体の大きさ
-	const float BodySize = 60.0f;
-	const float HalfBodySize = 30.0f;
+	int BodyColor;
 
 	//画像ハンドル
 	int Bodyhandle;

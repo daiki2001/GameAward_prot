@@ -11,15 +11,15 @@ public: //メンバ関数
 
 	void Init();
 	void Set();
-	void Update(Vector3& FaceCenterPos);
+	void Update(Vector3& FaceCenterPos, bool IsDownBody, int BodyDis);
 	void Draw(int offsetX, int offsetY, bool isleft, bool isright);
 
 public: //メンバ変数
-	Vector3 FootCenterPosition;
+	Vector3 FootLeftUpPosition;
 	Easing ease;
 
-	bool FootIsAction = false;
-	bool IsFootUp = false;
+	bool FootIsAction;
+	bool IsFootUp;
 
 	//画像ハンドル
 	int FootHandle;

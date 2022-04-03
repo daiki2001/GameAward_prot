@@ -50,6 +50,7 @@ public: //メンバ変数
 	PlayerBody Body_One;
 	PlayerBody Body_Two;
 	PlayerBody Body_Three;
+	PlayerBody Body_Four;
 
 	//body_twoを優先的に開くか
 	bool IsOpenTwo;
@@ -61,36 +62,36 @@ public: //メンバ変数
 	bool IsDownFold;
 
 	//移動速度
-	float SideMoveSpeed = 3.0f;
+	float SideMoveSpeed;
 
 	//ジャンプ
-	bool IsJump = false;
-	float JumpSpeed = 3.0f;
-	float FallSpeed = 3.0f;
+	bool IsJump;
+	float JumpSpeed;
+	float FallSpeed;
 
 	//落下判定(顔のみ
 	bool IsFaceFall;
 
 	//体と顔すべてを考慮した落下判定
-	bool IsAllFall = false;
+	bool IsAllFall;
 
 	//落下中・ジャンプ中にジャンプ入力が入っているかどうか
-	bool IsInputjump = false;
+	bool IsInputjump;
 
 	//どれか一つでも体を動かしていたらtrue
-	bool Player_IsAction = false;
+	bool Player_IsAction;
 
 	//画像ハンドル(顔)
 	int FaceHandle[2];
 
 	//ゴールに触れているかどうか
-	bool IsGoal = false;
+	bool IsGoal;
 
 	//ブロックに当たっているかどうか
-	bool IsColide = false;
+	bool IsColide;
 
 	//下に体があるかどうか
-	bool IsDownBody = false;
+	bool IsDownBody;
 
 	//足
 	PlayerFoot leg;
