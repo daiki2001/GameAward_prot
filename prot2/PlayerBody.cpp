@@ -460,10 +460,16 @@ void PlayerBody::Draw(int offsetX, int offsetY)
 {
 	if (IsActivate == true)
 	{
-		/*DrawBox(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
-			static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, BodyColor, true);*/
-		DrawExtendGraph(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
-			static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, Bodyhandle, true);
+		if (IsFold == true)
+		{
+			DrawExtendGraph(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
+				static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, Bodyhandle_fold, true);
+		}
+		else
+		{
+			DrawExtendGraph(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
+				static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, Bodyhandle, true);
+		}
 	}
 }
 
@@ -678,7 +684,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitRight == false && Body_Type == right || Body_Type == up)
 						{
-							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x);
+							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x) - 1;
 							IsHitRight = true;
 						}
 					}
@@ -706,7 +712,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitRight == false)
 						{
-							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x);
+							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x) - 1;
 							IsHitRight = true;
 						}
 					}

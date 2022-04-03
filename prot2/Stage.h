@@ -143,4 +143,8 @@ private:
 private: //ƒƒ“ƒo•Ï”
 	std::vector<StageData> stageData;
 	std::vector<StageData> initStageData;
+
+	int BlockHandle = LoadGraph("Resources/block.png");
+	int GoalHandle = LoadGraph("Resources/goal.png");
+	int EnptyHandle = LoadGraph("Resources/stage_enpty.png");
 };

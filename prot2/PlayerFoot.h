@@ -17,5 +17,5 @@ public:
 	void Init();
 	void Set();
 	void Update(Vector3& FaceCenterPos, bool IsDownBody, int BodyDis);
-	void Draw(bool isleft, bool isright);
+	void Draw(bool isleft, bool isright, int offsetX, int offsetY);
 };

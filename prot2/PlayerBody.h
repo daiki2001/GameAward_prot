@@ -117,4 +117,5 @@ public: //ƒƒ“ƒo•Ï”
 
 	//‰æ‘œƒnƒ“ƒhƒ‹
 	int Bodyhandle = LoadGraph("Resources/playerSub.png");
+	int Bodyhandle_fold = LoadGraph("Resources/playerSub_void.png");
 };

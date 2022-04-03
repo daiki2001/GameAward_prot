@@ -274,22 +274,25 @@ void Stage::Draw(int offsetX, int offsetY)
 					}
 					case MapchipData::BLOCK:
 					{
-						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
-						DrawShape::DrawPlane(pos1, pos2, GRAY);
+						//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
+						//DrawShape::DrawPlane(pos1, pos2, GRAY);
+						DrawExtendGraph(pos1.x, pos1.y, pos2.x, pos2.y, BlockHandle, true);
 						break;
 					}
 					case MapchipData::GOAL:
 					{
-						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
-						DrawShape::DrawPlane(pos1, pos2, YELLOW);
+						/*SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
+						DrawShape::DrawPlane(pos1, pos2, YELLOW);*/
+						DrawExtendGraph(pos1.x, pos1.y, pos2.x, pos2.y, GoalHandle, true);
 						break;
 					}
 					case MapchipData::NONE:
 					case MapchipData::START:
 					default:
 					{
-						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0x80);
-						DrawShape::DrawPlane(pos1, pos2, WHITE);
+						/*SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0x80);
+						DrawShape::DrawPlane(pos1, pos2, WHITE);*/
+						DrawExtendGraph(pos1.x, pos1.y, pos2.x, pos2.y, EnptyHandle, true);
 						break;
 					}
 					}
@@ -777,7 +780,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 				if (stageData[i].stageTileData[moveStageData].isFold)
 				{
-					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
+					Open(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
