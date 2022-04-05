@@ -165,12 +165,19 @@
     <None Include="Resources\stage1.csv" />
     <None Include="Resources\stage2.csv" />
     <None Include="Resources\stage3.csv" />
+    <None Include="Resources\stage4.csv" />
+    <None Include="Resources\stage5.csv" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\Body.png" />
-    <Image Include="Resources\face.png" />
-    <Image Include="Resources\face_fold.png" />
-    <Image Include="Resources\Foot.png" />
+    <Image Include="Resources\backSin.png" />
+    <Image Include="Resources\block.png" />
+    <Image Include="Resources\goal.png" />
+    <Image Include="Resources\player.png" />
+    <Image Include="Resources\playerBody\playerBody02.png" />
+    <Image Include="Resources\playerLegs\playerLegs.png" />
+    <Image Include="Resources\playerSub.png" />
+    <Image Include="Resources\playerSub_void.png" />
+    <Image Include="Resources\stage_enpty.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

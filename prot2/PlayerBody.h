@@ -1,5 +1,4 @@
 #pragma once
-#include <DxLib.h>
 #include "Stage.h"
 #include "Vector3.h"
 #include "Easing.h"
@@ -19,8 +18,16 @@ public: //定数
 	static const float BodySize;
 	static const float HalfBodySize;
 
+public: //静的メンバ関数
+	// 画像の初期化
+	static void GraphInit();
+
 public: //静的メンバ変数
 	static Stage* stage;
+
+	//画像ハンドル
+	static int BodyHandle;
+	static int BodyHandle_fold;
 
 public: //メンバ関数
 	PlayerBody();
@@ -118,7 +125,4 @@ public: //メンバ変数
 
 	//体の色
 	int BodyColor;
-
-	//画像ハンドル
-	int Bodyhandle;
 };

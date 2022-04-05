@@ -7,6 +7,8 @@
 const float PlayerBody::BodySize = 50.0f;
 const float PlayerBody::HalfBodySize = BodySize / 2.0f;
 Stage* PlayerBody::stage = Stage::Get();
+int PlayerBody::BodyHandle = -1;
+int PlayerBody::BodyHandle_fold = -1;
 
 PlayerBody::PlayerBody() :
 	IsActivate(false),
@@ -32,11 +34,22 @@ PlayerBody::PlayerBody() :
 	Ease{}
 {
 	BodyColor = WHITE;
-	Bodyhandle = LoadGraph("./Resources/playerSub.png");
 }
 
 PlayerBody::~PlayerBody()
 {
+}
+
+void PlayerBody::GraphInit()
+{
+	if (BodyHandle == -1)
+	{
+		BodyHandle = LoadGraph("./Resources/playerSub.png");
+	}
+	if (BodyHandle_fold == -1)
+	{
+		BodyHandle_fold = LoadGraph("Resources/playerSub_void.png");
+	}
 }
 
 void PlayerBody::Init(Vector3 position, bodytype number)
@@ -64,6 +77,8 @@ void PlayerBody::Init(Vector3 position, bodytype number)
 
 	IsOpen = true;
 	IsFold = false;
+
+	GraphInit();
 }
 
 void PlayerBody::Update(Vector3& center)
@@ -479,10 +494,16 @@ void PlayerBody::Draw(int offsetX, int offsetY)
 {
 	if (IsActivate == true)
 	{
-		/*DrawBox(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
-			static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, BodyColor, true);*/
-		DrawExtendGraph(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
-			static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, Bodyhandle, true);
+		if (IsFold == true)
+		{
+			DrawExtendGraph(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
+				static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, BodyHandle_fold, true);
+		}
+		else
+		{
+			DrawExtendGraph(static_cast<int>(BodyStartPos.x) + offsetX, static_cast<int>(BodyStartPos.y) + offsetY,
+				static_cast<int>(BodyEndPos.x) + offsetX, static_cast<int>(BodyEndPos.y) + offsetY, BodyHandle, true);
+		}
 	}
 }
 
@@ -697,7 +718,7 @@ void PlayerBody::IsHitBody(Vector3* center, float& FallSpeed, bool& isfall, bool
 					{
 						if (IsHitRight == false && Body_Type == right || Body_Type == up)
 						{
-							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x);
+							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x) - 1;
 							IsHitRight = true;
 						}
 					}
@@ -725,7 +746,7 @@ void PlayerBody::IsHitBody(Vector3* center, float& FallSpeed, bool& isfall, bool
 					{
 						if (IsHitRight == false)
 						{
-							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x);
+							center->x = (BodyRight_mapchip * 60) - (BodyRight - center->x) - 1;
 							IsHitRight = true;
 						}
 					}

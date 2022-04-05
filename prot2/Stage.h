@@ -65,6 +65,11 @@ public: //定数
 	Vector3 offset = { 0,0,0 };
 
 public: //静的メンバ関数
+	// 初期化
+	static void Init();
+	// 画像の初期化
+	static void GraphInit();
+
 	// プレイヤーのx軸上の開始位置を取得
 	inline static int GetStartPlayerPosX() { return startPlayerPosX; }
 	// プレイヤーのx軸上の開始位置を取得
@@ -73,13 +78,15 @@ public: //静的メンバ関数
 	static void GetInitFoldCount(unsigned char foldCount[4]);
 
 private: //静的メンバ変数
+	static int BlockHandle;
+	static int GoalHandle;
+	static int EmptyHandle;
+
 	static int startPlayerPosX;
 	static int startPlayerPosY;
 	static unsigned char initFoldCount[4];
 
 public: //メンバ関数
-	// 初期化
-	void Init();
 	// 更新
 	void Updata();
 	// 描画

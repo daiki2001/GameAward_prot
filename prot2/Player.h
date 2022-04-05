@@ -54,7 +54,7 @@ public: //メンバ変数
 	PlayerBody Body_One;
 	PlayerBody Body_Two;
 	PlayerBody Body_Three;
-	PlayerBody Body_Four;
+	PlayerBody Body_Four; //この変数要らないのでは?
 
 	//body_twoを優先的に開くか
 	bool IsOpenTwo;

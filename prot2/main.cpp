@@ -74,7 +74,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	//SetCameraScreenCenter(WIN_WIDTH / 2.0f, WIN_HEIGHT / 2.0f); //画面の中心をカメラの中心に合わせる
 	//SetCameraPositionAndTargetAndUpVec(cameraPosition, cameraTarget, cameraUp);
 
-	SetUseLighting(false);
+	//SetUseLighting(false);
 
 	// 画像などのリソースデータの変数宣言と読み込み
 
@@ -87,9 +87,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	player->Init();
 	player->bodysetup(playerTile);
 
-	int Back = LoadGraph("./Resources/back.png");
+	int Back = LoadGraph("./Resources/backSin.png");
 
-	const int drawOffsetX = 320, drawOffsetY = 0;
+	const int drawOffsetX = 340, drawOffsetY = 60;
 
 	// ゲームループ
 	while (1)
@@ -109,7 +109,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 		if (Input::isKey(KEY_INPUT_2))
 		{
-			stage->LoadStage("./Resources/stage2.csv", playerTile);
+			stage->LoadStage("./Resources/stage4.csv", playerTile);
 			player->Init();
 			player->bodysetup(playerTile);
 		}
@@ -137,8 +137,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 描画処理
 		DrawGraph(0, 0, Back, true);
 		//DrawBox(0, 0, 1280, 720, GetColor(0, 0, 0), true);
-		stage->Draw(drawOffsetX, drawOffsetY - WIN_HEIGHT);
+		stage->Draw(drawOffsetX, drawOffsetY/* - WIN_HEIGHT*/);
 		player->Draw(drawOffsetX, drawOffsetY);
+
+		//DrawFormatString(5, 200, GetColor(255, 255, 255), "R:リセット");
+		DrawFormatString(5, 220, GetColor(255, 255, 255), "1：ステージ1再設定");
+		DrawFormatString(5, 240, GetColor(255, 255, 255), "2：ステージ2再設定");
+		//DrawFormatString(5, 260, GetColor(255, 255, 255), "3：ステージ3");
+
+		DrawFormatString(5, 280, GetColor(255, 255, 255), "方向キー：ステージの折る・開く");
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面

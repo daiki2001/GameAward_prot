@@ -33,10 +33,10 @@ void PlayerFoot::Update(Vector3& FaceCenterPos, bool IsDownBody, int BodyDis)
 {
 	if (FootIsAction == true)
 	{
-		ease.addTime += ease.maxTime / 15.0f;
+		ease.addTime += ease.maxTime / 20.0f;
 		ease.timeRate = min(ease.addTime / ease.maxTime, 1.0f);
 
-		FootLeftUpPosition = { FaceCenterPos.x - 30,ease.easeOut(FaceCenterPos.y + (IsDownBody * 50 * BodyDis) + 25,FaceCenterPos.y + (IsDownBody * 50 * BodyDis) - 15,ease.timeRate),0.0f };
+		FootLeftUpPosition = { FaceCenterPos.x - 30,ease.easeOut(FaceCenterPos.y + (IsDownBody * 50 * BodyDis) + 25,FaceCenterPos.y + (IsDownBody * 50 * BodyDis) + 15,ease.timeRate),0.0f };
 		if (ease.timeRate >= 1.0f)
 		{
 			FootIsAction = false;
@@ -47,9 +47,11 @@ void PlayerFoot::Update(Vector3& FaceCenterPos, bool IsDownBody, int BodyDis)
 	{
 		FootLeftUpPosition = { FaceCenterPos.x - 30,FaceCenterPos.y + (IsDownBody * 50 * BodyDis) + 25,0.0f };
 	}
+
+	//FootLeftUpPosition.x = FaceCenterPos.x - 30;
 }
 
-void PlayerFoot::Draw(int offsetX, int offsetY, bool isleft, bool isright)
+void PlayerFoot::Draw(bool isleft, bool isright, int offsetX, int offsetY)
 {
 	if (isleft)
 	{

@@ -15,6 +15,7 @@
     </Filter>
     <Filter Include="リソース ファイル\ステージ">
       <UniqueIdentifier>{ee78ace4-0470-423e-a192-81f5ffa2ee9a}</UniqueIdentifier>
+      <Extensions>csv</Extensions>
     </Filter>
     <Filter Include="プレイヤー">
       <UniqueIdentifier>{92c688da-bbab-48a4-b496-36fae22c7f8a}</UniqueIdentifier>
@@ -136,18 +137,39 @@
     <None Include="Resources\stage3.csv">
       <Filter>リソース ファイル\ステージ</Filter>
     </None>
+    <None Include="Resources\stage4.csv">
+      <Filter>リソース ファイル\ステージ</Filter>
+    </None>
+    <None Include="Resources\stage5.csv">
+      <Filter>リソース ファイル\ステージ</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resources\Body.png">
+    <Image Include="Resources\backSin.png">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="Resources\face.png">
+    <Image Include="Resources\block.png">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="Resources\face_fold.png">
+    <Image Include="Resources\goal.png">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="Resources\Foot.png">
+    <Image Include="Resources\stage_enpty.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Resources\player.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Resources\playerBody\playerBody02.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Resources\playerLegs\playerLegs.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Resources\playerSub.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Resources\playerSub_void.png">
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>

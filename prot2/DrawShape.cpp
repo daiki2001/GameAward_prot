@@ -54,7 +54,6 @@ void DrawShape::Init()
 void DrawShape::DrawPlane(const Vector3& pos1, const Vector3& pos2, const unsigned int& color)
 {
 	static int r, g, b;
-	//static const int graph = LoadGraph("./Resources/block.png");
 
 	Init();
 

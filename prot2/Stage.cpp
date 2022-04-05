@@ -31,6 +31,9 @@ static size_t reverseMapchipPos = 0; //反転したマップチップの要素番号
 
 const int Stage::blockSize = 60;
 const int Stage::halfBlockSize = Stage::blockSize / 2;
+int Stage::BlockHandle = -1;
+int Stage::GoalHandle = -1;
+int Stage::EmptyHandle = -1;
 int Stage::startPlayerPosX = 0;
 int Stage::startPlayerPosY = 0;
 unsigned char Stage::initFoldCount[4] = { 0 };
@@ -38,6 +41,7 @@ unsigned char Stage::initFoldCount[4] = { 0 };
 Stage* Stage::Get()
 {
 	static Stage instance = {};
+	Init();
 	return &instance;
 }
 
@@ -53,16 +57,33 @@ Stage::~Stage()
 	DataClear();
 }
 
+void Stage::Init()
+{
+	GraphInit();
+}
+
+void Stage::GraphInit()
+{
+	if (BlockHandle == -1)
+	{
+		BlockHandle = LoadGraph("./Resources/block.png");
+	}
+	if (GoalHandle == -1)
+	{
+		GoalHandle = LoadGraph("./Resources/goal.png");
+	}
+	if (EmptyHandle == -1)
+	{
+		EmptyHandle = LoadGraph("./Resources/stage_enpty.png");
+	}
+}
+
 void Stage::GetInitFoldCount(unsigned char foldCount[4])
 {
 	for (i = 0; i < sizeof(initFoldCount) / sizeof(initFoldCount[0]); i++)
 	{
 		foldCount[i] = initFoldCount[i];
 	}
-}
-
-void Stage::Init()
-{
 }
 
 void Stage::Updata()
@@ -282,22 +303,25 @@ void Stage::Draw(int offsetX, int offsetY)
 					}
 					case MapchipData::BLOCK:
 					{
-						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
-						DrawShape::DrawPlane(pos1, pos2, GRAY);
+						//SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
+						//DrawShape::DrawPlane(pos1, pos2, GRAY);
+						DrawExtendGraph(static_cast<int>(pos1.x), static_cast<int>(pos1.y), static_cast<int>(pos2.x), static_cast<int>(pos2.y), BlockHandle, true);
 						break;
 					}
 					case MapchipData::GOAL:
 					{
-						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
-						DrawShape::DrawPlane(pos1, pos2, YELLOW);
+						/*SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0xE0);
+						DrawShape::DrawPlane(pos1, pos2, YELLOW);*/
+						DrawExtendGraph(static_cast<int>(pos1.x), static_cast<int>(pos1.y), static_cast<int>(pos2.x), static_cast<int>(pos2.y), GoalHandle, true);
 						break;
 					}
 					case MapchipData::NONE:
 					case MapchipData::START:
 					default:
 					{
-						SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0x80);
-						DrawShape::DrawPlane(pos1, pos2, WHITE);
+						/*SetDrawBlendMode(DX_BLENDMODE_ALPHA, 0x80);
+						DrawShape::DrawPlane(pos1, pos2, WHITE);*/
+						DrawExtendGraph(static_cast<int>(pos1.x), static_cast<int>(pos1.y), static_cast<int>(pos2.x), static_cast<int>(pos2.y), EmptyHandle, true);
 						break;
 					}
 					}
@@ -784,7 +808,7 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 
 				if (stageData[i].stageTileData[moveStageData].isFold)
 				{
-					Fold(playerTile, direction, i, onPlayerStageTile, moveStageData);
+					Open(playerTile, direction, i, onPlayerStageTile, moveStageData);
 
 					stageData[i].stageTileData[moveStageData].stageEase.isMove = true;
 					stageData[i].stageTileData[moveStageData].stageEase.splineIndex = 0;
@@ -906,7 +930,7 @@ int Stage::FoldSimulation(const Vector3& playerPos, const unsigned char& directi
 			{
 			case bodytype::up: //上入力
 			{
-				if (stageData[i].stageTileData[j].stageNumber / stageData[i].width <= 0)
+				if (static_cast<unsigned char>(stageData[i].stageTileData[j].stageNumber) / stageData[i].width <= 0)
 				{
 					// プレイヤーがいるステージタイルが端
 					break;
@@ -926,7 +950,7 @@ int Stage::FoldSimulation(const Vector3& playerPos, const unsigned char& directi
 			}
 			case bodytype::down: //下入力
 			{
-				if (stageData[i].stageTileData[j].stageNumber / stageData[i].width >= static_cast<size_t>(stageData[i].height - 1))
+				if (static_cast<unsigned char>(stageData[i].stageTileData[j].stageNumber) / stageData[i].width >= stageData[i].height - 1)
 				{
 					// プレイヤーがいるステージタイルが端
 					break;
@@ -946,7 +970,7 @@ int Stage::FoldSimulation(const Vector3& playerPos, const unsigned char& directi
 			}
 			case bodytype::left: //左入力
 			{
-				if (stageData[i].stageTileData[j].stageNumber % stageData[i].width <= 0)
+				if (static_cast<unsigned char>(stageData[i].stageTileData[j].stageNumber) % stageData[i].width <= 0)
 				{
 					// プレイヤーがいるステージタイルが端
 					break;
@@ -966,7 +990,7 @@ int Stage::FoldSimulation(const Vector3& playerPos, const unsigned char& directi
 			}
 			case bodytype::right: //右入力
 			{
-				if (stageData[i].stageTileData[j].stageNumber % stageData[i].width >= static_cast<size_t>(stageData[i].width - 1))
+				if (static_cast<unsigned char>(stageData[i].stageTileData[j].stageNumber) % stageData[i].width >= stageData[i].width - 1)
 				{
 					// プレイヤーがいるステージタイルが端
 					break;
