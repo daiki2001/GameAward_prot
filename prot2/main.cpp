@@ -132,7 +132,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 
 		stage->Updata();
-		player->Update(*stage);
+		player->Update();
 
 		// •`‰æˆ—
 		DrawGraph(0, 0, Back, true);

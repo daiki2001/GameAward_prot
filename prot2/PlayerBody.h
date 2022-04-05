@@ -1,8 +1,8 @@
 #pragma once
 #include <DxLib.h>
+#include "Stage.h"
 #include "Vector3.h"
 #include "Easing.h"
-#include "Stage.h"
 
 enum bodytype
 {
@@ -18,6 +18,9 @@ public: //定数
 	//体の大きさ
 	static const float BodySize;
 	static const float HalfBodySize;
+
+public: //静的メンバ変数
+	static Stage* stage;
 
 public: //メンバ関数
 	PlayerBody();
@@ -48,7 +51,7 @@ public: //メンバ関数
 	/// <param name="stage">ステージデータ</param>
 	/// <param name="center">プレイヤーの中心</param>
 	/// <returns></returns>
-	void IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide);
+	void IsHitBody(Vector3* center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide);
 
 	/// <summary>
 	/// 押し出し処理

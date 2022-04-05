@@ -10,6 +10,8 @@ namespace
 static size_t i = 0;
 }
 
+Stage* Player::stage = Stage::Get();
+
 Player* Player::Get()
 {
 	static Player instance = {};
@@ -82,7 +84,7 @@ void Player::Init()
 	IsRight = false;
 }
 
-void Player::Update(Stage& stage)
+void Player::Update()
 {
 	//左右移動
 	if (InputManger::Right() && !InputManger::Act1() && Player_IsAction == false)
@@ -143,7 +145,7 @@ void Player::Update(Stage& stage)
 	{
 		CenterPosition.y += FallSpeed;
 	}
-	IsHitPlayerBody(stage);
+	IsHitPlayerBody();
 
 
 	if (InputManger::SubLeftTrigger() && Player_IsAction == false)
@@ -599,17 +601,17 @@ void Player::Update(Stage& stage)
 
 	if (Body_One.IsActivate == true)
 	{
-		Body_One.IsHitBody(stage, &CenterPosition, FallSpeed, IsAllFall, IsJump, IsColide);
+		Body_One.IsHitBody(&CenterPosition, FallSpeed, IsAllFall, IsJump, IsColide);
 		Body_One.Update(CenterPosition);
 	}
 	if (Body_Two.IsActivate == true)
 	{
-		Body_Two.IsHitBody(stage, &CenterPosition, FallSpeed, IsAllFall, IsJump, IsColide);
+		Body_Two.IsHitBody(&CenterPosition, FallSpeed, IsAllFall, IsJump, IsColide);
 		Body_Two.Update(CenterPosition);
 	}
 	if (Body_Three.IsActivate == true)
 	{
-		Body_Three.IsHitBody(stage, &CenterPosition, FallSpeed, IsAllFall, IsJump, IsColide);
+		Body_Three.IsHitBody(&CenterPosition, FallSpeed, IsAllFall, IsJump, IsColide);
 		Body_Three.Update(CenterPosition);
 	}
 }
@@ -774,7 +776,7 @@ void Player::bodysetup(const unsigned char foldCount[4])
 		bodyTile[2] != -1, bodyTile[2]);
 }
 
-void Player::IsHitPlayerBody(Stage& stage)
+void Player::IsHitPlayerBody()
 {
 	//ステージの数
 	size_t i = 0;
@@ -782,10 +784,10 @@ void Player::IsHitPlayerBody(Stage& stage)
 	size_t j = 0;
 
 	//上下左右(プレイヤーの顔)
-	int left_mapchip = (int)((CenterPosition.x - 25) - stage.offset.x) / 60;
-	int up_mapchip = (int)((CenterPosition.y - 25) - stage.offset.y) / 60;
-	int right_mapchip = (int)((CenterPosition.x + 25) - stage.offset.x) / 60;
-	int down_mapchip = (int)((CenterPosition.y + 33) - stage.offset.y) / 60;
+	int left_mapchip = (int)((CenterPosition.x - 25) - stage->offset.x) / 60;
+	int up_mapchip = (int)((CenterPosition.y - 25) - stage->offset.y) / 60;
+	int right_mapchip = (int)((CenterPosition.x + 25) - stage->offset.x) / 60;
+	int down_mapchip = (int)((CenterPosition.y + 33) - stage->offset.y) / 60;
 
 	//タイル内のマップチップ座標
 	int left_mapchip_tile;
@@ -804,27 +806,27 @@ void Player::IsHitPlayerBody(Stage& stage)
 
 	int FallCount = 0;
 
-	if (CenterPosition.x - 30 <= stage.offset.x)
+	if (CenterPosition.x - 30 <= stage->offset.x)
 	{
 		CenterPosition.x = 30;
 	}
-	if (CenterPosition.y - 30 <= stage.offset.y)
+	if (CenterPosition.y - 30 <= stage->offset.y)
 	{
 		CenterPosition.y = 30;
 	}
 
-	for (i = 0; i < stage.GetStageDataSize(); i++)
+	for (i = 0; i < stage->GetStageDataSize(); i++)
 	{
-		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
+		for (j = 0; j < stage->GetStageTileDataSize(i); j++)
 		{
 			//左上
-			if (stage.GetPositionTile({ CenterPosition.x - 25,CenterPosition.y - 30,0.0f }, i, j))
+			if (stage->GetPositionTile({ CenterPosition.x - 25,CenterPosition.y - 30,0.0f }, i, j))
 			{
-				left_mapchip_tile = left_mapchip % stage.GetStageTileWidth(i, j);
-				up_mapchip_tile = up_mapchip % stage.GetStageTileHeight(i, j);
+				left_mapchip_tile = left_mapchip % stage->GetStageTileWidth(i, j);
+				up_mapchip_tile = up_mapchip % stage->GetStageTileHeight(i, j);
 
-				MapchipPos = (up_mapchip_tile)*stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
-				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
+				MapchipPos = (up_mapchip_tile)*stage->GetStageTileWidth(i, j) + (left_mapchip_tile);
+				if (stage->GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (left_mapchip * 60) - (CenterPosition.x - 30);
 					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
@@ -840,13 +842,13 @@ void Player::IsHitPlayerBody(Stage& stage)
 				}
 			}
 			//左下
-			if (stage.GetPositionTile({ CenterPosition.x - 25,CenterPosition.y + 33,0.0f }, i, j))
+			if (stage->GetPositionTile({ CenterPosition.x - 25,CenterPosition.y + 33,0.0f }, i, j))
 			{
-				left_mapchip_tile = left_mapchip % stage.GetStageTileWidth(i, j);
-				down_mapchip_tile = down_mapchip % stage.GetStageTileHeight(i, j);
+				left_mapchip_tile = left_mapchip % stage->GetStageTileWidth(i, j);
+				down_mapchip_tile = down_mapchip % stage->GetStageTileHeight(i, j);
 
-				MapchipPos = (down_mapchip_tile)*stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
-				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
+				MapchipPos = (down_mapchip_tile)*stage->GetStageTileWidth(i, j) + (left_mapchip_tile);
+				if (stage->GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (left_mapchip * 60) - (CenterPosition.x - 30);
 					BuriedY = ((CenterPosition.y + 29) - 60) - (down_mapchip * 60);
@@ -863,13 +865,13 @@ void Player::IsHitPlayerBody(Stage& stage)
 				}
 			}
 			//右上
-			if (stage.GetPositionTile({ CenterPosition.x + 25,CenterPosition.y - 30,0.0f }, i, j))
+			if (stage->GetPositionTile({ CenterPosition.x + 25,CenterPosition.y - 30,0.0f }, i, j))
 			{
-				right_mapchip_tile = right_mapchip % stage.GetStageTileWidth(i, j);
-				up_mapchip_tile = up_mapchip % stage.GetStageTileHeight(i, j);
+				right_mapchip_tile = right_mapchip % stage->GetStageTileWidth(i, j);
+				up_mapchip_tile = up_mapchip % stage->GetStageTileHeight(i, j);
 
-				MapchipPos = (up_mapchip_tile)*stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
-				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
+				MapchipPos = (up_mapchip_tile)*stage->GetStageTileWidth(i, j) + (right_mapchip_tile);
+				if (stage->GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = ((CenterPosition.x + 29) - 60) - (right_mapchip * 60);
 					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
@@ -885,13 +887,13 @@ void Player::IsHitPlayerBody(Stage& stage)
 				}
 			}
 			//右下
-			if (stage.GetPositionTile({ CenterPosition.x + 25,CenterPosition.y + 33,0.0f }, i, j))
+			if (stage->GetPositionTile({ CenterPosition.x + 25,CenterPosition.y + 33,0.0f }, i, j))
 			{
-				right_mapchip_tile = right_mapchip % stage.GetStageTileWidth(i, j);
-				down_mapchip_tile = down_mapchip % stage.GetStageTileHeight(i, j);
+				right_mapchip_tile = right_mapchip % stage->GetStageTileWidth(i, j);
+				down_mapchip_tile = down_mapchip % stage->GetStageTileHeight(i, j);
 
-				MapchipPos = (down_mapchip_tile)*stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
-				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
+				MapchipPos = (down_mapchip_tile)*stage->GetStageTileWidth(i, j) + (right_mapchip_tile);
+				if (stage->GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = ((CenterPosition.x + 29) - 60) - (right_mapchip * 60);
 					BuriedY = ((CenterPosition.y + 29) - 60) - (down_mapchip * 60);
@@ -909,35 +911,35 @@ void Player::IsHitPlayerBody(Stage& stage)
 			}
 
 			//ゴール判定
-			if (stage.GetPositionTile(CenterPosition, i, j))
+			if (stage->GetPositionTile(CenterPosition, i, j))
 			{
-				left_mapchip_tile = left_mapchip % stage.GetStageTileWidth(i, j);
-				up_mapchip_tile = up_mapchip % stage.GetStageTileHeight(i, j);
-				right_mapchip_tile = right_mapchip % stage.GetStageTileWidth(i, j);
-				down_mapchip_tile = down_mapchip % stage.GetStageTileHeight(i, j);
+				left_mapchip_tile = left_mapchip % stage->GetStageTileWidth(i, j);
+				up_mapchip_tile = up_mapchip % stage->GetStageTileHeight(i, j);
+				right_mapchip_tile = right_mapchip % stage->GetStageTileWidth(i, j);
+				down_mapchip_tile = down_mapchip % stage->GetStageTileHeight(i, j);
 
 				//左上
-				MapchipPos = up_mapchip_tile * stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
-				MapchipPos_Goal[0] = up_mapchip_tile * stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
-				MapchipPos_Goal[1] = down_mapchip_tile * stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
-				MapchipPos_Goal[2] = down_mapchip_tile * stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
+				MapchipPos = up_mapchip_tile * stage->GetStageTileWidth(i, j) + (left_mapchip_tile);
+				MapchipPos_Goal[0] = up_mapchip_tile * stage->GetStageTileWidth(i, j) + (right_mapchip_tile);
+				MapchipPos_Goal[1] = down_mapchip_tile * stage->GetStageTileWidth(i, j) + (left_mapchip_tile);
+				MapchipPos_Goal[2] = down_mapchip_tile * stage->GetStageTileWidth(i, j) + (right_mapchip_tile);
 
-				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::GOAL)
+				if (stage->GetStageMapchip(i, j, MapchipPos) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}
 				//右上
-				else if (stage.GetStageMapchip(i, j, MapchipPos_Goal[0]) == MapchipData::GOAL)
+				else if (stage->GetStageMapchip(i, j, MapchipPos_Goal[0]) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}
 				//左下
-				else if (stage.GetStageMapchip(i, j, MapchipPos_Goal[1]) == MapchipData::GOAL)
+				else if (stage->GetStageMapchip(i, j, MapchipPos_Goal[1]) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}
 				//右下
-				else if (stage.GetStageMapchip(i, j, MapchipPos_Goal[2]) == MapchipData::GOAL)
+				else if (stage->GetStageMapchip(i, j, MapchipPos_Goal[2]) == MapchipData::GOAL)
 				{
 					IsGoal = true;
 				}

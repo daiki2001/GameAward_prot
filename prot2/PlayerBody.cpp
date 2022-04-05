@@ -6,6 +6,7 @@
 
 const float PlayerBody::BodySize = 50.0f;
 const float PlayerBody::HalfBodySize = BodySize / 2.0f;
+Stage* PlayerBody::stage = Stage::Get();
 
 PlayerBody::PlayerBody() :
 	IsActivate(false),
@@ -532,7 +533,7 @@ void PlayerBody::setslide(int slidepat, int move_dis)
 	SlideDis = move_dis;
 }
 
-void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide)
+void PlayerBody::IsHitBody(Vector3* center, float& FallSpeed, bool& isfall, bool& isjump, bool& iscolide)
 {
 	Update(*center);
 
@@ -566,10 +567,10 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 	}
 
 	//四辺をブロックサイズで割った数
-	int BodyLeft_mapchip = (int)(BodyLeft - stage.offset.x) / 60;
-	int BodyUp_mapchip = (int)(BodyUp - stage.offset.y) / 60;
-	int BodyRight_mapchip = (int)(BodyRight - stage.offset.x) / 60;
-	int BodyDown_mapchip = (int)(BodyDown - stage.offset.y) / 60;
+	int BodyLeft_mapchip = (int)(BodyLeft - stage->offset.x) / 60;
+	int BodyUp_mapchip = (int)(BodyUp - stage->offset.y) / 60;
+	int BodyRight_mapchip = (int)(BodyRight - stage->offset.x) / 60;
+	int BodyDown_mapchip = (int)(BodyDown - stage->offset.y) / 60;
 
 	//タイル内のマップチップ座標
 	int BodyLeft_mapchip_tile;
@@ -596,30 +597,30 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 
 	int FallCount = 0;
 
-	if (BodyLeft < stage.offset.x)
+	if (BodyLeft < stage->offset.x)
 	{
-		center->x = stage.offset.x + (center->x - BodyLeft);
+		center->x = stage->offset.x + (center->x - BodyLeft);
 		iscolide = true;
 	}
-	if (BodyUp < stage.offset.y)
+	if (BodyUp < stage->offset.y)
 	{
-		center->y = stage.offset.y + (center->y - BodyUp);
+		center->y = stage->offset.y + (center->y - BodyUp);
 		iscolide = true;
 	}
 
-	for (i = 0; i < stage.GetStageDataSize(); i++)
+	for (i = 0; i < stage->GetStageDataSize(); i++)
 	{
-		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
+		for (j = 0; j < stage->GetStageTileDataSize(i); j++)
 		{
 			//左上
-			if (stage.GetPositionTile({ BodyLeft,BodyUp,0.0f }, i, j))
+			if (stage->GetPositionTile({ BodyLeft,BodyUp,0.0f }, i, j))
 			{
-				BodyLeft_mapchip_tile = BodyLeft_mapchip % stage.GetStageTileWidth(i, j);
-				BodyUp_mapchip_tile = BodyUp_mapchip % stage.GetStageTileHeight(i, j);
+				BodyLeft_mapchip_tile = BodyLeft_mapchip % stage->GetStageTileWidth(i, j);
+				BodyUp_mapchip_tile = BodyUp_mapchip % stage->GetStageTileHeight(i, j);
 
 				//今いる座標のマップチップを確認
-				mapchipPos = BodyUp_mapchip_tile * stage.GetStageTileWidth(i, j) + BodyLeft_mapchip_tile;
-				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+				mapchipPos = BodyUp_mapchip_tile * stage->GetStageTileWidth(i, j) + BodyLeft_mapchip_tile;
+				if (stage->GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (BodyLeft_mapchip * 60) - BodyLeft;
 					BuriedY = (BodyUp_mapchip * 60) - BodyUp;
@@ -644,13 +645,13 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 				}
 			}
 			//左下
-			if (stage.GetPositionTile({ BodyLeft,BodyDown,0.0f }, i, j))
+			if (stage->GetPositionTile({ BodyLeft,BodyDown,0.0f }, i, j))
 			{
-				BodyLeft_mapchip_tile = BodyLeft_mapchip % stage.GetStageTileWidth(i, j);
-				BodyDown_mapchip_tile = BodyDown_mapchip % stage.GetStageTileHeight(i, j);
+				BodyLeft_mapchip_tile = BodyLeft_mapchip % stage->GetStageTileWidth(i, j);
+				BodyDown_mapchip_tile = BodyDown_mapchip % stage->GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyDown_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyLeft_mapchip_tile);
-				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+				mapchipPos = (BodyDown_mapchip_tile)*stage->GetStageTileWidth(i, j) + (BodyLeft_mapchip_tile);
+				if (stage->GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (BodyLeft_mapchip * 60) - BodyLeft;
 					BuriedY = (BodyDown - 60) - (BodyDown_mapchip * 60);
@@ -672,13 +673,13 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 				}
 			}
 			//右上
-			if (stage.GetPositionTile({ BodyRight,BodyUp,0.0f }, i, j))
+			if (stage->GetPositionTile({ BodyRight,BodyUp,0.0f }, i, j))
 			{
-				BodyRight_mapchip_tile = BodyRight_mapchip % stage.GetStageTileWidth(i, j);
-				BodyUp_mapchip_tile = BodyUp_mapchip % stage.GetStageTileHeight(i, j);
+				BodyRight_mapchip_tile = BodyRight_mapchip % stage->GetStageTileWidth(i, j);
+				BodyUp_mapchip_tile = BodyUp_mapchip % stage->GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyUp_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyRight_mapchip_tile);
-				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+				mapchipPos = (BodyUp_mapchip_tile)*stage->GetStageTileWidth(i, j) + (BodyRight_mapchip_tile);
+				if (stage->GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (BodyRight - 60) - (BodyRight_mapchip * 60);
 					BuriedY = (BodyUp_mapchip * 60) - BodyUp;
@@ -703,13 +704,13 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 				}
 			}
 			//右下
-			if (stage.GetPositionTile({ BodyRight,BodyDown,0.0f }, i, j))
+			if (stage->GetPositionTile({ BodyRight,BodyDown,0.0f }, i, j))
 			{
-				BodyRight_mapchip_tile = BodyRight_mapchip % stage.GetStageTileWidth(i, j);
-				BodyDown_mapchip_tile = BodyDown_mapchip % stage.GetStageTileHeight(i, j);
+				BodyRight_mapchip_tile = BodyRight_mapchip % stage->GetStageTileWidth(i, j);
+				BodyDown_mapchip_tile = BodyDown_mapchip % stage->GetStageTileHeight(i, j);
 
-				mapchipPos = (BodyDown_mapchip_tile)*stage.GetStageTileWidth(i, j) + (BodyRight_mapchip_tile);
-				if (stage.GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
+				mapchipPos = (BodyDown_mapchip_tile)*stage->GetStageTileWidth(i, j) + (BodyRight_mapchip_tile);
+				if (stage->GetStageMapchip(i, j, mapchipPos) == MapchipData::BLOCK)
 				{
 					BuriedX = (BodyRight - 60) - (BodyRight_mapchip * 60);
 					BuriedY = (BodyDown - 60) - (BodyDown_mapchip * 60);

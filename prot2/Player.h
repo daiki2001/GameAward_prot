@@ -1,6 +1,7 @@
 #pragma once
 #include "PlayerBody.h"
 #include "PlayerFoot.h"
+#include "Stage.h"
 #include "Vector3.h"
 
 class Player final
@@ -13,11 +14,14 @@ private:
 	~Player();
 	Player operator=(const Player&) = delete;
 
+public: //静的メンバ変数
+	static Stage* stage;
+
 public: //メンバ関数
 	// 初期化
 	void Init();
 	// 更新
-	void Update(Stage& stage);
+	void Update();
 	// 描画
 	void Draw(int offsetX, int offsetY);
 
@@ -30,7 +34,7 @@ public: //メンバ関数
 	void bodysetup(bool one, int one_type, bool two, int two_type, bool three, int three_type);
 	void bodysetup(const unsigned char foldCount[4]);
 
-	void IsHitPlayerBody(Stage& stage);
+	void IsHitPlayerBody();
 
 	void ExtrudePlayer(Vector3 ExtrudePos, float ExtrudeDis, bodytype ExtrudeType);
 

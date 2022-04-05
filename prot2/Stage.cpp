@@ -26,6 +26,7 @@ static size_t i = 0, j = 0; //for文のループカウンタ
 static size_t x = 0, y = 0; //マップチップ上の座標
 
 static size_t mapchipPos = 0; //マップチップの要素番号
+static size_t reverseMapchipPos = 0; //反転したマップチップの要素番号
 }
 
 const int Stage::blockSize = 60;
@@ -52,6 +53,14 @@ Stage::~Stage()
 	DataClear();
 }
 
+void Stage::GetInitFoldCount(unsigned char foldCount[4])
+{
+	for (i = 0; i < sizeof(initFoldCount) / sizeof(initFoldCount[0]); i++)
+	{
+		foldCount[i] = initFoldCount[i];
+	}
+}
+
 void Stage::Init()
 {
 }
@@ -73,7 +82,6 @@ void Stage::Updata()
 				{
 					for (x = 0; x < stageData[i].stageTileData[j].width; x++)
 					{
-						static size_t reverseMapchipPos = 0;
 						static size_t easeMapchipPos = 0;
 
 						mapchipPos = y * stageData[i].stageTileData[j].width + x;
@@ -633,7 +641,6 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 		direction = bodytype::right;
 	}
 
-	static size_t reverseMapchipPos = 0;
 	static bool isAct = false;
 
 	isAct = false;
@@ -870,6 +877,169 @@ int Stage::FoldAndOpen(const Vector3& playerPos, unsigned char playerTile[4])
 	return 0;
 }
 
+int Stage::FoldSimulation(const Vector3& playerPos, const unsigned char& direction, char* returnMapchip)
+{
+	static size_t onPlayerStageData = 0;
+	static size_t moveStageTile = 0;
+	static size_t moveStageData = 0;
+	static bool isFold = false; //折れるかどうか
+
+	isFold = false;
+
+	for (i = 0; i < stageData.size(); i++)
+	{
+		for (j = 0; j < stageData[i].stageTileData.size(); j++)
+		{
+			if ((playerPos.x / blockSize >= stageData[i].stageTileData[j].offsetX &&
+				playerPos.x / blockSize < stageData[i].stageTileData[j].offsetX + stageData[i].stageTileData[j].width) &&
+				(playerPos.y / blockSize >= stageData[i].stageTileData[j].offsetY &&
+					playerPos.y / blockSize < stageData[i].stageTileData[j].offsetY + stageData[i].stageTileData[j].height))
+			{
+				onPlayerStageData = i;
+			}
+			else
+			{
+				continue;
+			}
+
+			switch (direction)
+			{
+			case bodytype::up: //上入力
+			{
+				if (stageData[i].stageTileData[j].stageNumber / stageData[i].width <= 0)
+				{
+					// プレイヤーがいるステージタイルが端
+					break;
+				}
+
+				moveStageTile = stageData[i].stageTileData[j].stageNumber - stageData[i].width;
+				moveStageData = stageData[i].stageTile[moveStageTile] - 1;
+
+				if (moveStageTile < 0 ||
+					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
+				{
+					// ステージタイルがその方向に折れない
+					break;
+				}
+
+				isFold = true;
+			}
+			case bodytype::down: //下入力
+			{
+				if (stageData[i].stageTileData[j].stageNumber / stageData[i].width >= static_cast<size_t>(stageData[i].height - 1))
+				{
+					// プレイヤーがいるステージタイルが端
+					break;
+				}
+
+				moveStageTile = stageData[i].stageTileData[j].stageNumber + stageData[i].width;
+				moveStageData = stageData[i].stageTile[moveStageTile] - 1;
+
+				if (moveStageTile >= static_cast<size_t>(stageData[i].width * stageData[i].height) ||
+					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
+				{
+					// ステージタイルがその方向に折れない
+					break;
+				}
+
+				isFold = true;
+			}
+			case bodytype::left: //左入力
+			{
+				if (stageData[i].stageTileData[j].stageNumber % stageData[i].width <= 0)
+				{
+					// プレイヤーがいるステージタイルが端
+					break;
+				}
+
+				moveStageTile = stageData[i].stageTileData[j].stageNumber - 1;
+				moveStageData = stageData[i].stageTile[moveStageTile] - 1;
+
+				if (moveStageTile < 0 ||
+					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
+				{
+					// ステージタイルがその方向に折れない
+					break;
+				}
+
+				isFold = true;
+			}
+			case bodytype::right: //右入力
+			{
+				if (stageData[i].stageTileData[j].stageNumber % stageData[i].width >= static_cast<size_t>(stageData[i].width - 1))
+				{
+					// プレイヤーがいるステージタイルが端
+					break;
+				}
+
+				moveStageTile = stageData[i].stageTileData[j].stageNumber + 1;
+				moveStageData = stageData[i].stageTile[moveStageTile] - 1;
+
+				if (moveStageTile >= static_cast<size_t>(stageData[i].width * stageData[i].height) ||
+					stageData[i].stageTile[moveStageTile] == MapchipData::EMPTY_STAGE)
+				{
+					// ステージタイルがその方向に折れない
+					break;
+				}
+
+				isFold = true;
+			}
+			default:
+			{
+				return EF;
+				break;
+			}
+			}
+
+			if (isFold)
+			{
+				break;
+			}
+		}
+
+		if (isFold)
+		{
+			break;
+		}
+	}
+
+	if (isFold)
+	{
+		if (stageData[onPlayerStageData].stageTileData[moveStageData].isFold)
+		{
+			return EF;
+		}
+		else
+		{
+			for (y = 0; y < static_cast<size_t>(stageData[onPlayerStageData].stageTileData[moveStageData].height); y++)
+			{
+				for (x = 0; x < stageData[onPlayerStageData].stageTileData[moveStageData].width; x++)
+				{
+					if (direction == bodytype::up || direction == bodytype::down)
+					{
+						mapchipPos = y * stageData[onPlayerStageData].stageTileData[moveStageData].width + x;
+						reverseMapchipPos = (stageData[onPlayerStageData].stageTileData[moveStageData].height - y - 1) * stageData[onPlayerStageData].stageTileData[moveStageData].width + x;
+					}
+					if (direction == bodytype::left || direction == bodytype::right)
+					{
+						mapchipPos = y * stageData[onPlayerStageData].stageTileData[moveStageData].width + x;
+						reverseMapchipPos = y * stageData[onPlayerStageData].stageTileData[moveStageData].width + (stageData[onPlayerStageData].stageTileData[moveStageData].width - x - 1);
+					}
+
+					returnMapchip[mapchipPos] = stageData[onPlayerStageData].stageTileData[moveStageData].mapchip[reverseMapchipPos];
+				}
+			}
+		}
+	}
+	else
+	{
+		// 折れる物が無い
+		return EF;
+	}
+
+	return 0;
+}
+
 void Stage::Reset()
 {
 	for (i = 0; i < stageData.size(); i++)
@@ -951,14 +1121,6 @@ void Stage::DataClear()
 	ContainerClear(initStageData);
 }
 
-void Stage::GetInitFoldCount(unsigned char foldCount[4])
-{
-	for (i = 0; i < sizeof(initFoldCount) / sizeof(initFoldCount[0]); i++)
-	{
-		foldCount[i] = initFoldCount[i];
-	}
-}
-
 inline Stage::StageTileData* Stage::GetStageTileData(const short& stageNumber, const short& stageTileNumber)
 {
 	if (stageNumber < 0 || size_t(stageNumber) >= stageData.size())
@@ -986,42 +1148,42 @@ inline Stage::StageData* Stage::GetAllStageData()
 	return stageData.data();
 }
 
-size_t Stage::GetStageDataSize()
+size_t Stage::GetStageDataSize() const
 {
 	return stageData.size();
 }
 
-size_t Stage::GetStageTileDataSize(int i)
+size_t Stage::GetStageTileDataSize(int i) const
 {
 	return stageData[i].stageTileData.size();
 }
 
-char Stage::GetStageWidth(int i)
+char Stage::GetStageWidth(int i) const
 {
 	return stageData[i].width;
 }
 
-char Stage::GetStageHeight(int i)
+char Stage::GetStageHeight(int i) const
 {
 	return stageData[i].height;
 }
 
-char Stage::GetStageTileWidth(int i, int j)
+char Stage::GetStageTileWidth(int i, int j) const
 {
 	return stageData[i].stageTileData[j].width;
 }
 
-char Stage::GetStageTileHeight(int i, int j)
+char Stage::GetStageTileHeight(int i, int j) const
 {
 	return stageData[i].stageTileData[j].height;
 }
 
-char Stage::GetStageMapchip(int i, int j, int mapchipPos)
+char Stage::GetStageMapchip(int i, int j, int mapchipPos) const
 {
 	return stageData[i].stageTileData[j].mapchip[mapchipPos];
 }
 
-bool Stage::GetPositionTile(Vector3 center, int i, int j)
+bool Stage::GetPositionTile(Vector3 center, int i, int j) const
 {
 	float left = (float)stageData[i].stageTileData[j].offsetX * blockSize;
 	float up = (float)stageData[i].stageTileData[j].offsetY * blockSize;
@@ -1038,12 +1200,12 @@ bool Stage::GetPositionTile(Vector3 center, int i, int j)
 	}
 }
 
-int Stage::GetStageTileOffsetX(int i, int j)
+int Stage::GetStageTileOffsetX(int i, int j) const
 {
 	return stageData[i].stageTileData[j].offsetX;
 }
 
-int Stage::GetStageTileOffsetY(int i, int j)
+int Stage::GetStageTileOffsetY(int i, int j) const
 {
 	return stageData[i].stageTileData[j].offsetY;
 }
@@ -1054,8 +1216,6 @@ int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, con
 	{
 		return EF;
 	}
-
-	static size_t reverseMapchipPos = 0;
 
 	if (direction == bodytype::up || direction == bodytype::down)
 	{
@@ -1130,8 +1290,6 @@ int Stage::Open(unsigned char playerTile[4], const unsigned char& direction, con
 	{
 		return EF;
 	}
-
-	static size_t reverseMapchipPos = 0;
 
 	if (direction == bodytype::up || direction == bodytype::down)
 	{

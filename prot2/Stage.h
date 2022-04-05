@@ -64,6 +64,14 @@ public: //定数
 
 	Vector3 offset = { 0,0,0 };
 
+public: //静的メンバ関数
+	// プレイヤーのx軸上の開始位置を取得
+	inline static int GetStartPlayerPosX() { return startPlayerPosX; }
+	// プレイヤーのx軸上の開始位置を取得
+	inline static int GetStartPlayerPosY() { return startPlayerPosY; }
+	// プレイヤーの折れる回数の初期状態を取得
+	static void GetInitFoldCount(unsigned char foldCount[4]);
+
 private: //静的メンバ変数
 	static int startPlayerPosX;
 	static int startPlayerPosY;
@@ -87,43 +95,39 @@ public: //メンバ関数
 
 	// ステージを折る・開く
 	int FoldAndOpen(const Vector3& playerPos, unsigned char foldCount[4]);
+	// ステージがどう折れるかの予測
+	int FoldSimulation(const Vector3& playerPos, const unsigned char& direction, char* returnMapchip);
 	// リセット
 	void Reset();
 	// 内部データ全削除
 	void DataClear();
 
-	// プレイヤーのx軸上の開始位置を取得
-	inline static int GetStartPlayerPosX() { return startPlayerPosX; }
-	// プレイヤーのx軸上の開始位置を取得
-	inline static int GetStartPlayerPosY() { return startPlayerPosY; }
-	// プレイヤーの折れる回数の初期状態を取得
-	static void GetInitFoldCount(unsigned char foldCount[4]);
 	// ステージタイルのデータを取得
 	inline StageTileData* GetStageTileData(const short& stageNumber, const short& stageTileNumber);
 	// ステージのデータを取得
 	inline StageData* GetStageData(const short& stageNumber);
 	// 全ステージのデータを取得
 	inline StageData* GetAllStageData();
-	// Stagedataのサイズを取得
-	size_t GetStageDataSize();
-	// Stagetiledataのサイズを取得
-	size_t GetStageTileDataSize(int i);
+	// StageDataのサイズを取得
+	size_t GetStageDataSize() const;
+	// StageTileDataのサイズを取得
+	size_t GetStageTileDataSize(int i) const;
 	// ステージの横幅を取得
-	char GetStageWidth(int i);
+	char GetStageWidth(int i) const;
 	// ステージの縦幅を取得
-	char GetStageHeight(int i);
+	char GetStageHeight(int i) const;
 	// 任意のStageTileの高さを取得
-	char GetStageTileHeight(int i, int j);
+	char GetStageTileHeight(int i, int j) const;
 	// 任意のStageTileの幅を取得
-	char GetStageTileWidth(int i, int j);
+	char GetStageTileWidth(int i, int j) const;
 	// 任意の場所のマップチップ情報を取得
-	char GetStageMapchip(int i, int j, int mapchipPos);
+	char GetStageMapchip(int i, int j, int mapchipPos) const;
 	// 任意の座標からどのStageTileにいるかを取得
-	bool GetPositionTile(Vector3 center, int i, int j);
+	bool GetPositionTile(Vector3 center, int i, int j) const;
 	// ステージタイルのX軸のオフセットを返す
-	int GetStageTileOffsetX(int i, int j);
+	int GetStageTileOffsetX(int i, int j) const;
 	// ステージタイルのY軸のオフセットを返す
-	int GetStageTileOffsetY(int i, int j);
+	int GetStageTileOffsetY(int i, int j) const;
 	//任意の方向に特定のマップチップがあるかどうか
 	bool IsNeighberMapchip(int i, int j, int MapchipPos, MapchipData mapchipData);
 
