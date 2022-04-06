@@ -1530,10 +1530,10 @@ void Player::IsHitPlayerBody(Stage& stage)
 	int j = 0;
 
 	//上下左右(プレイヤーの顔)
-	int left_mapchip = (int)((CenterPosition.x - 25) - stage.offset.x) / 60;
-	int up_mapchip = (int)((CenterPosition.y - 25) - stage.offset.y) / 60;
-	int right_mapchip = (int)((CenterPosition.x + 25) - stage.offset.x) / 60;
-	int down_mapchip = (int)((CenterPosition.y + 33) - stage.offset.y) / 60;
+	int left_mapchip = (int)((CenterPosition.x - 25) - stage.offset.x) / stage.blockSize;
+	int up_mapchip = (int)((CenterPosition.y - 25) - stage.offset.y) / stage.blockSize;
+	int right_mapchip = (int)((CenterPosition.x + 25) - stage.offset.x) / stage.blockSize;
+	int down_mapchip = (int)((CenterPosition.y + 33) - stage.offset.y) / stage.blockSize;
 
 	//タイル内のマップチップ座標
 	int left_mapchip_tile;
@@ -1574,16 +1574,16 @@ void Player::IsHitPlayerBody(Stage& stage)
 				MapchipPos = (up_mapchip_tile)*stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
 				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = (left_mapchip * 60) - (CenterPosition.x - 30);
-					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
+					BuriedX = (left_mapchip * stage.blockSize) - (CenterPosition.x - 30);
+					BuriedY = (up_mapchip * stage.blockSize) - (CenterPosition.y - 30);
 
 					if (BuriedX > BuriedY)
 					{
-						CenterPosition.y = (up_mapchip + 1) * 60 + 25;
+						CenterPosition.y = (up_mapchip + 1) * stage.blockSize + 25;
 					}
 					else if (BuriedX < BuriedY)
 					{
-						CenterPosition.x = (left_mapchip + 1) * 60 + 25;
+						CenterPosition.x = (left_mapchip + 1) * stage.blockSize + 25;
 					}
 				}
 			}
@@ -1596,17 +1596,17 @@ void Player::IsHitPlayerBody(Stage& stage)
 				MapchipPos = (down_mapchip_tile)*stage.GetStageTileWidth(i, j) + (left_mapchip_tile);
 				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = (left_mapchip * 60) - (CenterPosition.x - 30);
-					BuriedY = ((CenterPosition.y + 29) - 60) - (down_mapchip * 60);
+					BuriedX = (left_mapchip * stage.blockSize) - (CenterPosition.x - 30);
+					BuriedY = ((CenterPosition.y + 29) - stage.blockSize) - (down_mapchip * stage.blockSize);
 
 					if (BuriedX > BuriedY)
 					{
-						CenterPosition.y = (down_mapchip * 60) - 33;
+						CenterPosition.y = (down_mapchip * stage.blockSize) - 33;
 						FallCount++;
 					}
 					else if (BuriedX < BuriedY)
 					{
-						CenterPosition.x = (left_mapchip + 1) * 60 + 25;
+						CenterPosition.x = (left_mapchip + 1) * stage.blockSize + 25;
 					}
 				}
 			}
@@ -1619,16 +1619,16 @@ void Player::IsHitPlayerBody(Stage& stage)
 				MapchipPos = (up_mapchip_tile)*stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
 				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = ((CenterPosition.x + 29) - 60) - (right_mapchip * 60);
-					BuriedY = (up_mapchip * 60) - (CenterPosition.y - 30);
+					BuriedX = ((CenterPosition.x + 29) - stage.blockSize) - (right_mapchip * stage.blockSize);
+					BuriedY = (up_mapchip * stage.blockSize) - (CenterPosition.y - 30);
 
 					if (BuriedX > BuriedY)
 					{
-						CenterPosition.y = (up_mapchip + 1) * 60 + 25;
+						CenterPosition.y = (up_mapchip + 1) * stage.blockSize + 25;
 					}
 					else if (BuriedX < BuriedY)
 					{
-						CenterPosition.x = (right_mapchip * 60) - 25;
+						CenterPosition.x = (right_mapchip * stage.blockSize) - 25;
 					}
 				}
 			}
@@ -1641,17 +1641,17 @@ void Player::IsHitPlayerBody(Stage& stage)
 				MapchipPos = (down_mapchip_tile)*stage.GetStageTileWidth(i, j) + (right_mapchip_tile);
 				if (stage.GetStageMapchip(i, j, MapchipPos) == MapchipData::BLOCK)
 				{
-					BuriedX = ((CenterPosition.x + 29) - 60) - (right_mapchip * 60);
-					BuriedY = ((CenterPosition.y + 29) - 60) - (down_mapchip * 60);
+					BuriedX = ((CenterPosition.x + 29) - stage.blockSize) - (right_mapchip * stage.blockSize);
+					BuriedY = ((CenterPosition.y + 29) - stage.blockSize) - (down_mapchip * stage.blockSize);
 
 					if (BuriedX > BuriedY)
 					{
-						CenterPosition.y = (down_mapchip * 60) - 33;
+						CenterPosition.y = (down_mapchip * stage.blockSize) - 33;
 						FallCount++;
 					}
 					else if (BuriedX < BuriedY)
 					{
-						CenterPosition.x = (right_mapchip * 60) - 25;
+						CenterPosition.x = (right_mapchip * stage.blockSize) - 25;
 					}
 				}
 			}
