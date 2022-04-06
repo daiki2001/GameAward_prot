@@ -225,6 +225,14 @@ void Player::Update(Stage& stage)
 				{
 					IsOpenTwo = false;
 				}
+
+				if (Body_One.Body_Type != Body_Three.Body_Type)
+				{
+					if (Body_Three.IsFold == true)
+					{
+						Body_Three.Overlap++;
+					}
+				}
 			}
 			//body1のみ有効
 			else if (Body_One.IsActivate == true)
@@ -556,6 +564,14 @@ void Player::Update(Stage& stage)
 				if (Body_Three.BodyDistance == 2 && Body_Two.IsFold == true)
 				{
 					IsOpenTwo = false;
+				}
+
+				if (Body_One.Body_Type != Body_Three.Body_Type)
+				{
+					if (Body_One.IsFold == true)
+					{
+						Body_One.Overlap++;
+					}
 				}
 			}
 			//body1のみ有効
@@ -1228,17 +1244,48 @@ void Player::Update(Stage& stage)
 	//下にスライド
 	if (Input::isKeyTrigger(KEY_INPUT_V))
 	{
-		if (Body_Two.Body_Type == up)
+		if (Body_Two.IsActivate == true && Body_Four.IsActivate == true)
 		{
-			Body_Two.setslide(1, 2);
+			if (Body_Two.Body_Type == up)
+			{
+				Body_Two.Overlap = 0;
+				Body_Two.setslide(-1, 2);
+				Body_Four.BodyDistance = 1;
+				Body_Four.setslide(-1, 1);
+			}
+			if (Body_Two.Body_Type == down && Body_Two.BodyDistance == 1 && Body_Four.IsFold == false)
+			{
+				if (Body_Two.IsFold == true)
+				{
+					Body_Four.Overlap = 1;
+					Body_Two.BodyDistance = 2;
+					Body_Two.setslide(-1, 1);
+					Body_Four.setslide(-1, 2);
+
+					if (Body_One.IsFold == true)
+					{
+						Body_One.Overlap = 0;
+					}
+				}
+				else
+				{
+					Body_Two.BodyDistance = 2;
+					Body_Two.setslide(-1, 1);
+					Body_Four.setslide(-1, 2);
+				}
+			}
 		}
-		else
+		else if (Body_Four.IsActivate == true && Body_Four.Body_Type == up && Body_Four.IsFold == false && Body_Four.IsAction == false)
+		{
+			Body_Four.setslide(-1, 2);
+		}
+		else if (Body_Two.IsActivate == true && Body_Two.Body_Type == up && Body_Two.IsFold == false)
 		{
 			Body_Two.setslide(-1, 2);
 		}
 	}
 
-	if (Body_One.Body_Type == down || Body_Two.Body_Type == down || Body_Three.Body_Type == down || Body_Four.Body_Type == down)
+	if (Body_One.Body_Type == down || Body_Two.Body_Type == down || Body_Three.Body_Type == down /*|| Body_Four.Body_Type == down*/)
 	{
 		IsDownBody = true;
 	}
