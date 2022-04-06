@@ -52,7 +52,7 @@ void PlayerBody::Update(Vector3& center)
 	//äJÇ¢ÇƒÇ¢ÇÈìríÜ
 	if (IsFold == false && IsOpen == true && IsAction == true && IsSlide == false)
 	{
-		Ease.addTime += Ease.maxTime / 20.0f;
+		Ease.addTime += Ease.maxTime / 25.0f;
 		Ease.timeRate = min(Ease.addTime / Ease.maxTime, 1.0f);
 
 		if (Body_Type == left)
@@ -190,7 +190,7 @@ void PlayerBody::Update(Vector3& center)
 	//ê‹Ç¡ÇƒÇ¢ÇÈìríÜ
 	if (IsFold == true && IsOpen == false && IsAction == true && IsSlide == false)
 	{
-		Ease.addTime += Ease.maxTime / 20.0f;
+		Ease.addTime += Ease.maxTime / 25.0f;
 		Ease.timeRate = min(Ease.addTime / Ease.maxTime, 1.0f);
 
 		if (Body_Type == left)
@@ -631,7 +631,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					}
 					else if (BuriedX < BuriedY)
 					{
-						if (IsHitLeft == false)
+						if (IsHitLeft == false && Body_Type == left || Body_Type == down)
 						{
 							center->x = (BodyLeft_mapchip + 1) * stage.blockSize + (center->x - BodyLeft);
 							IsHitLeft = true;
@@ -690,7 +690,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					}
 					else if (BuriedX < BuriedY)
 					{
-						if (IsHitRight == false)
+						if (IsHitRight == false && Body_Type == right || Body_Type == down)
 						{
 							center->x = (BodyRight_mapchip * stage.blockSize) - (BodyRight - center->x) - 1;
 							IsHitRight = true;
@@ -704,7 +704,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 	if (FallCount > 0)
 	{
 		BodyIsFall = false;
-		//FallSpeed = 0.0f;
+		FallSpeed = 0.0f;
 	}
 	else
 	{

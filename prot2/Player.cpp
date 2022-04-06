@@ -954,7 +954,11 @@ void Player::Update(Stage& stage)
 	}
 
 	//PlayerIsactionのfalse条件
-	if (PlayerFoot.FootIsAction == false)
+	if (PlayerFoot.FootIsAction == false && 
+		Body_One.IsAction == false &&
+		Body_Two.IsAction == false && 
+		Body_Three.IsAction == false && 
+		Body_Four.IsAction == false)
 	{
 		Player_IsAction = false;
 		PlayerFoot.IsFootUp = false;
@@ -1324,7 +1328,7 @@ void Player::Update(Stage& stage)
 		}*/
 	}
 
-	//左にスライド
+	/*//左にスライド
 	/*if (Input::isKeyTrigger(KEY_INPUT_Z))
 	{
 		if (Body_One.IsActivate == true && Body_Three.IsActivate == true)
@@ -1366,7 +1370,7 @@ void Player::Update(Stage& stage)
 		{
 			Body_One.setslide(-1, 2);
 		}
-	}*/
+	}
 	//右にスライド
 	/*if (Input::isKeyTrigger(KEY_INPUT_X))
 	{
@@ -1409,7 +1413,7 @@ void Player::Update(Stage& stage)
 		{
 			Body_Three.setslide(1, 2);
 		}
-	}*/
+	}
 	//上にスライド
 	/*if (Input::isKeyTrigger(KEY_INPUT_C))
 	{
@@ -1452,7 +1456,7 @@ void Player::Update(Stage& stage)
 		{
 			Body_Two.setslide(-1, 2);
 		}
-	}*/
+	}
 	//下にスライド
 	/*if (Input::isKeyTrigger(KEY_INPUT_V))
 	{
@@ -1620,9 +1624,6 @@ void Player::Draw(int offsetX, int offsetY)
 		}
 	}
 
-	//DrawLine(0, 240, 1280, 240, WHITE, true);
-	//DrawLine(300, 0, 300, 720, RED, true);
-
 #pragma region debug
 	DrawFormatString(5, 5, WHITE, "AD:左右移動");
 	DrawFormatString(5, 25, WHITE, "W:ジャンプ");
@@ -1635,11 +1636,11 @@ void Player::Draw(int offsetX, int offsetY)
 	DrawFormatString(5, 205, WHITE, "two:%d", Body_Two.Overlap);
 	DrawFormatString(5, 225, WHITE, "three:%d", Body_Three.Overlap);
 	DrawFormatString(5, 245, WHITE, "OpenTwo:%d", IsOpenTwo);
-	//DrawFormatString(5, 265, WHITE, "jump:%d", IsJump);
-	//DrawFormatString(5, 285, WHITE, "%f", FallSpeed);
-	//DrawFormatString(5, 305, WHITE, "IsAllFall:%d", IsFall());
+	DrawFormatString(5, 265, WHITE, "jump:%d", IsJump);
+	DrawFormatString(5, 285, WHITE, "%f", FallSpeed);
+	DrawFormatString(5, 305, WHITE, "IsAllFall:%d", IsFall());
 	//DrawFormatString(5, 325, WHITE, "%d", Player_IsAction);
-	//DrawFormatString(5, 345, WHITE, "IsInputjump:%d", IsInputjump);
+	DrawFormatString(5, 345, WHITE, "IsInputjump:%d", IsInputjump);
 	if (IsGoal == true)
 	{
 		DrawFormatString(630, 100, YELLOW, "GOAL");
@@ -1984,6 +1985,10 @@ bool Player::IsFall()
 		FallCount++;
 	}
 	if (Body_Three.IsActivate == true && Body_Three.BodyIsFall == false)
+	{
+		FallCount++;
+	}
+	if (Body_Four.IsActivate == true && Body_Four.BodyIsFall == false)
 	{
 		FallCount++;
 	}

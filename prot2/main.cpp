@@ -51,7 +51,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Stage* stage = Stage::Get();
 	stage->LoadStage("./Resources/CSV's/stage1.csv", playerTile);
 	player->Init();
-	player->bodysetup(true, left, true, up, true, right, true, down);
+	player->bodysetup(false, left, true, up, true, right, true, down);
 
 	int Back = LoadGraph("Resources/backSin.png");
 
@@ -84,8 +84,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			stage->LoadStage("./Resources/stage5.csv", playerTile);
 			player->Init();
 			player->bodysetup(true, left, false, up, false, right);
-		}*/
-		/*if (InputManger::Reset())
+		}
+		if (InputManger::Reset())
 		{
 			stage->Reset();
 			stage->GetInitFoldCount(playerTile);
@@ -111,7 +111,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		//DrawFormatString(5, 240, GetColor(255, 255, 255), "2：ステージ2再設定");
 		//DrawFormatString(5, 260, GetColor(255, 255, 255), "3：ステージ3");
 
-		DrawFormatString(5, 280, GetColor(255, 255, 255), "方向キー：ステージの折る・開く");
+		//DrawFormatString(5, 280, GetColor(255, 255, 255), "方向キー：ステージの折る・開く");
 
 		//---------  ここまでにプログラムを記述  ---------//
 		// (ダブルバッファ)裏面
