@@ -623,7 +623,7 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 	if (end == false)
 	{
 		// ŠJŽnˆÊ’u‚ª–³‚¢
-		//return EF;
+		return EF;
 	}
 
 	for (i = 0; i < stageData.size(); i++)
@@ -906,7 +906,7 @@ int Stage::FoldSimulation(const Vector3& playerPos, const unsigned char& directi
 	static size_t onPlayerStageData = 0;
 	static size_t moveStageTile = 0;
 	static size_t moveStageData = 0;
-	static bool isFold = false; //Ü‚ê‚é‚©‚Ç‚¤‚©
+	static bool isFold = false; //Ü‚ê‚é•¨‚ª‚ ‚é‚©‚Ç‚¤‚©
 
 	isFold = false;
 
@@ -1029,30 +1029,32 @@ int Stage::FoldSimulation(const Vector3& playerPos, const unsigned char& directi
 
 	if (isFold)
 	{
+		for (y = 0; y < static_cast<size_t>(stageData[onPlayerStageData].stageTileData[moveStageData].height); y++)
+		{
+			for (x = 0; x < stageData[onPlayerStageData].stageTileData[moveStageData].width; x++)
+			{
+				if (direction == bodytype::up || direction == bodytype::down)
+				{
+					mapchipPos = y * stageData[onPlayerStageData].stageTileData[moveStageData].width + x;
+					reverseMapchipPos = (stageData[onPlayerStageData].stageTileData[moveStageData].height - y - 1) * stageData[onPlayerStageData].stageTileData[moveStageData].width + x;
+				}
+				if (direction == bodytype::left || direction == bodytype::right)
+				{
+					mapchipPos = y * stageData[onPlayerStageData].stageTileData[moveStageData].width + x;
+					reverseMapchipPos = y * stageData[onPlayerStageData].stageTileData[moveStageData].width + (stageData[onPlayerStageData].stageTileData[moveStageData].width - x - 1);
+				}
+
+				returnMapchip[mapchipPos] = stageData[onPlayerStageData].stageTileData[moveStageData].mapchip[reverseMapchipPos];
+			}
+		}
+
 		if (stageData[onPlayerStageData].stageTileData[moveStageData].isFold)
 		{
-			return EF;
+			return 1;
 		}
 		else
 		{
-			for (y = 0; y < static_cast<size_t>(stageData[onPlayerStageData].stageTileData[moveStageData].height); y++)
-			{
-				for (x = 0; x < stageData[onPlayerStageData].stageTileData[moveStageData].width; x++)
-				{
-					if (direction == bodytype::up || direction == bodytype::down)
-					{
-						mapchipPos = y * stageData[onPlayerStageData].stageTileData[moveStageData].width + x;
-						reverseMapchipPos = (stageData[onPlayerStageData].stageTileData[moveStageData].height - y - 1) * stageData[onPlayerStageData].stageTileData[moveStageData].width + x;
-					}
-					if (direction == bodytype::left || direction == bodytype::right)
-					{
-						mapchipPos = y * stageData[onPlayerStageData].stageTileData[moveStageData].width + x;
-						reverseMapchipPos = y * stageData[onPlayerStageData].stageTileData[moveStageData].width + (stageData[onPlayerStageData].stageTileData[moveStageData].width - x - 1);
-					}
-
-					returnMapchip[mapchipPos] = stageData[onPlayerStageData].stageTileData[moveStageData].mapchip[reverseMapchipPos];
-				}
-			}
+			return 0;
 		}
 	}
 	else

@@ -102,7 +102,14 @@ public: //メンバ関数
 
 	// ステージを折る・開く
 	int FoldAndOpen(const Vector3& playerPos, unsigned char foldCount[4]);
-	// ステージがどう折れるかの予測
+
+	/// <summary>
+	/// ステージがどう折れるかの予測
+	/// </summary>
+	/// <param name="playerPos"> プレイヤーの座標 </param>
+	/// <param name="direction"> 折りたい方向 </param>
+	/// <param name="returnMapchip"> マップチップ(出力) </param>
+	/// <returns> 0で折れる、1で開ける、-1で失敗 </returns>
 	int FoldSimulation(const Vector3& playerPos, const unsigned char& direction, char* returnMapchip);
 	// リセット
 	void Reset();
