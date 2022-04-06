@@ -88,16 +88,33 @@ void PlayerBody::Update(Vector3& center)
 		}
 		if (Body_Type == up)
 		{
-			BodyEndPos = { center.x + 25.0f, center.y - 25.0f, 0.0f };
-			BodyStartPos.y = Ease.easeout(BodyEndPos.y + BodySize, BodyEndPos.y - BodySize, Ease.timeRate);
-			BodyStartPos.x = BodyEndPos.x - BodySize;
-			if (Ease.timeRate < 0.5)
+			if (FoldCount == 1)
 			{
-				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				BodyEndPos = { center.x + 25.0f, center.y - 25.0f, 0.0f };
+				BodyStartPos.y = Ease.easeout(BodyEndPos.y + BodySize, BodyEndPos.y - BodySize, Ease.timeRate);
+				BodyStartPos.x = BodyEndPos.x - BodySize;
+				if (Ease.timeRate < 0.5)
+				{
+					BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				}
+				else
+				{
+					BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				}
 			}
-			else
+			else if (FoldCount == 2)
 			{
-				BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				BodyStartPos = { center.x - 25.0f, center.y - 25.0f, 0.0f };
+				BodyEndPos.y = Ease.easeout(BodyStartPos.y + BodySize, BodyStartPos.y - BodySize, Ease.timeRate);
+				BodyEndPos.x = BodyEndPos.x - BodySize;
+				if (Ease.timeRate < 0.5)
+				{
+					BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				}
+				else
+				{
+					BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				}
 			}
 		}
 		if (Body_Type == right)
@@ -133,17 +150,33 @@ void PlayerBody::Update(Vector3& center)
 		}
 		if (Body_Type == down)
 		{
-			BodyStartPos = { center.x - 25.0f, center.y + 25.0f, 0.0f };
-			BodyEndPos.y = Ease.easeout(BodyStartPos.y - BodySize, BodyStartPos.y + BodySize, Ease.timeRate);
-			BodyEndPos.x = BodyStartPos.x + BodySize;
-			BodyCenterPos.x = BodyStartPos.x + BodySize / 2;
-			if (Ease.timeRate < 0.5)
+			if (FoldCount == 1)
 			{
-				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				BodyStartPos = { center.x - 25.0f, center.y + static_cast<float>(25 + BodySize * (BodyDistance - 1)), 0.0f };
+				BodyEndPos.y = Ease.easeout(BodyStartPos.y - BodySize, BodyStartPos.y + BodySize, Ease.timeRate);
+				BodyEndPos.x = BodyStartPos.x + BodySize;
+				if (Ease.timeRate < 0.5)
+				{
+					BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				}
+				else
+				{
+					BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				}
 			}
-			else
+			else if (FoldCount == 2)
 			{
-				BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				BodyEndPos = { center.x + 25.0f, center.y + 25, 0.0f };
+				BodyStartPos.y = Ease.easeout(BodyEndPos.y - BodySize, BodyEndPos.y + BodySize, Ease.timeRate);
+				BodyStartPos.x = BodyEndPos.x - BodySize;
+				if (Ease.timeRate < 0.5)
+				{
+					BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				}
+				else
+				{
+					BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				}
 			}
 		}
 
@@ -176,9 +209,20 @@ void PlayerBody::Update(Vector3& center)
 		}
 		if (Body_Type == up)
 		{
-			BodyStartPos = { center.x - 25.0f,center.y - 75.0f,0.0f };
-			BodyEndPos = { BodyStartPos.x + 50,BodyStartPos.y + 50,0.0f };
-			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30,0.0f };
+			if (FoldCount == 0)
+			{
+				BodyStartPos = { center.x - 25.0f,center.y - (25 + BodyDistance * BodySize),0.0f };
+				BodyEndPos = { BodyStartPos.x + 50,BodyStartPos.y + 50,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30,0.0f };
+			}
+			else if (FoldCount == 1)
+			{
+				BodyStartPos = { center.x - 25,center.y - 25 ,0.0f };
+				BodyEndPos = { BodyStartPos.x - BodySize,BodyStartPos.y + BodySize ,0.0f };
+				BodyCenterPos = { BodyStartPos.x - 30,BodyStartPos.y + 30 ,0.0f };
+				IsFold = true;
+				IsOpen = false;
+			}
 		}
 		if (Body_Type == right)
 		{
@@ -199,9 +243,20 @@ void PlayerBody::Update(Vector3& center)
 		}
 		if (Body_Type == down)
 		{
-			BodyStartPos = { center.x - 25,center.y + 25 ,0.0f };
-			BodyEndPos = { BodyStartPos.x + 50,BodyStartPos.y + 50 ,0.0f };
-			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30 ,0.0f };
+			if (FoldCount == 0)
+			{
+				BodyStartPos = { center.x - 25,center.y + (25 + (BodyDistance - 1) * BodySize) ,0.0f };
+				BodyEndPos = { BodyStartPos.x + 50,BodyStartPos.y + 50 ,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y + 30 ,0.0f };
+			}
+			else if (FoldCount == 1)
+			{
+				BodyEndPos = { center.x + 25,center.y + 25,0.0f };
+				BodyStartPos = { BodyEndPos.x + BodySize,BodyEndPos.y - BodySize,0.0f };
+				BodyCenterPos = { BodyEndPos.x + 30,BodyEndPos.y - 30,0.0f };
+				IsFold = true;
+				IsOpen = false;
+			}
 		}
 	}
 	//Ü‚Á‚Ä‚¢‚é“r’†
@@ -243,16 +298,33 @@ void PlayerBody::Update(Vector3& center)
 		}
 		if (Body_Type == up)
 		{
-			BodyEndPos = { center.x + 25.0f, center.y - 25.0f, 0.0f };
-			BodyStartPos.y = Ease.easeout(BodyEndPos.y - BodySize, BodyEndPos.y + BodySize, Ease.timeRate);
-			BodyStartPos.x = BodyEndPos.x - BodySize;
-			if (Ease.timeRate < 0.5)
+			if (FoldCount == 0)
 			{
-				BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				BodyEndPos = { center.x + 25.0f, center.y - static_cast<float>(25 + BodySize * (BodyDistance - 1)), 0.0f };
+				BodyStartPos.y = Ease.easeout(BodyEndPos.y - BodySize, BodyEndPos.y + BodySize, Ease.timeRate);
+				BodyStartPos.x = BodyEndPos.x - BodySize;
+				if (Ease.timeRate < 0.5)
+				{
+					BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				}
+				else
+				{
+					BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				}
 			}
-			else
+			else if (FoldCount == 1)
 			{
-				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				BodyStartPos = { center.x - 25.0f, center.y - 25, 0.0f };
+				BodyEndPos.y = Ease.easeout(BodyStartPos.y - BodySize, BodyStartPos.y + BodySize, Ease.timeRate);
+				BodyEndPos.x = BodyStartPos.x + BodySize;
+				if (Ease.timeRate < 0.5)
+				{
+					BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				}
+				else
+				{
+					BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				}
 			}
 		}
 		if (Body_Type == right)
@@ -288,16 +360,33 @@ void PlayerBody::Update(Vector3& center)
 		}
 		if (Body_Type == down)
 		{
-			BodyStartPos = { center.x - 25.0f, center.y + 25.0f, 0.0f };
-			BodyEndPos.y = Ease.easeout(BodyStartPos.y + BodySize, BodyStartPos.y - BodySize, Ease.timeRate);
-			BodyEndPos.x = BodyStartPos.x + BodySize;
-			if (Ease.timeRate < 0.5)
+			if (FoldCount == 0)
 			{
-				BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				BodyStartPos = { center.x - 25.0f, center.y + static_cast<float>(25 + BodySize * (BodyDistance - 1)), 0.0f };
+				BodyEndPos.y = Ease.easeout(BodyStartPos.y + BodySize, BodyStartPos.y - BodySize, Ease.timeRate);
+				BodyEndPos.x = BodyStartPos.x + BodySize;
+				if (Ease.timeRate < 0.5)
+				{
+					BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				}
+				else
+				{
+					BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				}
 			}
-			else
+			else if (FoldCount == 1)
 			{
-				BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				BodyEndPos = { center.x + 25.0f, center.y + static_cast<float>(25 + BodySize * (BodyDistance - 1)), 0.0f };
+				BodyStartPos.y = Ease.easeout(BodyEndPos.y + BodySize, BodyEndPos.y - BodySize, Ease.timeRate);
+				BodyStartPos.x = BodyStartPos.x + BodySize;
+				if (Ease.timeRate < 0.5)
+				{
+					BodyCenterPos.y = BodyStartPos.y + (BodyEndPos.y - BodyStartPos.y) / 2;
+				}
+				else
+				{
+					BodyCenterPos.y = BodyEndPos.y + (BodyStartPos.y - BodyEndPos.y) / 2;
+				}
 			}
 		}
 
@@ -328,9 +417,18 @@ void PlayerBody::Update(Vector3& center)
 		}
 		else if (Body_Type == up)
 		{
-			BodyStartPos = { center.x - 25,center.y + 25 ,0.0f };
-			BodyEndPos = { BodyStartPos.x + BodySize,BodyStartPos.y - BodySize ,0.0f };
-			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y - 30 ,0.0f };
+			if (FoldCount == 1)
+			{
+				BodyStartPos = { center.x - 25,center.y + (25 + BodySize * (BodyDistance - 1)) ,0.0f };
+				BodyEndPos = { BodyStartPos.x + BodySize,BodyStartPos.y - BodySize ,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y - 30 ,0.0f };
+			}
+			else if (FoldCount == 2)
+			{
+				BodyStartPos = { center.x - 25,center.y - 25 ,0.0f };
+				BodyEndPos = { BodyStartPos.x + BodySize,BodyStartPos.y + BodySize ,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y - 30 ,0.0f };
+			}
 		}
 		else if (Body_Type == right)
 		{
@@ -349,9 +447,18 @@ void PlayerBody::Update(Vector3& center)
 		}
 		else if (Body_Type == down)
 		{
-			BodyStartPos = { center.x - 25,center.y + 25 ,0.0f };
-			BodyEndPos = { BodyStartPos.x + BodySize,BodyStartPos.y - BodySize ,0.0f };
-			BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y - 30 ,0.0f };
+			if (FoldCount == 1)
+			{
+				BodyStartPos = { center.x - 25,center.y + (25 + BodySize * (BodyDistance - 1)) ,0.0f };
+				BodyEndPos = { BodyStartPos.x + BodySize,BodyStartPos.y - BodySize ,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y - 30 ,0.0f };
+			}
+			else if (FoldCount == 2)
+			{
+				BodyStartPos = { center.x - 25,center.y - 25 ,0.0f };
+				BodyEndPos = { BodyStartPos.x + BodySize,BodyStartPos.y + BodySize ,0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30,BodyStartPos.y - 30 ,0.0f };
+			}
 		}
 	}
 
@@ -432,6 +539,18 @@ void PlayerBody::Update(Vector3& center)
 			}
 			BodyStartPos = { BodyEndPos.x + static_cast<float>(100 * IsFold - BodySize), center.y + 25.0f, 0.0f };
 		}
+		else if (Body_Type == up)
+		{
+			if (SlidePat == -1)
+			{
+				BodyEndPos = { center.x - 25.0f, Ease.easeout(center.y - 25, center.y - 75, Ease.timeRate), 0.0f };
+			}
+			else
+			{
+				BodyEndPos = { center.x - 25.0f, Ease.easeout(center.y - 75, center.y - 25, Ease.timeRate), 0.0f };
+			}
+			BodyStartPos = { BodyEndPos.x + static_cast<float>(100 * IsFold - BodySize), center.y + 25.0f, 0.0f };
+		}
 		else if (Body_Type == right)
 		{
 			if (SlidePat == -1)
@@ -441,7 +560,21 @@ void PlayerBody::Update(Vector3& center)
 			}
 			else
 			{
-				BodyStartPos = { Ease.easeout(center.x + 25, center.x + 75, Ease.timeRate), center.y - 30.0f, 0.0f };
+				BodyStartPos = { Ease.easeout(center.x + 25, center.x + 75, Ease.timeRate), center.y - 25.0f, 0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30, 0.0f };
+			}
+			BodyEndPos = { BodyStartPos.x + static_cast<float>(-100 * IsFold + BodySize), center.y + 25.0f, 0.0f };
+		}
+		else if (Body_Type == down)
+		{
+			if (SlidePat == -1)
+			{
+				BodyStartPos = { center.x - 25.0f, Ease.easeout(center.y + 75, center.y + 25, Ease.timeRate), 0.0f };
+				BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30, 0.0f };
+			}
+			else
+			{
+				BodyStartPos = { center.x - 25.0f, Ease.easeout(center.y + 25, center.y + 75, Ease.timeRate), 0.0f };
 				BodyCenterPos = { BodyStartPos.x + 30.0f, BodyStartPos.y + 30, 0.0f };
 			}
 			BodyEndPos = { BodyStartPos.x + static_cast<float>(-100 * IsFold + BodySize), center.y + 25.0f, 0.0f };
@@ -475,14 +608,15 @@ void PlayerBody::Draw(int offsetX, int offsetY)
 
 void PlayerBody::setactivate(Vector3 center)
 {
+	IsFold = false;
+	IsOpen = true;
+	IsSlide = false;
+	BodyDistance = 1;
+	Overlap = 0;
+	FoldCount = 0;
+
 	if (IsActivate == true)
 	{
-		IsFold = false;
-		IsOpen = true;
-		IsSlide = false;
-		BodyDistance = 1;
-		Overlap = 0;
-		FoldCount = 0;
 
 		if (Body_Type == left)
 		{
