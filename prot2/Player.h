@@ -31,7 +31,7 @@ public: //メンバ関数
 	/// <param name="one">body_one</param>
 	/// <param name="two">body_two</param>
 	/// <param name="three">body_three</param>
-	void bodysetup(bool one, int one_type, bool two, int two_type, bool three, int three_type);
+	void bodysetup(bool one, int one_type, bool two, int two_type, bool three, int three_type, bool four, int four_type);
 	void bodysetup(const unsigned char foldCount[4]);
 
 	void IsHitPlayerBody();
@@ -54,7 +54,7 @@ public: //メンバ変数
 	PlayerBody Body_One;
 	PlayerBody Body_Two;
 	PlayerBody Body_Three;
-	PlayerBody Body_Four; //この変数要らないのでは?
+	PlayerBody Body_Four;
 
 	//body_twoを優先的に開くか
 	bool IsOpenTwo;

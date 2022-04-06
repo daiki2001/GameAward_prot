@@ -29,7 +29,7 @@ static size_t mapchipPos = 0; //マップチップの要素番号
 static size_t reverseMapchipPos = 0; //反転したマップチップの要素番号
 }
 
-const int Stage::blockSize = 60;
+const int Stage::blockSize = 30;
 const int Stage::halfBlockSize = Stage::blockSize / 2;
 int Stage::BlockHandle = -1;
 int Stage::GoalHandle = -1;
@@ -623,7 +623,7 @@ int Stage::LoadStage(const char* filePath, unsigned char foldCount[4])
 	if (end == false)
 	{
 		// 開始位置が無い
-		return EF;
+		//return EF;
 	}
 
 	for (i = 0; i < stageData.size(); i++)

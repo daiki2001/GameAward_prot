@@ -109,16 +109,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		}
 		if (Input::isKey(KEY_INPUT_2))
 		{
-			stage->LoadStage("./Resources/stage4.csv", playerTile);
+			stage->LoadStage("./Resources/stage6.csv", playerTile);
 			player->Init();
 			player->bodysetup(playerTile);
 		}
-		if (Input::isKey(KEY_INPUT_3))
+		/*if (Input::isKey(KEY_INPUT_3))
 		{
 			stage->LoadStage("./Resources/stage3.csv", playerTile);
 			player->Init();
 			player->bodysetup(playerTile);
-		}
+		}*/
 		if (InputManger::Reset())
 		{
 			stage->Reset();
@@ -137,12 +137,12 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		// 描画処理
 		DrawGraph(0, 0, Back, true);
 		//DrawBox(0, 0, 1280, 720, GetColor(0, 0, 0), true);
-		stage->Draw(drawOffsetX, drawOffsetY/* - WIN_HEIGHT*/);
+		stage->Draw(drawOffsetX, drawOffsetY);
 		player->Draw(drawOffsetX, drawOffsetY);
 
 		//DrawFormatString(5, 200, GetColor(255, 255, 255), "R:リセット");
-		DrawFormatString(5, 220, GetColor(255, 255, 255), "1：ステージ1再設定");
-		DrawFormatString(5, 240, GetColor(255, 255, 255), "2：ステージ2再設定");
+		//DrawFormatString(5, 220, GetColor(255, 255, 255), "1：ステージ1再設定");
+		//DrawFormatString(5, 240, GetColor(255, 255, 255), "2：ステージ2再設定");
 		//DrawFormatString(5, 260, GetColor(255, 255, 255), "3：ステージ3");
 
 		DrawFormatString(5, 280, GetColor(255, 255, 255), "方向キー：ステージの折る・開く");
