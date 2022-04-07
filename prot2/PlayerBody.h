@@ -82,9 +82,6 @@ public: //メンバ変数
 	//体の座標(初期状態：右下)
 	Vector3 BodyEndPos;
 
-	//体の中心座標
-	Vector3 BodyCenterPos;
-
 	//スライドの開始座標
 	Vector3 SlideStartPos;
 

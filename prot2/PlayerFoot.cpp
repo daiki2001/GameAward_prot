@@ -47,8 +47,6 @@ void PlayerFoot::Update(Vector3& FaceCenterPos, bool IsDownBody, int BodyDis)
 	{
 		FootLeftUpPosition = { FaceCenterPos.x - 30,FaceCenterPos.y + (IsDownBody * 50 * BodyDis) + 25,0.0f };
 	}
-
-	//FootLeftUpPosition.x = FaceCenterPos.x - 30;
 }
 
 void PlayerFoot::Draw(bool isleft, bool isright, int offsetX, int offsetY)
