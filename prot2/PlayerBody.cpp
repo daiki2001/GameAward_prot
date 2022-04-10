@@ -564,6 +564,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 
 	int FallCount = 0;
 
+	//ステージ全体のオフセットとの当たり判定
 	if (BodyLeft < stage.offset.x)
 	{
 		center->x = stage.offset.x + (center->x - BodyLeft);
@@ -575,10 +576,19 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 		iscolide = true;
 	}
 
+	std::vector<float> TilesLeft = {};
+	std::vector<float> TilesRight = {};
+	std::vector<float> TilesUp = {};
+
 	for (i = 0; i < stage.GetStageDataSize(); i++)
 	{
 		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
 		{
+			//各ステージタイルの端
+			TilesLeft.push_back(stage.GetStageTileOffsetX(i, j) * stage.blockSize);
+			TilesRight.push_back((stage.GetStageTileOffsetX(i, j) * stage.blockSize) + stage.GetStageTileWidth(i, j) * stage.blockSize);
+			TilesUp.push_back(stage.GetStageTileOffsetY(i, j) * stage.blockSize);
+
 			//左上
 			if (stage.GetPositionTile({ BodyLeft,BodyUp,0.0f }, i, j))
 			{
@@ -692,14 +702,26 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					{
 						if (IsHitRight == false && Body_Type == right || Body_Type == down)
 						{
-							center->x = (BodyRight_mapchip * stage.blockSize) - (BodyRight - center->x) - 1;
+							center->x = (BodyRight_mapchip * stage.blockSize) - (BodyRight - center->x) - 1.5;
 							IsHitRight = true;
 						}
 					}
 				}
 			}
+
+
 		}
 	}
+
+	for (int i = 0; i < TilesLeft.size(); i++)
+	{
+		if (TilesLeft[i] > stage.offset.x)
+		{
+
+		}
+	}
+
+
 
 	if (FallCount > 0)
 	{

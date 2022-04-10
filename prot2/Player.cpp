@@ -90,11 +90,21 @@ void Player::Update(Stage& stage)
 		IsInputjump = false;
 	}
 
+	if (InputManger::Up())
+	{
+		CenterPosition.y -= SideMoveSpeed;
+	}
+
+	if (InputManger::Down())
+	{
+		CenterPosition.y += SideMoveSpeed;
+	}
+
 	//ƒWƒƒƒ“ƒv
 	if (InputManger::UpTrigger() && !InputManger::Act1() && IsInputjump == true)
 	{
-		IsJump = true;
-		FallSpeed = -9.5f;
+		//IsJump = true;
+		//FallSpeed = -9.5f;
 	}
 
 	if (IsJump == true)
@@ -122,7 +132,7 @@ void Player::Update(Stage& stage)
 
 	if (IsAllFall == true && Player_IsAction == false)
 	{
-		CenterPosition.y += FallSpeed;
+		//CenterPosition.y += FallSpeed;
 	}
 	IsHitPlayerBody(stage);
 
