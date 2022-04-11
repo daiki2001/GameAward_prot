@@ -580,6 +580,7 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 	std::vector<float> TilesRight = {};
 	std::vector<float> TilesUp = {};
 
+	//ブロックとの当たり判定
 	for (i = 0; i < stage.GetStageDataSize(); i++)
 	{
 		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
@@ -708,20 +709,8 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 					}
 				}
 			}
-
-
 		}
 	}
-
-	for (int i = 0; i < TilesLeft.size(); i++)
-	{
-		if (TilesLeft[i] > stage.offset.x)
-		{
-
-		}
-	}
-
-
 
 	if (FallCount > 0)
 	{
@@ -731,6 +720,64 @@ void PlayerBody::IsHitBody(Stage& stage, Vector3* center, float& FallSpeed, bool
 	else
 	{
 		BodyIsFall = true;
+	}
+
+	//ステージの階層ごとの左端・右端
+	float hierarcy = 0;
+	float hierarcy_Left_zero = 0;
+	float hierarcy_Right_zero = 0;
+	float hierarcy_Left_one = 0;
+	float hierarcy_Right_one = 0;
+	float hierarcy_Left_two = 0;
+	float hierarcy_Right_two = 0;
+
+	//階層ごとの左端・右端座標
+	std::vector<Vector3> Hierarcy_StartEnd = {};
+
+	//ステージの枠との判定
+	for (i = 0; i < stage.GetStageDataSize(); i++)
+	{
+		for (j = 0; j < stage.GetStageTileDataSize(i); j++)
+		{
+			hierarcy = stage.GetStageTileOffsetY(i, j);
+
+			if (hierarcy == 0)
+			{
+				if (hierarcy_Left_zero > stage.GetStageTileOffsetX(i, j))
+				{
+					hierarcy_Left_zero = stage.GetStageTileOffsetX(i, j);
+				}
+
+				if (hierarcy_Right_zero < stage.GetStageTileOffsetX(i, j) + stage.GetStageTileWidth(i, j))
+				{
+					hierarcy_Right_zero = stage.GetStageTileOffsetX(i, j) + stage.GetStageTileWidth(i, j);
+				}
+			}
+			if (hierarcy == 5)
+			{
+				if (hierarcy_Left_one > stage.GetStageTileOffsetX(i, j))
+				{
+					hierarcy_Left_one = stage.GetStageTileOffsetX(i, j);
+				}
+
+				if (hierarcy_Right_one < stage.GetStageTileOffsetX(i, j) + stage.GetStageTileWidth(i, j))
+				{
+					hierarcy_Right_one = stage.GetStageTileOffsetX(i, j) + stage.GetStageTileWidth(i, j);
+				}
+			}
+			if (hierarcy == 10)
+			{
+				if (hierarcy_Left_two > stage.GetStageTileOffsetX(i, j))
+				{
+					hierarcy_Left_two = stage.GetStageTileOffsetX(i, j);
+				}
+
+				if (hierarcy_Right_two < stage.GetStageTileOffsetX(i, j) + stage.GetStageTileWidth(i, j))
+				{
+					hierarcy_Right_two = stage.GetStageTileOffsetX(i, j) + stage.GetStageTileWidth(i, j);
+				}
+			}
+		}
 	}
 }
 

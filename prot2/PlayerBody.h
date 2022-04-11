@@ -54,7 +54,9 @@ public: //メンバ関数
 	/// <param name="extrudetype">どの方向"から"押し出すか</param>
 	void Extrude(Vector3* center, Vector3 extrudepos, float extrudedis, bodytype extrudetype, bool& isfall, bool& isjump, bool& iscolide);
 
+
 public: //メンバ変数
+
 	//有効化フラグ
 	bool IsActivate;
 

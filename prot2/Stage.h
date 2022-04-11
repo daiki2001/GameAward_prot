@@ -39,6 +39,12 @@ public: //サブクラス
 		unsigned char direction = 0;
 		bool isFold = false;
 
+		//このタイルの階層(高さ別)
+		int hierarchy;
+
+		//このタイルの列(左から順番)
+		int Column;
+
 		Easing stageEase = {};
 		std::vector<Vector3> startPos = {};
 		std::vector<Vector3> endPos = {};
@@ -124,8 +130,12 @@ public: //メンバ関数
 	int GetStageTileOffsetX(int i, int j);
 	// ステージタイルのY軸のオフセットを返す
 	int GetStageTileOffsetY(int i, int j);
-	//任意の方向に特定のマップチップがあるかどうか
-	bool IsNeighberMapchip(int i, int j, int MapchipPos, MapchipData mapchipData);
+	//ステージタイルの階層・列をセット
+	void SetHierarchyAndColumn();
+	//ステージタイルの階層を取得
+	int GetStageTileHierarcy(int i, int j);
+	//ステージタイルの列を取得
+	int GetStageTileColumn(int i, int j);
 
 private:
 	// ステージを折る

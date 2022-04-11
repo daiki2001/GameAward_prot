@@ -248,6 +248,8 @@ void Stage::Draw(int offsetX, int offsetY)
 
 	static Vector3 pos1, pos2;
 
+	SetHierarchyAndColumn();
+
 	for (i = 0; i < stageData.size(); i++)
 	{
 		for (j = 0; j < stageData[i].stageTileData.size(); j++)
@@ -1049,6 +1051,28 @@ int Stage::GetStageTileOffsetX(int i, int j)
 int Stage::GetStageTileOffsetY(int i, int j)
 {
 	return stageData[i].stageTileData[j].offsetY;
+}
+
+void Stage::SetHierarchyAndColumn()
+{
+	for (i = 0; i < stageData.size(); i++)
+	{
+		for (j = 0; j < stageData[i].stageTileData.size(); j++)
+		{
+			stageData[i].stageTileData[j].hierarchy = stageData[i].stageTileData[j].offsetY / 5;
+			stageData[i].stageTileData[j].Column = stageData[i].stageTileData[j].offsetX / 5;
+		}
+	}
+}
+
+int Stage::GetStageTileHierarcy(int i, int j)
+{
+	return stageData[i].stageTileData[j].hierarchy;
+}
+
+int Stage::GetStageTileColumn(int i, int j)
+{
+	return stageData[i].stageTileData[j].Column;
 }
 
 int Stage::Fold(unsigned char playerTile[4], const unsigned char& direction, const size_t& onPlayerStage, const size_t& onPlayerStageTile, const size_t& moveStageData)
