@@ -30,8 +30,9 @@ public: //ƒƒ“ƒoŠÖ”
 	void bodysetup(bool one, int one_type, bool two, int two_type, bool three, int three_type, bool four, int four_type);
 	void bodysetup(const unsigned char foldCount[4]);
 
+	
 	void IsHitPlayerBody(Stage& stage);
-
+	
 	void ExtrudePlayer(Vector3 ExtrudePos, float ExtrudeDis, bodytype ExtrudeType);
 
 	bool IsFall();
