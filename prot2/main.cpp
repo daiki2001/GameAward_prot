@@ -51,7 +51,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	Stage* stage = Stage::Get();
 	stage->LoadStage("./Resources/CSV's/stage4.csv", playerTile);
 	player->Init();
-	player->bodysetup(false, left, true, up, true, right, false, down);
+	player->bodysetup(false, left, true, up, false, right, false, down);
 
 	int Back = LoadGraph("Resources/backSin.png");
 
